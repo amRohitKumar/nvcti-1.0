@@ -1,8 +1,9 @@
 # LOGIN PAGE
 
-![U<img width="468" alt="Screenshot 2022-09-17 185920" src="https://user-images.githubusercontent.com/103945041/190859742-46042a76-c309-4913-adc1-6c01a141e0f8.png">
+<img width="468" alt="Screenshot 2022-09-17 185920" src="https://user-images.githubusercontent.com/103945041/190859742-46042a76-c309-4913-adc1-6c01a141e0f8.png">
 
-<img width="468" alt="Screenshot 2022-09-17 185920" src="https://user-images.githubusercontent.com/103945041/190859753-1d85eeed-f9ba-4aef-9ae0-59dd09df0119.png">
+<img width="960" alt="Screenshot 2022-09-17 185950" src="https://user-images.githubusercontent.com/103945041/190859809-ec568d40-91ea-4eca-84ac-703bc03c87e4.png">
+
 
 
 # REGISTER NEW USER PAGE
