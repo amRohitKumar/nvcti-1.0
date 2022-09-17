@@ -12,8 +12,5 @@
     "server-dev": "cd server && nodemon index.js"
   },
   "author": "Rohit Kumar",
-  "license": "ISC",
-  "dependencies": {
-    "@mui/icons-material": "^5.10.3"
-  }
+  "license": "ISC"
 }
