@@ -39,7 +39,7 @@ export default function Error() {
               color="secondary"
               href="/login"
             >
-              Back Home
+              Back To Home
             </Button>
           </Grid>
         </Grid>
