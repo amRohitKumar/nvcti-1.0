@@ -1,6 +1,6 @@
 import React from "react";
-import { Box, Button, Container, Typography } from "@mui/material";
-import Grid from "@mui/material/Grid";
+import { Box, Button, Container, Typography, Grid } from "@mui/material";
+import error from "../../assets/error.png";
 
 export default function Error() {
   return (
@@ -23,8 +23,8 @@ export default function Error() {
             alignContent: "center",
           }}
         >
-          <Grid xs={6} sm={12}>
-            <img src="" alt="Error" />
+          <Grid item xs={6} sm={12}>
+            <img src={error} alt="Error" />
             <Typography
               sx={{
                 fontSize: { xs: "1em", sm: "2.5em" },
@@ -37,7 +37,7 @@ export default function Error() {
               sx={{ marginTop: "2em" }}
               variant="contained"
               color="secondary"
-              href="/login"
+              href="/"
             >
               Back To Home
             </Button>

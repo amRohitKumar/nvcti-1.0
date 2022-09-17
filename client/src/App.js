@@ -1,13 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ProtectedRoutes } from "./components";
 import { ThemeProvider } from "@mui/material/styles";
-import {theme} from './theme';
 import SharedLayout from "./pages/client-dashboard/shared-layout.page";
 import { ClientDashboard } from "./pages";
 import { LogIn, Register, Error } from "./pages/index";
 import { Footer } from "./components/index";
-import { Routes, Route } from "react-router-dom";
-import { ThemeProvider } from "@mui/material/styles";
 import { theme } from './theme/theme';
 
 
@@ -24,25 +21,26 @@ function App() {
               </ProtectedRoutes>
             }
           >
-            <Route index element={<ClientDashboard />} />
-            <Route
-              exact
-              path="/login"
-              element={<LogIn />}>
-            </Route>
-            <Route
-              exact
-              path="/register"
-              element={<Register />}>
-            </Route>
-            <Route
-              exact
-              path="*"
-              element={<Error />}>
-            </Route>
           </Route>
+          <Route index element={<ClientDashboard />} />
+          <Route
+            exact
+            path="/login"
+            element={<LogIn />}>
+          </Route>
+          <Route
+            exact
+            path="/register"
+            element={<Register />}>
+          </Route>
+          <Route
+            exact
+            path="*"
+            element={<Error />}>
+          </Route>
+
         </Routes>
-        <Footer/>
+        <Footer />
       </ThemeProvider>
     </BrowserRouter>
   );

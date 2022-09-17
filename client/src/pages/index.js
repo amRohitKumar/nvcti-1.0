@@ -5,5 +5,4 @@ import ClientDashboard from "./client-dashboard/client-dashboard.page";
 
 
 
-export { Login, Register, Error, ClientDashboard };
-export { LogIn, Register, Error };
+export { LogIn, Register, Error, ClientDashboard };
