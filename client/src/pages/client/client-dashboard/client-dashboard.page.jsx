@@ -1,5 +1,5 @@
-import { Carousel, OngoingEventsTable } from "../../components";
-import { ongoingEvents } from "../../data";
+import { Carousel, OngoingEventsTable } from "../../../components";
+import { ongoingEvents } from "../../../data";
 
 const ClientDashboard = () => {
   

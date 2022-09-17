@@ -1,3 +1,4 @@
-import ClientDashboard from "./client-dashboard/client-dashboard.page";
+import ClientDashboard from "./client/client-dashboard/client-dashboard.page";
+import StatusPage from "./client/status/status.page";
 
-export {ClientDashboard}
+export {ClientDashboard, StatusPage}

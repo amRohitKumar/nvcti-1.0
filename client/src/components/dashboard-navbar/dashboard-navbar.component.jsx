@@ -1,16 +1,16 @@
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import styled from "@emotion/styled";
 import {
   AppBar,
   Avatar,
-  Badge,
   Box,
-  IconButton,
   Toolbar,
-  Tooltip,
+  Button,
 } from "@mui/material";
-import { Bell as BellIcon } from "../../icons/bell";
 import { UserCircle as UserCircleIcon } from "../../icons/user-circle";
+import NotificationSection from "../notification-dropdown/notification-dropdown.component";
 import { AccountPopover } from "../account-popover/account-popover.component";
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
@@ -22,6 +22,7 @@ export const DashboardNavbar = (props) => {
   const { onSidebarOpen, ...other } = props;
   const settingsRef = useRef(null);
   const [openAccountPopover, setOpenAccountPopover] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -43,13 +44,8 @@ export const DashboardNavbar = (props) => {
         >
           {/* NAVBAR LOGO */}
           <Box sx={{ flexGrow: 1 }} />
-          <Tooltip title="Notifications">
-            <IconButton sx={{ ml: 1 }}>
-              <Badge badgeContent={4} color="primary" variant="standard">
-                <BellIcon fontSize="small" />
-              </Badge>
-            </IconButton>
-          </Tooltip>
+          <Button variant="contained" onClick={() => navigate('status')}>Status</Button>
+          <NotificationSection />
           <Avatar
             onClick={() => setOpenAccountPopover(true)}
             ref={settingsRef}
