@@ -4,6 +4,7 @@ import Carousel from "./carousel/carousel.component";
 import OngoingEventsTable from "./ongoing-events-table/ongoing-events-table.component";
 import Event from "./event/event.component";
 import Footer from "./footer/Footer.component";
+import TimeLine from "./timeline/timeline.component";
 
 
-export { DashboardNavbar, ProtectedRoutes, Carousel, OngoingEventsTable, Event, Footer };
+export { DashboardNavbar, ProtectedRoutes, Carousel, OngoingEventsTable, Event, Footer, TimeLine };

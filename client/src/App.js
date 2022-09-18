@@ -3,7 +3,7 @@ import { ProtectedRoutes } from "./components";
 import { ThemeProvider } from "@mui/material/styles";
 import SharedLayout from "./pages/client-dashboard/shared-layout.page";
 import { ClientDashboard } from "./pages";
-import { LogIn, Register, Error } from "./pages/index";
+import { LogIn, Register, Error, EventDetails } from "./pages/index";
 import { Footer } from "./components/index";
 import { theme } from './theme/theme';
 
@@ -32,6 +32,11 @@ function App() {
             exact
             path="/register"
             element={<Register />}>
+          </Route>
+          <Route
+            exact
+            path="/events"
+            element={<EventDetails />}>
           </Route>
           <Route
             exact
