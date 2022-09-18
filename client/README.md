@@ -1,3 +1,18 @@
+# LOGIN PAGE
+
+<img width="468" alt="Screenshot 2022-09-17 185920" src="https://user-images.githubusercontent.com/103945041/190859742-46042a76-c309-4913-adc1-6c01a141e0f8.png">
+
+<img width="960" alt="Screenshot 2022-09-17 185950" src="https://user-images.githubusercontent.com/103945041/190859809-ec568d40-91ea-4eca-84ac-703bc03c87e4.png">
+
+
+
+# REGISTER NEW USER PAGE
+
+<img width="956" alt="Screenshot 2022-09-17 185613" src="https://user-images.githubusercontent.com/103945041/190859768-7d5da901-493b-4c27-a52c-4cb53ae3b93b.png">
+
+<img width="468" alt="Screenshot 2022-09-17 185835" src="https://user-images.githubusercontent.com/103945041/190859772-a05f8a40-fbba-4e57-8255-4a33a0dac7e5.png">
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
