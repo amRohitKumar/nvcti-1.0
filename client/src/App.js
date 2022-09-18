@@ -4,7 +4,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from '@mui/material';
 import {theme} from './theme';
 import SharedLayoutClient from "./pages/client/client-dashboard/shared-layout.page";
-import { ClientDashboard, StatusPage } from "./pages";
+import { ClientDashboard, StatusPage, EventFormPage } from "./pages";
 
 function App() {
   return (
@@ -22,6 +22,7 @@ function App() {
           >
             <Route index element={<ClientDashboard />} />
             <Route path="status" element={<StatusPage />} />
+            <Route path="apply/:eventId" element={<EventFormPage />} />
           </Route>
         </Routes>
       </ThemeProvider>

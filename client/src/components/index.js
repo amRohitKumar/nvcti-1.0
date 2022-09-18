@@ -4,6 +4,7 @@ import Carousel from "./carousel/carousel.component";
 import OngoingEventsTable from "./ongoing-events-table/ongoing-events-table.component";
 import PreviousStatusTable from "./previous-status-table/previous-state-table.component";
 import Event from "./event/event.component";
+import EventForm from "./event-form-display/event-form-display.component";
 
 export {
   DashboardNavbar,
@@ -12,4 +13,5 @@ export {
   OngoingEventsTable,
   Event,
   PreviousStatusTable,
+  EventForm
 };
