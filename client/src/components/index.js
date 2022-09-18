@@ -4,6 +4,8 @@ import Carousel from "./carousel/carousel.component";
 import OngoingEventsTable from "./ongoing-events-table/ongoing-events-table.component";
 import PreviousStatusTable from "./previous-status-table/previous-state-table.component";
 import Event from "./event/event.component";
+import Footer from "./footer/Footer.component";
+import TimeLine from "./timeline/timeline.component";
 import EventForm from "./event-form-display/event-form-display.component";
 
 export {
@@ -12,6 +14,8 @@ export {
   Carousel,
   OngoingEventsTable,
   Event,
+  TimeLine,
   PreviousStatusTable,
-  EventForm
+  Footer,
+  EventForm,
 };
