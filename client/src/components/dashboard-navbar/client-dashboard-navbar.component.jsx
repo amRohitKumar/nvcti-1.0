@@ -18,7 +18,7 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
   boxShadow: theme.shadows[3],
 }));
 
-export const DashboardNavbar = (props) => {
+export const ClientDashboardNavbar = (props) => {
   const { onSidebarOpen, ...other } = props;
   const settingsRef = useRef(null);
   const [openAccountPopover, setOpenAccountPopover] = useState(false);
@@ -71,4 +71,4 @@ export const DashboardNavbar = (props) => {
   );
 };
 
-export default DashboardNavbar;
+export default ClientDashboardNavbar;

@@ -1,10 +1,9 @@
 import * as React from "react";
-import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import nvctii from "../../assets/nvctii.png";
-import iitism2 from "../../assets/iitism2.png";
+import nvctii from "../../assets/nvcti3.png";
+import iitism2 from "../../assets/ism_transparent_logo.png";
 
 
 
@@ -13,7 +12,7 @@ export default function Footer() {
     return (
       <Typography
         variant="body2"
-        sx={{ color: "white" }}
+        sx={{ color: "black" }}
         align="center"
         {...props}
       >
@@ -31,10 +30,9 @@ export default function Footer() {
         width: "100%",
         marginTop: "auto",
         paddingInline: "10px",
-        backgroundColor: "#0c0c0c",
+        backgroundColor: "#edeaeab7",
       }}
     >
-      <CssBaseline />
       <Box>
         <img src={nvctii} alt="" style={{ width: "40px", height: "40px" }} />
       </Box>

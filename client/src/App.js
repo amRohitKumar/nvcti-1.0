@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ProtectedRoutes } from "./components";
 import { ThemeProvider } from "@mui/material/styles";
-import { Footer } from "./components/index";
+import { Footer, ProtectedRoutes } from "./components";
 import { CssBaseline } from "@mui/material";
 import { theme } from "./theme";
 import {
@@ -10,10 +9,13 @@ import {
   Error,
   EventDetails,
   ClientDashboard,
+  AdminDashboard,
   StatusPage,
   EventFormPage,
+  SharedLayoutAdmin,
+  SharedLayoutClient,
+  CreateEvent
 } from "./pages";
-import SharedLayoutClient from "./pages/client/client-dashboard/shared-layout.page";
 
 function App() {
   return (
@@ -30,7 +32,7 @@ function App() {
           <Route
             path="/client"
             element={
-              <ProtectedRoutes>
+              <ProtectedRoutes userRole="user">
                 <SharedLayoutClient />
               </ProtectedRoutes>
             }
@@ -43,13 +45,23 @@ function App() {
 
           {/* ADMIN LOGIN ROUTES */}
           {/* ADMIN PROTECTED ROUTES */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoutes userRole="admin">
+                <SharedLayoutAdmin />
+              </ProtectedRoutes>
+            }
+          >
+            <Route index element={<AdminDashboard />} />
+            <Route path="create" element={<CreateEvent />} />
+          </Route>
 
           {/* MENTOR LOGIN ROUTES*/}
           {/* MENTOR PROTECTED ROUTES */}
 
           {/* SUPER-ADMIN LOGIN ROUTES */}
           {/* SUPER-ADMIN PROTEDTED ROUTES */}
-
         </Routes>
         <Footer />
       </ThemeProvider>

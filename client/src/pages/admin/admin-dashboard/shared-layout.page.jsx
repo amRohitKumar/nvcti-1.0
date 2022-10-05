@@ -1,11 +1,11 @@
 import { Outlet } from "react-router-dom";
-import { ClientDashboardNavbar } from "../../../components";
+import { AdminDashboardNavbar } from "../../../components";
 
-const SharedLayoutClient = () => (
+const SharedLayoutAdmin = () => (
   <div>
     <main className="dashboard">
       <div>
-        <ClientDashboardNavbar />
+        <AdminDashboardNavbar />
         <div style={{marginTop: '5em'}} />
         <div className="dashboard-page">
           <Outlet />
@@ -15,4 +15,4 @@ const SharedLayoutClient = () => (
   </div>
 );
 
-export default SharedLayoutClient;
+export default SharedLayoutAdmin;
