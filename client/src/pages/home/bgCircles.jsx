@@ -26,14 +26,6 @@ const Wrapper = styled("div")({
     borderRadius: "50%",
     animation: "ping 1s cubic-bezier(0, 0, 0.2, 1) infinite",
   },
-  ".child-div3": {
-    width: "260px",
-    height: "260px",
-    position: "absolute",
-    border: "1px solid #fff",
-    borderRadius: "50%",
-    animation: "ping 1s cubic-bezier(0, 0, 0.2, 1) infinite",
-  },
   "@keyframes ping": {
     "75%, 100%": {
       transform: "scale(2)",
@@ -77,14 +69,13 @@ const Typewriter2 = () => {
   return (
     <Box
       sx={{
-        fontSize: { xs:"30px",sm: "40px", md: "40px", lg: "50px" },
+        fontSize: { xs: "30px", sm: "40px", md: "40px", lg: "50px" },
         fontWeight: "400",
       }}
     >
-      <span className="span">
-        « {text2}
-        <Cursor cursorColor="#fff" />»
-      </span>
+      <Cursor cursorColor="#fff" cursorStyle="« " />
+      <span className="span">{text2}</span>
+      <Cursor cursorColor="#fff" cursorStyle=" »" />
     </Box>
   );
 };
@@ -95,7 +86,6 @@ export const BgCircles = () => {
       <Typewriter />
       <div className="child-div" />
       <div className="child-div2" />
-      <div className="child-div3" />
       <Typewriter2 />
     </Wrapper>
   );

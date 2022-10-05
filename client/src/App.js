@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ProtectedRoutes, Footer } from "./components";
 import { ThemeProvider } from "@mui/material/styles";
+import { Footer, ProtectedRoutes } from "./components";
 import { CssBaseline } from "@mui/material";
 import { theme } from "./theme";
 import {
@@ -9,6 +9,7 @@ import {
   Error,
   EventDetails,
   ClientDashboard,
+  AdminDashboard,
   StatusPage,
   EventFormPage,
   Home,
@@ -16,10 +17,11 @@ import {
   Missions,
   Videos,
   Navbar,
+  SharedLayoutAdmin,
+  SharedLayoutClient,
+  CreateEvent
 } from "./pages";
-import SharedLayoutClient from "./pages/client/client-dashboard/shared-layout.page";
 import { HelmetProvider } from 'react-helmet-async';
-
 
 function App() {
   return (
@@ -47,7 +49,7 @@ function App() {
             <Route
               path="/client"
               element={
-                <ProtectedRoutes>
+                <ProtectedRoutes userRole="user">
                   <SharedLayoutClient />
                 </ProtectedRoutes>
               }
@@ -55,11 +57,22 @@ function App() {
               <Route index element={<ClientDashboard />} />
               <Route path="status" element={<StatusPage />} />
               <Route path="apply/:eventId" element={<EventFormPage />} />
-              <Route path="events/:eventId" element={<EventDetails />} />
+              <Route path="events" element={<EventDetails />}></Route>
             </Route>
 
             {/* ADMIN LOGIN ROUTES */}
             {/* ADMIN PROTECTED ROUTES */}
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoutes userRole="admin">
+                  <SharedLayoutAdmin />
+                </ProtectedRoutes>
+              }
+            >
+              <Route index element={<AdminDashboard />} />
+              <Route path="create" element={<CreateEvent />} />
+            </Route>
 
             {/* MENTOR LOGIN ROUTES*/}
             {/* MENTOR PROTECTED ROUTES */}
@@ -72,6 +85,7 @@ function App() {
         </ThemeProvider>
       </BrowserRouter>
     </HelmetProvider>
+
   );
 }
 

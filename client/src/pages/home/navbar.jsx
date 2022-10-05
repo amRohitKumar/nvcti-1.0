@@ -1,8 +1,7 @@
 import * as React from "react";
 import { MenuIcon, IconButton } from "../../icons/icons";
-import nvctii2 from "../../assets/nvctii2.png";
+import nvcti3 from "../../assets/nvcti3.png";
 import {
-  Avatar,
   AppBar,
   Box,
   Divider,
@@ -47,7 +46,7 @@ const Navbar = (props) => {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Avatar src={nvctii2} sx={{ width: 68, height: 68 }} variant="square" />
+      <img src={nvcti3} width="56" height="56" />
       <Divider />
       <List>
         {navItems.map(({ link, text }) => (
@@ -89,7 +88,7 @@ const Navbar = (props) => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", md: "block" } }}
           >
-            <Avatar src={nvctii2} sx={{ width: 56, height: 56 }} />
+            <img src={nvcti3} width="56" height="56" />
           </Box>
           <Box sx={{ display: { xs: "none", md: "block" } }}>
             {navItems.map(({ link, text }) => (

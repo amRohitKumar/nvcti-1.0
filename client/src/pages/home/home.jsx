@@ -4,7 +4,6 @@ import { Page } from "../../components";
 import ismSky from "../../assets/ismSky.jpeg";
 import { BgCircles } from "./bgCircles";
 
-
 const Home = () => {
   return (
     <Page title={"Home"}>
