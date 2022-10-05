@@ -7,9 +7,9 @@ import {
   ImageList,
   ImageListItem,
 } from "@mui/material";
-import { event } from "../../data/index";
-import { TimeLine } from "../../components";
-import { InfoIcon, HowToRegIcon } from "../../icons/icons";
+import { event } from "../../../data/index";
+import { TimeLine } from "../../../components";
+import { InfoIcon, HowToRegIcon } from "../../../icons/icons";
 
 const EventDetails = () => {
   return (
@@ -26,19 +26,20 @@ const EventDetails = () => {
           <ImageList sx={{ borderRadius: "12px" }}>
             <ImageListItem cols={2} sx={{ position: "relative" }}>
               <img src={event.imgUrl} alt="" loading="lazy" />
-              <InfoIcon
-                sx={{
-                  position: "absolute",
-                  top: "20px",
-                  right: "20px",
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  document.getElementById("link").click();
-                }}
-                fontSize="large"
-              />
-              <a id="link" href="#details"></a>
+              <a id="link" href="#details" style={{color:"black"}}>
+                <InfoIcon
+                  sx={{
+                    position: "absolute",
+                    top: "20px",
+                    right: "20px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    document.getElementById("link").click();
+                  }}
+                  fontSize="large"
+                />
+              </a>
             </ImageListItem>
           </ImageList>
         </Grid>

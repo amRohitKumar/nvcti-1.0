@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ProtectedRoutes } from "./components";
+import { ProtectedRoutes, Footer } from "./components";
 import { ThemeProvider } from "@mui/material/styles";
-import { Footer } from "./components/index";
 import { CssBaseline } from "@mui/material";
 import { theme } from "./theme";
 import {
@@ -12,48 +11,67 @@ import {
   ClientDashboard,
   StatusPage,
   EventFormPage,
+  Home,
+  About,
+  Missions,
+  Videos,
+  Navbar,
 } from "./pages";
 import SharedLayoutClient from "./pages/client/client-dashboard/shared-layout.page";
+import { HelmetProvider } from 'react-helmet-async';
+
 
 function App() {
   return (
-    <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Routes>
-          {/* CLIENT LOGIN/REGISTER ROUTES */}
-          <Route exact path="/login" element={<LogIn />}></Route>
-          <Route exact path="/register" element={<Register />}></Route>
-          <Route exact path="*" element={<Error />}></Route>
+    <HelmetProvider>
+      <BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Routes>
+            <Route exact path="/" element={
+              <>
+                <Navbar />
+                <Home />
+                <About />
+                <Missions />
+                <Videos />
+              </>
+            }></Route>
 
-          {/* CLIENT PROTECTED ROUTES */}
-          <Route
-            path="/client"
-            element={
-              <ProtectedRoutes>
-                <SharedLayoutClient />
-              </ProtectedRoutes>
-            }
-          >
-            <Route index element={<ClientDashboard />} />
-            <Route path="status" element={<StatusPage />} />
-            <Route path="apply/:eventId" element={<EventFormPage />} />
-            <Route path="events" element={<EventDetails />}></Route>
-          </Route>
+            {/* CLIENT LOGIN/REGISTER ROUTES */}
+            <Route exact path="/login" element={<LogIn />}></Route>
+            <Route exact path="/register" element={<Register />}></Route>
+            <Route exact path="*" element={<Error />}></Route>
 
-          {/* ADMIN LOGIN ROUTES */}
-          {/* ADMIN PROTECTED ROUTES */}
+            {/* CLIENT PROTECTED ROUTES */}
+            <Route
+              path="/client"
+              element={
+                <ProtectedRoutes>
+                  <SharedLayoutClient />
+                </ProtectedRoutes>
+              }
+            >
+              <Route index element={<ClientDashboard />} />
+              <Route path="status" element={<StatusPage />} />
+              <Route path="apply/:eventId" element={<EventFormPage />} />
+              <Route path="events/:eventId" element={<EventDetails />} />
+            </Route>
 
-          {/* MENTOR LOGIN ROUTES*/}
-          {/* MENTOR PROTECTED ROUTES */}
+            {/* ADMIN LOGIN ROUTES */}
+            {/* ADMIN PROTECTED ROUTES */}
 
-          {/* SUPER-ADMIN LOGIN ROUTES */}
-          {/* SUPER-ADMIN PROTEDTED ROUTES */}
+            {/* MENTOR LOGIN ROUTES*/}
+            {/* MENTOR PROTECTED ROUTES */}
 
-        </Routes>
-        <Footer />
-      </ThemeProvider>
-    </BrowserRouter>
+            {/* SUPER-ADMIN LOGIN ROUTES */}
+            {/* SUPER-ADMIN PROTEDTED ROUTES */}
+
+          </Routes>
+          <Footer />
+        </ThemeProvider>
+      </BrowserRouter>
+    </HelmetProvider>
   );
 }
 

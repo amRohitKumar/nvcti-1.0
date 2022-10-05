@@ -1,49 +1,53 @@
-import React from "react";
-import { Box, Button, Container, Typography, Grid } from "@mui/material";
-import error from "../../assets/error.png";
+import { Link as RouterLink } from "react-router-dom";
+import { styled } from "@mui/material/styles";
+import { Button, Typography, Container, Box } from "@mui/material";
+import {Page} from "../../components";
+import error404 from "../../assets/images/error404.svg";
+
+// ----------------------------------------------------------------------
+
+const ContentStyle = styled("div")(({ theme }) => ({
+  maxWidth: 480,
+  margin: "auto",
+  minHeight: "100vh",
+  display: "flex",
+  justifyContent: "center",
+  flexDirection: "column",
+  padding: theme.spacing(12, 0),
+}));
+
+// ----------------------------------------------------------------------
 
 export default function Error() {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "100vh",
-        padding: "2em",
-      }}
-    >
-      <Container maxWidth="md">
-        <Grid
-          container
-          spacing={4}
-          sx={{
-            display: "grid",
-            justifyItems: { xs: "center", sm: "start" },
-            alignContent: "center",
-          }}
-        >
-          <Grid item xs={6} sm={12}>
-            <img src={error} alt="Error" />
-            <Typography
-              sx={{
-                fontSize: { xs: "1em", sm: "2.5em" },
-                wordWrap: "no-wrap",
-              }}
-            >
-              The page you're looking for doesn't exist.
-            </Typography>
-            <Button
-              sx={{ marginTop: "2em" }}
-              variant="contained"
-              color="secondary"
-              href="/"
-            >
-              Back To Home
-            </Button>
-          </Grid>
-        </Grid>
+    <Page title="404 Page Not Found">
+      <Container>
+        <ContentStyle sx={{ textAlign: "center", alignItems: "center" }}>
+          <Typography variant="h3" paragraph>
+            Oops, page not found!
+          </Typography>
+
+          <Typography sx={{ color: "text.secondary" }}>
+            Sorry, we couldn't find the page you're looking for. Perhaps you've
+            mistyped the URL? Be sure to check your spelling.
+          </Typography>
+
+          <Box
+            component="img"
+            src={error404}
+            sx={{ height: 260, mx: "auto", my: { xs: 5, sm: 10 } }}
+          />
+
+          <Button
+            to="/home"
+            size="large"
+            variant="contained"
+            component={RouterLink}
+          >
+            Go to Home
+          </Button>
+        </ContentStyle>
       </Container>
-    </Box>
+    </Page>
   );
 }

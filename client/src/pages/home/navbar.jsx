@@ -1,0 +1,140 @@
+import * as React from "react";
+import { MenuIcon, IconButton } from "../../icons/icons";
+import nvctii2 from "../../assets/nvctii2.png";
+import {
+  Avatar,
+  AppBar,
+  Box,
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Toolbar,
+  Button,
+  Link,
+} from "@mui/material";
+
+const drawerWidth = 240;
+const navItems = [
+  { link: "#home", text: "Home" },
+  { link: "#about", text: "About us" },
+  { link: "#mission", text: "Our missions" },
+  { link: "#events", text: "events" },
+  { link: "/facilities", text: "facilities" },
+  { link: "#projects", text: "projects" },
+  { link: "/contact", text: "contact us" },
+];
+
+const Navbar = (props) => {
+  const { window } = props;
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  // const CustomNavLink = forwardRef((props, ref) => (
+  //   <NavLink
+  //     ref={ref}
+  //     {...props}
+  //     className={({ isActive }) => (isActive ? "" : "")}
+  //     style={{ textDecoration: "none" }}
+  //     end
+  //   />
+  // ));
+
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
+      <Avatar src={nvctii2} sx={{ width: 68, height: 68 }} variant="square" />
+      <Divider />
+      <List>
+        {navItems.map(({ link, text }) => (
+          <ListItem key={link} disablePadding component={Link} href={link}>
+            <ListItemButton sx={{ textAlign: "center" }}>
+              <ListItemText
+                sx={{
+                  textTransform: "uppercase",
+                  color: "#000",
+                }}
+              >
+                {text}
+              </ListItemText>
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
+
+  return (
+    <Box sx={{ display: "flex" }}>
+      <AppBar component="nav" sx={{ backgroundColor: "#F2f2f2" }}>
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { md: "none" } }}
+          >
+            <MenuIcon sx={{ color: "black" }} />
+          </IconButton>
+          <Box
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, display: { xs: "none", md: "block" } }}
+          >
+            <Avatar src={nvctii2} sx={{ width: 56, height: 56 }} />
+          </Box>
+          <Box sx={{ display: { xs: "none", md: "block" } }}>
+            {navItems.map(({ link, text }) => (
+              <Link key={link} href={link} style={{ textDecoration: "none" }}>
+                <Button
+                  sx={{
+                    color: "#000",
+                    textTransform: "uppercase",
+                    listDecoration: "none",
+                    marginRight: "10px",
+                    ":hover": {
+                      backgroundColor: "#000",
+                      color: "#fff",
+                    },
+                  }}
+                >
+                  {text}
+                </Button>
+              </Link>
+            ))}
+          </Box>
+        </Toolbar>
+      </AppBar>
+      <Box component="nav">
+        <Drawer
+          container={container}
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{
+            display: { xs: "block", md: "none" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
+          }}
+        >
+          {drawer}
+        </Drawer>
+      </Box>
+    </Box>
+  );
+};
+
+export default Navbar;
