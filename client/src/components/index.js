@@ -8,6 +8,8 @@ import Event from "./event/event.component";
 import Footer from "./footer/Footer.component";
 import TimeLine from "./timeline/timeline.component";
 import EventForm from "./event-form-display/event-form-display.component";
+import Page from "./title/pages";
+
 
 export {
   ClientDashboardNavbar,
@@ -20,4 +22,5 @@ export {
   PreviousStatusTable,
   Footer,
   EventForm,
+  Page
 };
