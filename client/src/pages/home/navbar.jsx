@@ -83,16 +83,12 @@ const Navbar = (props) => {
           >
             <MenuIcon sx={{ color: "black" }} />
           </IconButton>
-          <Box
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", md: "block" } }}
-          >
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "block" } }}>
             <img src={nvcti3} width="56" height="56" />
           </Box>
           <Box sx={{ display: { xs: "none", md: "block" } }}>
             {navItems.map(({ link, text }) => (
-              <Link key={link} href={link} style={{ textDecoration: "none" }}>
+              <Link key={link} href={link} sx={{ textDecoration: "none" }}>
                 <Button
                   sx={{
                     color: "#000",
@@ -109,6 +105,19 @@ const Navbar = (props) => {
                 </Button>
               </Link>
             ))}
+          </Box>
+          <Box
+            sx={{
+              display: { xs: "none", md: "flex" },
+              gap: "10px",
+            }}
+          >
+            <Button variant="contained" color="secondary" href="/login">
+              LOGIN
+            </Button>
+            <Button variant="contained" color="error" href="/register">
+              REGISTER
+            </Button>
           </Box>
         </Toolbar>
       </AppBar>

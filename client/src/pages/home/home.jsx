@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import React from "react";
 import { Page } from "../../components";
 import ismSky from "../../assets/ismSky.jpeg";
-import { BgCircles } from "./bgCircles";
+import { Typewriter } from "./typewriter";
 
 const Home = () => {
   return (
@@ -22,7 +22,7 @@ const Home = () => {
           overflow: "hidden",
         }}
       >
-        <BgCircles />
+        <Typewriter />
       </Box>
       <Box
         sx={{
