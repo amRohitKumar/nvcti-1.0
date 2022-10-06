@@ -25,13 +25,13 @@ export const Typewriter = () => {
   return (
     <Box
       sx={{
-        padding: "10em",
+        padding: {xs:"10px", sm:"1em", md:"4em", lg:"10em"},
         color: "#fff",
       }}
     >
       <Typography
         sx={{
-          fontSize: { xs: "40px", sm: "50px", md: "60px", lg: "70px" },
+          fontSize: { xs: "30px", sm: "50px", md: "60px", lg: "70px" },
           fontWeight: "500",
         }}
       >
@@ -48,7 +48,7 @@ export const Typewriter = () => {
       </Box>
       <Typography
         sx={{
-          fontSize: { xs: "4px", sm: "8px", md: "15px", lg: "20px" },
+          fontSize: { xs: "8px", sm: "10px", md: "15px", lg: "20px" },
           fontWeight: "500",
           letterSpacing: "8px",
         }}

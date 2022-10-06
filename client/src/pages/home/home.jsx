@@ -13,7 +13,7 @@ const Home = () => {
           width: "100%",
           height: "101vh",
           backgroundAttachment: "fixed",
-          backgroundPosition: "50%",
+          backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           display: "flex",

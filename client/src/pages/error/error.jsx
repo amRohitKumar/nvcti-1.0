@@ -39,7 +39,7 @@ export default function Error() {
           />
 
           <Button
-            to="/home"
+            to="/"
             size="large"
             variant="contained"
             component={RouterLink}

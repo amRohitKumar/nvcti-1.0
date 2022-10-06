@@ -45,7 +45,10 @@ const Navbar = (props) => {
   // ));
 
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
+    <Box
+      onClick={handleDrawerToggle}
+      sx={{ textAlign: "center", marginTop: "1em" }}
+    >
       <img src={nvcti3} width="56" height="56" />
       <Divider />
       <List>
@@ -64,6 +67,27 @@ const Navbar = (props) => {
           </ListItem>
         ))}
       </List>
+      <Box
+        sx={{
+          display: "flex",
+          gap: "10px",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Button
+          variant="contained"
+          color="secondary"
+          size="small"
+          href="/login"
+        >
+          LOGIN
+        </Button>
+        <Button variant="contained" color="error" size="small" href="/register">
+          REGISTER
+        </Button>
+      </Box>
     </Box>
   );
 
