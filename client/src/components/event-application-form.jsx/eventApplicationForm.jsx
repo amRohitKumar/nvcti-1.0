@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
 import Linkify from "react-linkify";
-import { Typography, Button, Paper, Box } from "@mui/material";
+import { Button, Paper, Box } from "@mui/material";
 import {
   ShortAnswer,
   ParagraphAnswer,
