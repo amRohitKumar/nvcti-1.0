@@ -7,7 +7,8 @@ import PreviousStatusTable from "./previous-status-table/previous-state-table.co
 import Event from "./event/event.component";
 import Footer from "./footer/Footer.component";
 import TimeLine from "./timeline/timeline.component";
-import EventForm from "./event-form-display/event-form-display.component";
+// import EventForm from "./event-form-display/event-form-display.component";
+import EventApplicationForm from "./event-application-form.jsx/eventApplicationForm";
 import Page from "./title/pages";
 
 
@@ -21,6 +22,7 @@ export {
   TimeLine,
   PreviousStatusTable,
   Footer,
-  EventForm,
+  // EventForm,
+  EventApplicationForm,
   Page
 };

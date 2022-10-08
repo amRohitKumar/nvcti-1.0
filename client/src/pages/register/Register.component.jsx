@@ -24,19 +24,21 @@ import {
   PhoneIcon,
   CalendarMonthIcon,
 } from "../../icons/icons";
-import {Page } from"../../components";
+import { Page } from "../../components";
 
 export default function Register() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const response = {
+      fullname: data.get("fullname"),
       email: data.get("email"),
       password: data.get("password"),
       phone: data.get("phone"),
       dob: data.get("dob"),
       gender: data.get("gender"),
-    });
+    };
+    console.log(response);
   };
 
   const [Gender, setGender] = useState("");
@@ -71,7 +73,7 @@ export default function Register() {
               <Grid item xs={12}>
                 <TextField
                   size="small"
-                  name="fullName"
+                  name="fullname"
                   type="text"
                   required
                   fullWidth
@@ -189,7 +191,7 @@ export default function Register() {
                     <MenuItem value={"Female"}>Female</MenuItem>
                     <MenuItem value={"Other"}>Other</MenuItem>
                   </Select>
-                </FormControl>{" "}
+                </FormControl>
               </Grid>
             </Grid>
             <Button
