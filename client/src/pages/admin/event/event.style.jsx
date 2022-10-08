@@ -32,6 +32,7 @@ export const EventInputMultiline = styled('textarea')({
     padding: '0.25em 0.5em',
     margin: '0.25em 0.25em',
     letterSpacing: '1px',
+    resize: 'vertical',
 
     '&:focus': {
         borderBottom: '2px solid #828DF8',

@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
-import { Footer, ProtectedRoutes } from "./components";
+import { EventParticipants, Footer, ProtectedRoutes } from "./components";
 import { CssBaseline } from "@mui/material";
 import { theme } from "./theme";
 import {
@@ -55,6 +55,7 @@ function App() {
           >
             <Route index element={<AdminDashboard />} />
             <Route path="create" element={<CreateEvent />} />
+            <Route path="event/:eventId" element={<EventParticipants/>} />
           </Route>
 
           {/* MENTOR LOGIN ROUTES*/}

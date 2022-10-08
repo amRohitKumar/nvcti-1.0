@@ -251,7 +251,7 @@ const CreateEvent = () => {
   };
 
   return (
-    <Wrapper sx={{ width: { lg: "55%", md: "70%", sm: "80%", xs: "95%" } }}>
+    <Wrapper sx={{ width: { lg: "50%", md: "70%", sm: "80%", xs: "95%" } }}>
       {/* EVENT INFO SECTION */}
       <Paper
         elevation={1}

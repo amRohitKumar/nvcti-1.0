@@ -1,5 +1,4 @@
 import ClientDashboardNavbar from "./dashboard-navbar/client-dashboard-navbar.component";
-import AdminDashboardNavbar from "./dashboard-navbar/admin-dashboard-navbar.component";
 import ProtectedRoutes from "./protected-routes/protected-routes.component";
 import Carousel from "./carousel/carousel.component";
 import OngoingEventsTable from "./ongoing-events-table/ongoing-events-table.component";
@@ -9,15 +8,22 @@ import Footer from "./footer/Footer.component";
 import TimeLine from "./timeline/timeline.component";
 import EventForm from "./event-form-display/event-form-display.component";
 
+// ADMIN
+import AdminDashboardNavbar from "./dashboard-navbar/admin-dashboard-navbar.component";
+import OngoingEventsAdmin from "./ongoing-events-table-admin/ongoing-events.component";
+import EventParticipants from "./event-participant/event-participant.component";
+
 export {
   ClientDashboardNavbar,
   AdminDashboardNavbar,
   ProtectedRoutes,
   Carousel,
   OngoingEventsTable,
+  OngoingEventsAdmin,
   Event,
   TimeLine,
   PreviousStatusTable,
+  EventParticipants,
   Footer,
   EventForm,
 };
