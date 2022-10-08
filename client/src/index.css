@@ -3,6 +3,9 @@
 ::before {
   box-sizing: border-box;
 }
+html {
+  scroll-behavior: smooth;
+}
 html,
 body,
 #root {
@@ -23,9 +26,6 @@ body,
 ::-webkit-scrollbar-track {
   border-radius: 3px;
   background-color: #bfbfbf;
-}
-html {
-  scroll-behavior: smooth;
 }
 :root {
   /* colors */
