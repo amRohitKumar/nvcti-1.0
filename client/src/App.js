@@ -19,7 +19,8 @@ import {
   Navbar,
   SharedLayoutAdmin,
   SharedLayoutClient,
-  CreateEvent
+  CreateEvent,
+  Contact
 } from "./pages";
 import { HelmetProvider } from 'react-helmet-async';
 
@@ -39,6 +40,13 @@ function App() {
                 <Videos />
               </>
             }></Route>
+            <Route exact path="/contact"
+              element={
+                <>
+                  <Navbar />
+                  <Contact />
+                </>}
+            />
 
             {/* CLIENT LOGIN/REGISTER ROUTES */}
             <Route exact path="/login" element={<LogIn />}></Route>

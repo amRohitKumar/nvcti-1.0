@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 
-import { EventForm } from "../../../components";
+import { EventApplicationForm } from "..";
 import Wrapper from "./event-form.style";
 
 const EventFormPage = () => {
@@ -8,7 +8,7 @@ const EventFormPage = () => {
   console.log(params.eventId);
   return (
     <Wrapper>
-      <EventForm />
+      <EventApplicationForm />
     </Wrapper>
   );
 };

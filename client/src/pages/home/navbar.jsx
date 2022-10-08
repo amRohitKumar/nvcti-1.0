@@ -17,12 +17,12 @@ import {
 
 const drawerWidth = 240;
 const navItems = [
-  { link: "#home", text: "Home" },
-  { link: "#about", text: "About us" },
-  { link: "#mission", text: "Our missions" },
-  { link: "#events", text: "events" },
+  { link: "/", text: "Home" },
+  { link: "/#about", text: "About us" },
+  { link: "/#mission", text: "Our missions" },
+  { link: "/#events", text: "events" },
   { link: "/facilities", text: "facilities" },
-  { link: "#projects", text: "projects" },
+  { link: "/#projects", text: "projects" },
   { link: "/contact", text: "contact us" },
 ];
 
@@ -95,7 +95,7 @@ const Navbar = (props) => {
     window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", marginBottom:"2.5em" }}>
       <AppBar component="nav" sx={{ backgroundColor: "#F2f2f2" }}>
         <Toolbar>
           <IconButton
@@ -118,7 +118,7 @@ const Navbar = (props) => {
                     color: "#000",
                     textTransform: "uppercase",
                     listDecoration: "none",
-                    marginRight: "10px",
+                    marginRight: {xs:"0px", lg:"2em"},
                     ":hover": {
                       backgroundColor: "#000",
                       color: "#fff",
@@ -136,10 +136,20 @@ const Navbar = (props) => {
               gap: "10px",
             }}
           >
-            <Button variant="contained" color="secondary" href="/login">
+            <Button
+              size="small"
+              variant="contained"
+              color="secondary"
+              href="/login"
+            >
               LOGIN
             </Button>
-            <Button variant="contained" color="error" href="/register">
+            <Button
+              size="small"
+              variant="contained"
+              color="error"
+              href="/register"
+            >
               REGISTER
             </Button>
           </Box>

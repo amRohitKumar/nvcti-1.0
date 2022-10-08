@@ -10,8 +10,8 @@ import HowToRegIcon from "@mui/icons-material/HowToReg";
 import MenuIcon from "@mui/icons-material/Menu";
 import IconButton from "@mui/material/IconButton";
 import SchoolIcon from "@mui/icons-material/School";
-
-
+import MessageIcon from '@mui/icons-material/Message';
+import SendIcon from '@mui/icons-material/Send';
 
 export {
     PersonIcon,
@@ -25,5 +25,7 @@ export {
     HowToRegIcon,
     MenuIcon,
     IconButton,
-    SchoolIcon
+    SchoolIcon,
+    MessageIcon,
+    SendIcon
 }
