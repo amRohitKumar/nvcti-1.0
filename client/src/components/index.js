@@ -13,9 +13,17 @@ import AdminDashboardNavbar from "./dashboard-navbar/admin-dashboard-navbar.comp
 import OngoingEventsAdmin from "./ongoing-events-table-admin/ongoing-events.component";
 import EventParticipants from "./event-participant/event-participant.component";
 
+// MENTOR
+import MentorDashboardNavbar from "./dashboard-navbar/mentor-dashboard-navbar.component";
+
+// SUPER-ADMIN
+import SuperAdminDashboardNavbar from "./dashboard-navbar/superAdmin-dashboard-navbar.component";
+
 export {
   ClientDashboardNavbar,
   AdminDashboardNavbar,
+  MentorDashboardNavbar,
+  SuperAdminDashboardNavbar,
   ProtectedRoutes,
   Carousel,
   OngoingEventsTable,

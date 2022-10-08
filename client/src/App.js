@@ -10,11 +10,15 @@ import {
   EventDetails,
   ClientDashboard,
   AdminDashboard,
+  MentorDashboard,
+  SuperAdminDashboard,
   StatusPage,
   EventFormPage,
   SharedLayoutAdmin,
   SharedLayoutClient,
-  CreateEvent
+  CreateEvent,
+  SharedLayoutMentor,
+  SharedLayoutSuperAdmin
 } from "./pages";
 
 function App() {
@@ -60,9 +64,29 @@ function App() {
 
           {/* MENTOR LOGIN ROUTES*/}
           {/* MENTOR PROTECTED ROUTES */}
+          <Route
+            path="/mentor"
+            element={
+              <ProtectedRoutes userRole="mentor">
+                <SharedLayoutMentor />
+              </ProtectedRoutes>
+            }
+          >
+            <Route index element={<MentorDashboard />} />
+          </Route>
 
           {/* SUPER-ADMIN LOGIN ROUTES */}
           {/* SUPER-ADMIN PROTEDTED ROUTES */}
+          <Route
+            path="/superAdmin"
+            element={
+              <ProtectedRoutes userRole="superAdmin">
+                <SharedLayoutSuperAdmin />
+              </ProtectedRoutes>
+            }
+          >
+            <Route index element={<SuperAdminDashboard />} />
+          </Route>
         </Routes>
         <Footer />
       </ThemeProvider>
