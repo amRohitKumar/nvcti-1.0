@@ -2,7 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import nvctii from "../../assets/nvcti3.png";
+import nvctii from "../../assets/nvcti_logo.svg";
 import iitism2 from "../../assets/ism_transparent_logo.png";
 
 

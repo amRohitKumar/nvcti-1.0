@@ -1,6 +1,6 @@
 import { Grid, Typography, Box } from "@mui/material";
 import React from "react";
-import nvcti2 from "../../assets/nvcti2.png";
+import nvcti2 from "../../assets/nvcti_logo.svg";
 
 const About = () => {
   return (
@@ -15,7 +15,7 @@ const About = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-around",
-              flexDirection: {  xs: "column" },
+              flexDirection: { xs: "column" },
               overflow: "hidden",
             }}
           >
@@ -23,7 +23,7 @@ const About = () => {
               <Typography variant="h4">NVCTI ,</Typography>
               <Typography variant="h5">Innovation Cell of IIT ISM</Typography>
             </Box>
-            <img src={nvcti2} alt="NVCTI" />
+            <img src={nvcti2} alt="NVCTI" width="150" height="150" />
           </Box>
         </Grid>
         <Grid item xs={12} md={4}>

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { MenuIcon, IconButton } from "../../icons/icons";
-import nvcti3 from "../../assets/nvcti3.png";
+import nvcti3 from "../../assets/nvcti_logo.svg";
 import {
   AppBar,
   Box,

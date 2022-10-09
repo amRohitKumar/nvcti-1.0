@@ -14,17 +14,14 @@ import {
   SuperAdminDashboard,
   StatusPage,
   EventFormPage,
-  Home,
-  About,
-  Missions,
-  Videos,
-  Navbar,
+  HomePage,
   SharedLayoutAdmin,
   SharedLayoutClient,
   CreateEvent,
   SharedLayoutMentor,
   SharedLayoutSuperAdmin,
   Contact,
+  Navbar,
 } from "./pages";
 
 function App() {
@@ -33,19 +30,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Routes>
-          <Route
-            exact
-            path="/"
-            element={
-              <>
-                <Navbar />
-                <Home />
-                <About />
-                <Missions />
-                <Videos />
-              </>
-            }
-          ></Route>
+          <Route exact path="/" element={<HomePage />} />
           <Route
             exact
             path="/contact"

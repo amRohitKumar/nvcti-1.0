@@ -13,10 +13,7 @@ import MentorDashboard from "./mentor/mentor-dashboard/mentor-dashboard.page";
 import SharedLayoutMentor from "./mentor/shared-layout.page";
 import SuperAdminDashboard from "./superAdmin/superAdmin-dashboard/superAdmin-dashboard.page";
 import SharedLayoutSuperAdmin from "./superAdmin/shared-layout.page";
-import Home from "./home/home";
-import About from "./home/about";
-import Missions from "./home/mission";
-import Videos from "./home/videos";
+import HomePage from "./home/home.page";
 import Navbar from "./home/navbar";
 import Contact from "./home/contact";
 
@@ -36,10 +33,7 @@ export {
   SharedLayoutAdmin,
   SharedLayoutMentor,
   SharedLayoutSuperAdmin,
-  Home,
-  About,
-  Missions,
-  Videos,
+  HomePage,
   Navbar,
   Contact,
 };
