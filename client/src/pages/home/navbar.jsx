@@ -49,7 +49,7 @@ const Navbar = (props) => {
       onClick={handleDrawerToggle}
       sx={{ textAlign: "center", marginTop: "1em" }}
     >
-      <img src={nvcti3} width="56" height="56" />
+      <img src={nvcti3} width="56" height="56" alt="NVCTI"/>
       <Divider />
       <List>
         {navItems.map(({ link, text }) => (
@@ -108,7 +108,7 @@ const Navbar = (props) => {
             <MenuIcon sx={{ color: "black" }} />
           </IconButton>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "block" } }}>
-            <img src={nvcti3} width="56" height="56" />
+            <img src={nvcti3} width="56" height="56" alt="NVCTI"/>
           </Box>
           <Box sx={{ display: { xs: "none", md: "block" } }}>
             {navItems.map(({ link, text }) => (

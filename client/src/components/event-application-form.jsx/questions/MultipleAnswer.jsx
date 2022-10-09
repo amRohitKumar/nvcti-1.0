@@ -1,5 +1,4 @@
 import {
-  Paper,
   Radio,
   RadioGroup,
   FormControlLabel,
@@ -10,15 +9,38 @@ import {
 import React, { useState } from "react";
 import { ElemWrapper } from "../eventApplicationForm.styles";
 import Linkify from "react-linkify";
+import { Box } from "@mui/system";
+import { useEffect } from "react";
 
-const MultipleAnswer = ({ title, isRequired, options, other }) => {
+const MultipleAnswer = ({
+  title,
+  isRequired,
+  options,
+  other,
+  answer,
+  questionNumber,
+  setAnswerArray,
+}) => {
   const [value, setValue] = useState("");
-  // const [otherInfo, setOtherInfo] = useState("Other");
-  // const [disabled, setDisabled] = useState(true);
+  const [otherText, setOtherText] = useState("");
 
   const handleChange = (e) => {
     setValue(e.target.value);
   };
+
+  useEffect(() => {
+    let answerState = { other: "", options: [] };
+    if (value === "other") {
+      answerState.other = otherText;
+      answerState.options = [];
+    } else {
+      answerState.other = "";
+      answerState.options = [value];
+    }
+    let newAnswer = JSON.parse(answer);
+    newAnswer[questionNumber] = answerState;
+    setAnswerArray(JSON.stringify(newAnswer));
+  }, [value, otherText]);
 
   return (
     <ElemWrapper>
@@ -37,22 +59,22 @@ const MultipleAnswer = ({ title, isRequired, options, other }) => {
               );
             })}
             {other && (
-              // <div>
-              <FormControlLabel
-                value="Other"
-                control={<Radio />}
-                label="Others"
-                // onClick={() => setDisabled(!disabled)}
-              />
-              //   <TextField
-              //     fullWidth
-              //     disabled={disabled}
-              //     placeholder="Please specify"
-              //     variant="standard"
-              //     onChange={(e) => setOtherInfo(e.target.value)}
-              //     sx={{ color: "#828DF8" }}
-              //   />
-              // </div>
+              <Box sx={{ display: "flex" }}>
+                <FormControlLabel
+                  value="other"
+                  control={<Radio />}
+                  label="Others"
+                />
+                <TextField
+                  fullWidth
+                  disabled={value !== "other"}
+                  placeholder="Please specify"
+                  variant="standard"
+                  value={otherText}
+                  onChange={(e) => setOtherText(e.target.value)}
+                  sx={{ color: "#828DF8" }}
+                />
+              </Box>
             )}
           </RadioGroup>
           {isRequired && (

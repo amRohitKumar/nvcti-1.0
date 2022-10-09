@@ -8,12 +8,27 @@ import {
 import React, { useState } from "react";
 import { ElemWrapper } from "../eventApplicationForm.styles";
 import Linkify from "react-linkify";
+import { useEffect } from "react";
 
-const DropdownAnswer = ({ title, isRequired, options, other }) => {
-  const [answer, setAnswer] = useState("");
+const DropdownAnswer = ({
+  title,
+  isRequired,
+  options,
+  other,
+  answer,
+  questionNumber,
+  setAnswerArray,
+}) => {
+  const [state, setState] = useState("");
   const handleChange = (e) => {
-    setAnswer(e.target.value);
+    setState(e.target.value);
   };
+
+  useEffect(() => {
+    let newAnswer = JSON.parse(answer);
+    newAnswer[questionNumber] = state;
+    setAnswerArray(JSON.stringify(newAnswer));
+  }, [state]);
 
   return (
     <ElemWrapper>
@@ -22,7 +37,7 @@ const DropdownAnswer = ({ title, isRequired, options, other }) => {
         <FormControl fullWidth>
           <Select
             name={title}
-            value={answer}
+            value={state}
             onChange={handleChange}
             required={isRequired ? true : false}
           >
