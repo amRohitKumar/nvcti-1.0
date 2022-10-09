@@ -24,7 +24,7 @@ import {
   PhoneIcon,
   CalendarMonthIcon,
 } from "../../icons/icons";
-import { Page } from "../../components";
+import useTitle from "../../hooks/useTitle";
 
 export default function Register() {
   const handleSubmit = (event) => {
@@ -45,9 +45,9 @@ export default function Register() {
   const handleChange = (e) => {
     setGender(e.target.value);
   };
-
+  useTitle("Register")
   return (
-    <Page title={"Register"}>
+    <>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -213,6 +213,6 @@ export default function Register() {
           </Box>
         </Box>
       </Container>
-    </Page>
+    </>
   );
 }

@@ -8,7 +8,6 @@ import Footer from "./footer/Footer.component";
 import TimeLine from "./timeline/timeline.component";
 // import EventForm from "./event-form-display/event-form-display.component";
 import EventApplicationForm from "./event-application-form.jsx/eventApplicationForm";
-import Page from "./title/pages";
 
 
 // ADMIN
@@ -38,5 +37,4 @@ export {
   Footer,
   // EventForm,
   EventApplicationForm,
-  Page
 };

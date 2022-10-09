@@ -1,4 +1,3 @@
-import * as React from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -18,7 +17,7 @@ import {
   LockOutlinedIcon,
   NoEncryptionIcon,
 } from "../../icons/icons";
-import { Page } from "../../components";
+import useTitle from "../../hooks/useTitle";
 
 export default function LogIn() {
   const handleSubmit = (e) => {
@@ -38,9 +37,9 @@ export default function LogIn() {
       password: data.get("password"),
     });
   };
-
+  useTitle("Login")
   return (
-    <Page title={"Login"}>
+    <>
       <ToastContainer
         position="top-left"
         autoClose={2000}
@@ -133,6 +132,6 @@ export default function LogIn() {
           </Box>
         </Box>
       </Container>
-    </Page>
+    </>
   );
 }

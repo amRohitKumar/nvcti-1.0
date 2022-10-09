@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import Linkify from "react-linkify";
 import { Button, Paper } from "@mui/material";
 import {
@@ -9,10 +10,7 @@ import {
 } from "./questions";
 import { EventInput, EventInputMultiline } from "./eventApplicationForm.styles";
 import Wrapper from "./eventApplicationForm.styles";
-import { Page } from "../";
 import { eventFormData } from "../../data";
-import { useEffect } from "react";
-import { useState } from "react";
 
 const EventApplicationForm = () => {
   const { title, description, questions } = eventFormData;
@@ -37,100 +35,96 @@ const EventApplicationForm = () => {
   return (
     <>
       {!loading && (
-        <Page title={"APPLY NOW"}>
-          <Wrapper
-            sx={{ width: { lg: "55%", md: "70%", sm: "80%", xs: "95%" } }}
+        <Wrapper sx={{ width: { lg: "55%", md: "70%", sm: "80%", xs: "95%" } }}>
+          <Paper
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              p: "1em",
+              borderTop: "10px solid #828DF8",
+            }}
           >
-              <Paper
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  p: "1em",
-                  borderTop: "10px solid #828DF8",
+            <EventInput size="large">{title} </EventInput>
+            <EventInputMultiline>
+              <Linkify
+                properties={{
+                  target: "_blank",
                 }}
               >
-                <EventInput size="large">{title} </EventInput>
-                <EventInputMultiline>
-                  <Linkify
-                    properties={{
-                      target: "_blank",
-                    }}
-                  >
-                    {description}
-                  </Linkify>
-                </EventInputMultiline>
-              </Paper>
+                {description}
+              </Linkify>
+            </EventInputMultiline>
+          </Paper>
 
-              {questions.map(
-                ({ type, question, isRequired, options, other }, idx) => {
-                  if (type === "short_anwer")
-                    return (
-                      <ShortAnswer
-                        key={idx}
-                        title={question}
-                        isRequired={isRequired}
-                        answer={answerArray}
-                        questionNumber={idx}
-                        setAnswerArray={setAnswerArray}
-                      />
-                    );
-                  else if (type === "paragraph")
-                    return (
-                      <ParagraphAnswer
-                        key={idx}
-                        title={question}
-                        isRequired={isRequired}
-                        answer={answerArray}
-                        questionNumber={idx}
-                        setAnswerArray={setAnswerArray}
-                      />
-                    );
-                  else if (type === "multiple")
-                    return (
-                      <MultipleAnswer
-                        key={idx}
-                        title={question}
-                        isRequired={isRequired}
-                        options={options}
-                        answer={answerArray}
-                        questionNumber={idx}
-                        setAnswerArray={setAnswerArray}
-                        other={other}
-                      />
-                    );
-                  else if (type === "dropdown")
-                    return (
-                      <DropdownAnswer
-                        key={idx}
-                        title={question}
-                        isRequired={isRequired}
-                        options={options}
-                        other={other}
-                        answer={answerArray}
-                        questionNumber={idx}
-                        setAnswerArray={setAnswerArray}
-                      />
-                    );
-                  else if (type === "checkboxes")
-                    return (
-                      <CheckboxesAnswer
-                        key={idx}
-                        title={question}
-                        isRequired={isRequired}
-                        options={options}
-                        other={other}
-                        answer={answerArray}
-                        questionNumber={idx}
-                        setAnswerArray={setAnswerArray}
-                      />
-                    );
-                }
-              )}
-              <Button variant="contained" onClick={handleSubmit}>
-                Submit
-              </Button>
-          </Wrapper>
-        </Page>
+          {questions.map(
+            ({ type, question, isRequired, options, other }, idx) => {
+              if (type === "short_anwer")
+                return (
+                  <ShortAnswer
+                    key={idx}
+                    title={question}
+                    isRequired={isRequired}
+                    answer={answerArray}
+                    questionNumber={idx}
+                    setAnswerArray={setAnswerArray}
+                  />
+                );
+              else if (type === "paragraph")
+                return (
+                  <ParagraphAnswer
+                    key={idx}
+                    title={question}
+                    isRequired={isRequired}
+                    answer={answerArray}
+                    questionNumber={idx}
+                    setAnswerArray={setAnswerArray}
+                  />
+                );
+              else if (type === "multiple")
+                return (
+                  <MultipleAnswer
+                    key={idx}
+                    title={question}
+                    isRequired={isRequired}
+                    options={options}
+                    answer={answerArray}
+                    questionNumber={idx}
+                    setAnswerArray={setAnswerArray}
+                    other={other}
+                  />
+                );
+              else if (type === "dropdown")
+                return (
+                  <DropdownAnswer
+                    key={idx}
+                    title={question}
+                    isRequired={isRequired}
+                    options={options}
+                    other={other}
+                    answer={answerArray}
+                    questionNumber={idx}
+                    setAnswerArray={setAnswerArray}
+                  />
+                );
+              else if (type === "checkboxes")
+                return (
+                  <CheckboxesAnswer
+                    key={idx}
+                    title={question}
+                    isRequired={isRequired}
+                    options={options}
+                    other={other}
+                    answer={answerArray}
+                    questionNumber={idx}
+                    setAnswerArray={setAnswerArray}
+                  />
+                );
+            }
+          )}
+          <Button variant="contained" onClick={handleSubmit}>
+            Submit
+          </Button>
+        </Wrapper>
       )}
     </>
   );
