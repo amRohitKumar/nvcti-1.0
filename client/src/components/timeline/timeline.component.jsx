@@ -9,7 +9,7 @@ import {
   TimelineDot,
   TimelineOppositeContent,
 } from "@mui/lab";
-import { QueryBuilderRoundedIcon } from "../../icons/icons";
+import { QueryBuilderRoundedIcon } from "../../icons";
 import { event } from "../../data/index";
 
 const TimeLine = () => {

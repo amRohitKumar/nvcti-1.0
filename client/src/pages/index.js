@@ -1,5 +1,8 @@
-import LogIn from "./login/LogIn.component";
-import Register from "./register/Register.component";
+import ClientLogIn from "./client/login/LogIn.component";
+import AdminLogIn from "./admin/login/LogIn.component";
+import MentorLogIn from "./mentor/login/LogIn.component";
+import SuperAdminLogIn from "./superAdmin/login/LogIn.component";
+import Register from "./client/register/Register.component";
 import Error from "./error/error";
 import EventDetails from "./client/eventdetails/EventDetails";
 import ClientDashboard from "./client/client-dashboard/client-dashboard.page";
@@ -18,7 +21,10 @@ import Navbar from "./home/navbar";
 import Contact from "./home/contact";
 
 export {
-  LogIn,
+  ClientLogIn,
+  AdminLogIn,
+  MentorLogIn,
+  SuperAdminLogIn,
   Register,
   Error,
   ClientDashboard,

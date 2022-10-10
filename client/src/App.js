@@ -1,10 +1,20 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
-import { EventParticipants, ProtectedRoutes, Footer, EventFormSubmitted } from "./components";
+import {
+  EventParticipants,
+  ProtectedRoutes,
+  Footer,
+  EventFormSubmitted,
+} from "./components";
 import { CssBaseline } from "@mui/material";
 import { theme } from "./theme";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
-  LogIn,
+  ClientLogIn,
+  AdminLogIn,
+  MentorLogIn,
+  SuperAdminLogIn,
   Register,
   Error,
   EventDetails,
@@ -43,7 +53,7 @@ function App() {
           />
 
           {/* CLIENT LOGIN/REGISTER ROUTES */}
-          <Route exact path="/login" element={<LogIn />}></Route>
+          <Route exact path="/login" element={<ClientLogIn />}></Route>
           <Route exact path="/register" element={<Register />}></Route>
           {/* CLIENT PROTECTED ROUTES */}
           <Route
@@ -59,7 +69,9 @@ function App() {
             <Route path="apply/:eventId" element={<EventFormPage />} />
             <Route path="events" element={<EventDetails />}></Route>
           </Route>
+
           {/* ADMIN LOGIN ROUTES */}
+          <Route exact path="/adminlogin" element={<AdminLogIn />}></Route>
           {/* ADMIN PROTECTED ROUTES */}
           <Route
             path="/admin"
@@ -75,6 +87,7 @@ function App() {
           </Route>
 
           {/* MENTOR LOGIN ROUTES*/}
+          <Route exact path="/mentorlogin" element={<MentorLogIn />}></Route>
           {/* MENTOR PROTECTED ROUTES */}
           <Route
             path="/mentor"
@@ -85,11 +98,19 @@ function App() {
             }
           >
             <Route index element={<MentorDashboard />} />
-            <Route exact path="response/:CandidateId"
-              element={<EventFormSubmitted />} />
+            <Route
+              exact
+              path="response/:CandidateId"
+              element={<EventFormSubmitted />}
+            />
           </Route>
 
           {/* SUPER-ADMIN LOGIN ROUTES */}
+          <Route
+            exact
+            path="/superadminlogin"
+            element={<SuperAdminLogIn />}
+          ></Route>
           {/* SUPER-ADMIN PROTEDTED ROUTES */}
           <Route
             path="/superAdmin"
@@ -105,6 +126,17 @@ function App() {
           {/* ERROR ROUTE */}
           <Route exact path="*" element={<Error />}></Route>
         </Routes>
+        <ToastContainer
+          position="top-left"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          limit={1}
+          draggable
+          pauseOnHover
+        />
         <Footer />
       </ThemeProvider>
     </BrowserRouter>

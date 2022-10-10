@@ -1,6 +1,6 @@
 import { Avatar, Card, Typography, Grid, Box } from "@mui/material";
 import React from "react";
-import { SchoolIcon } from "../../icons/icons";
+import { SchoolIcon } from "../../icons";
 
 const QuotesArr = [
   "To build a vibrant innovation ecosystem by establishing a network between innovators, academia and incubators",

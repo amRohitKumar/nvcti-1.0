@@ -14,7 +14,7 @@ import {
   PersonIcon,
   MessageIcon,
   SendIcon,
-} from "../../icons/icons";
+} from "../../icons";
 
 const Div = styled("div")({
   fontSize: "18px",
