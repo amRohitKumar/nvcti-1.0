@@ -35,15 +35,15 @@ const CheckboxesAnswer = ({
 
   useEffect(() => {
     let answerState = { other: "", options: [] };
-    JSON.parse(state).forEach((take,idx) => {
-      if(take) answerState.options.push(parsedOptions[idx]);
-    })
-    if(otherState) answerState.other = text;
+    JSON.parse(state).forEach((take, idx) => {
+      if (take) answerState.options.push(parsedOptions[idx]);
+    });
+    if (otherState) answerState.other = text;
     else answerState.other = "";
     let newAnswer = JSON.parse(answer);
     newAnswer[questionNumber] = answerState;
     setAnswerArray(JSON.stringify(newAnswer));
-  }, [state, otherState, text])
+  }, [state, otherState, text]);
 
   return (
     <ElemWrapper>
