@@ -114,3 +114,51 @@ export const eventFormData = {
     }
   ]
 }
+
+
+export const response = {
+  "title": "Event 1",
+  "responses": [
+    {
+      "question": "short answer 1",
+      "response": "anupam kher",
+    },
+    {
+      "question": "paragraph 1",
+      "response": "fxmhiuf ds xunbxduhdnwiu zdiuewbyiuwe zueydbwiu",
+    },
+    {
+      "question": "multiple 1",
+      "response": {
+        "other": "others",
+        "options": []
+      }
+    },
+    {
+      "question": "multiple 2",
+      "response": {
+        "other": "",
+        "options": [
+          "Option 3"
+        ]
+      }
+    },
+    {
+      "question": "checkbox 1",
+      "response": {
+        "other": "prefer not to say",
+        "options": [
+          "Option 3", "Option 1"
+        ]
+      }
+    },
+    {
+      "question": "dropdown 1",
+      "response": "Option 3"
+    },
+    {
+      "question": "dropdown 2",
+      "response": "None"
+    },
+  ]
+}

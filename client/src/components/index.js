@@ -21,6 +21,8 @@ import MentorDashboardNavbar from "./dashboard-navbar/mentor-dashboard-navbar.co
 // SUPER-ADMIN
 import SuperAdminDashboardNavbar from "./dashboard-navbar/superAdmin-dashboard-navbar.component";
 
+import EventFormSubmitted from "./submitted-event-form/submittedForm";
+
 export {
   ClientDashboardNavbar,
   AdminDashboardNavbar,
@@ -37,4 +39,5 @@ export {
   Footer,
   // EventForm,
   EventApplicationForm,
+  EventFormSubmitted
 };

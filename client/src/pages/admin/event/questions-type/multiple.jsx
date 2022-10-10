@@ -2,6 +2,7 @@ import TextField from "@mui/material/TextField";
 import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import CancelIcon from "@mui/icons-material/Cancel";
 
+
 const MultipleAnswer = ({ options, setOptions, other, setOther }) => {
   const handleInput = (evt, idx) => {
     let newOptions = JSON.parse(options);

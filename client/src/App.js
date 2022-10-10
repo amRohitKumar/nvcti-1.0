@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
-import { EventParticipants, ProtectedRoutes, Footer } from "./components";
+import { EventParticipants, ProtectedRoutes, Footer, EventFormSubmitted } from "./components";
 import { CssBaseline } from "@mui/material";
 import { theme } from "./theme";
 import {
@@ -85,6 +85,8 @@ function App() {
             }
           >
             <Route index element={<MentorDashboard />} />
+            <Route exact path="response/:CandidateId"
+              element={<EventFormSubmitted />} />
           </Route>
 
           {/* SUPER-ADMIN LOGIN ROUTES */}
