@@ -120,22 +120,22 @@ export const response = {
   "title": "Event 1",
   "responses": [
     {
-      "question": "short answer 1",
-      "response": "anupam kher",
+      "question": "what is your name?",
+      "response": "Anupam Kher",
     },
     {
-      "question": "paragraph 1",
-      "response": "fxmhiuf ds xunbxduhdnwiu zdiuewbyiuwe zueydbwiu",
+      "question": "Tell about yourself... Which ice cream flavors have you purchased in the past 6 months? Select all that apply.",
+      "response": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rerum obcaecati error deleniti fugiat eaque delectus. Porro eum molestias debitis natus. Nihil reprehenderit similique voluptas voluptates quia fugiat, ex deserunt cupiditate!",
     },
     {
-      "question": "multiple 1",
+      "question": "what is your age?",
       "response": {
-        "other": "others",
+        "other": "Others",
         "options": []
       }
     },
     {
-      "question": "multiple 2",
+      "question": "what is your gender?",
       "response": {
         "other": "",
         "options": [
@@ -144,7 +144,7 @@ export const response = {
       }
     },
     {
-      "question": "checkbox 1",
+      "question": "Which ice cream flavors have you purchased in the past 6 months? Select all that apply.",
       "response": {
         "other": "prefer not to say",
         "options": [
@@ -153,11 +153,11 @@ export const response = {
       }
     },
     {
-      "question": "dropdown 1",
+      "question": "In which state were you born?",
       "response": "Option 3"
     },
     {
-      "question": "dropdown 2",
+      "question": "Is there any additional feedback you'd like to share with us",
       "response": "None"
     },
   ]

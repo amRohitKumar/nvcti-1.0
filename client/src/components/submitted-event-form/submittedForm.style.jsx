@@ -19,14 +19,12 @@ export const EventInput = styled(Box)(({ size }) => ({
   },
 }));
 
-
 export const ElemWrapper = styled(Paper)({
-  marginBlock: "2em",
+  marginBlock: "1em",
   padding: "1em",
-
-  ".title-div": {
-    marginBottom: "1em",
-  },
+  backgroundColor: "rgba(255, 255, 255)",
+  display: "flex",
 });
 
 export default Wrapper;
+

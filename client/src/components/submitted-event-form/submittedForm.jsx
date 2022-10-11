@@ -9,7 +9,7 @@ const EventFormSubmitted = () => {
   const { title, responses } = response;
 
   return (
-    <Wrapper sx={{ width: { lg: "55%", md: "70%", sm: "80%", xs: "95%" } }}>
+    <Wrapper sx={{ width: "80%" }}>
       <Paper
         sx={{
           display: "flex",
@@ -20,19 +20,24 @@ const EventFormSubmitted = () => {
       >
         <EventInput size="large">{title} </EventInput>
       </Paper>
+
       {responses.map(({ response, question }, idx) => (
         <ElemWrapper key={idx}>
-          <Typography sx={{ fontWeight: "500" }}>
+          <Box sx={{ fontWeight: "500", width: "40%" }}>
             {question || "Question left blank"}
-          </Typography>
-          <Divider sx={{ marginBottom: "1em", marginTop: "1em" }} />
+          </Box>
+          <Divider
+            orientation="vertical"
+            flexItem
+            sx={{ margin: "0 10px 0 10px" }}
+          />
           {response && typeof response === "string" && (
-            <Box>
+            <Box sx={{ display: "flex", alignItems: "center", flex: "1 1 0" }}>
               <Typography
                 sx={{
                   display: "flex",
                   alignItems: "flex-start",
-                  gap: "20px",
+                  gap: "10px",
                 }}
               >
                 <CheckCircleOutlineIcon sx={{ color: "green" }} />
@@ -44,8 +49,10 @@ const EventFormSubmitted = () => {
             <Box
               sx={{
                 display: "flex",
-                gap: "20px",
+                alignItems: "flex-start",
                 flexDirection: "column",
+                gap: "10px",
+                flex: "1 1 0",
               }}
             >
               {response.options.length !== 0 &&
@@ -55,7 +62,7 @@ const EventFormSubmitted = () => {
                     sx={{
                       display: "flex",
                       alignItems: "flex-start",
-                      gap: "20px",
+                      gap: "10px",
                     }}
                   >
                     <CheckCircleOutlineIcon sx={{ color: "green" }} />
@@ -67,7 +74,7 @@ const EventFormSubmitted = () => {
                   sx={{
                     display: "flex",
                     alignItems: "flex-start",
-                    gap: "20px",
+                    gap: "10px",
                   }}
                 >
                   <CheckCircleOutlineIcon sx={{ color: "green" }} />
