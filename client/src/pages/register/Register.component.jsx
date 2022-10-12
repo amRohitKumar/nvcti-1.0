@@ -27,6 +27,8 @@ import {
 import useTitle from "../../hooks/useTitle";
 
 export default function Register() {
+  useTitle("Register");
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -45,7 +47,7 @@ export default function Register() {
   const handleChange = (e) => {
     setGender(e.target.value);
   };
-  useTitle("Register")
+  useTitle("Register");
   return (
     <>
       <Container component="main" maxWidth="xs">

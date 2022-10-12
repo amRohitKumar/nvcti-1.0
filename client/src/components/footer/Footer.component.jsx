@@ -66,14 +66,15 @@ export default function Footer() {
         padding: "0.8em",
       }}
     >
-      <Grid item xs={3}></Grid>
+      <Grid item xs={1} sm={3}></Grid>
       <Grid
         item
-        xs={1}
+        xs={3}
+        sm={1}
         sx={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "flex-end",
+          justifyContent: "center",
         }}
       >
         <img
@@ -89,7 +90,7 @@ export default function Footer() {
             alignItems: "center",
             justifyContent: "center",
             flexDirection: "column",
-            gap: "10px",
+            gap: "6px",
           }}
         >
           <Container>
@@ -106,8 +107,9 @@ export default function Footer() {
               gap: "10px",
             }}
           >
-            {socialNetworks.map(({ link, icon, iconColor }) => (
+            {socialNetworks.map(({ socialHandle, link, icon, iconColor }) => (
               <Link
+                key={socialHandle}
                 href={link}
                 target="_blank"
                 sx={{ color: "#000", "&:hover": { color: iconColor } }}
@@ -120,11 +122,12 @@ export default function Footer() {
       </Grid>
       <Grid
         item
-        xs={1}
+        xs={3}
+        sm={1}
         sx={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "flex-start",
+          justifyContent: "center",
         }}
       >
         <img
@@ -133,7 +136,7 @@ export default function Footer() {
           style={{ width: "45px", height: "45px" }}
         />
       </Grid>
-      <Grid item xs={3}></Grid>
+      <Grid item xs={1} sm={3}></Grid>
     </Grid>
   );
 }

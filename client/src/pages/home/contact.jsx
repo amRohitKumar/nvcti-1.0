@@ -15,6 +15,8 @@ import {
   MessageIcon,
   SendIcon,
 } from "../../icons/icons";
+import { grey } from "@mui/material/colors";
+import useTitle from "../../hooks/useTitle";
 
 const Div = styled("div")({
   fontSize: "18px",
@@ -42,6 +44,8 @@ const Textfield = styled(TextField)({
 });
 
 const Contact = () => {
+  useTitle("Contact Us");
+
   const [loading, setLoading] = useState(false);
   function handleClick() {
     setLoading(true);
@@ -50,9 +54,8 @@ const Contact = () => {
     <Grid container>
       <Box
         sx={{
-          backgroundImage: `url("https://techiejunky.com/wp-content/uploads/2021/10/contact-us-banner.jpg")`,
+          backgroundImage: `url("https://images.unsplash.com/photo-1596524430615-b46475ddff6e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y29udGFjdCUyMHVzfGVufDB8fDB8fA%3D%3D&w=1000&q=80")`,
           width: "100%",
-          // aspectRatio: "1",
           height: { xs: "20vh", sm: "80vh" },
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -61,7 +64,7 @@ const Contact = () => {
           justifyContent: "center",
           alignItems: "center",
           overflow: "hidden",
-          marginBottom: "1em",
+          // marginBottom: "1em",
         }}
       />
       <Grid item xs={12} sm={6}>
@@ -124,14 +127,14 @@ const Contact = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            padding: "3em",
+            padding: "2em",
             gap: "2em",
           }}
         >
           <Typography variant="h4">SAY SOMETHING!</Typography>
           <Textfield
             autoFocus
-            variant="outlined"
+            variant="standard"
             size="small"
             label="NAME"
             color="secondary"
@@ -145,7 +148,7 @@ const Contact = () => {
             }}
           />
           <Textfield
-            variant="outlined"
+            variant="standard"
             size="small"
             label="EMAIL"
             color="secondary"
@@ -159,13 +162,13 @@ const Contact = () => {
             }}
           />
           <Textfield
-            id="outlined-multiline-flexible"
             label="YOUR MESSAGE"
             multiline
             maxRows={4}
+            variant="standard"
             fullWidth
             size="small"
-            color="secondary"
+            color="error"
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -180,6 +183,7 @@ const Contact = () => {
             loading={loading}
             variant="contained"
             color="secondary"
+            size="small"
             loadingPosition="end"
             sx={{
               backgroundColor: "#fff",
@@ -189,8 +193,8 @@ const Contact = () => {
               },
               "&:hover": {
                 backgroundColor: "#000",
-                color:"#fff"
-              }
+                color: "#fff",
+              },
             }}
           >
             SEND

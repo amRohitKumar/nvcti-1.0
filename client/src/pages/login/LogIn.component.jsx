@@ -20,6 +20,8 @@ import {
 import useTitle from "../../hooks/useTitle";
 
 export default function LogIn() {
+  useTitle("Log In");
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
@@ -37,7 +39,7 @@ export default function LogIn() {
       password: data.get("password"),
     });
   };
-  useTitle("Login")
+  useTitle("Login");
   return (
     <>
       <ToastContainer
