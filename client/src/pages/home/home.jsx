@@ -2,8 +2,11 @@ import { Box, Typography } from "@mui/material";
 import React from "react";
 import ismSky from "../../assets/ismSky.jpeg";
 import { Typewriter } from "./typewriter";
+import useTitle from "../../hooks/useTitle";
 
 const Home = () => {
+  useTitle("Home");
+
   return (
     <Box>
       <Box
