@@ -15,7 +15,6 @@ import {
   MessageIcon,
   SendIcon,
 } from "../../icons/icons";
-import { grey } from "@mui/material/colors";
 import useTitle from "../../hooks/useTitle";
 
 const Div = styled("div")({

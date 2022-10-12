@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { event } from "../../../data/index";
 import { TimeLine } from "../../../components";
-import { InfoIcon, HowToRegIcon } from "../../../icons/icons";
+import { InfoIcon, HowToRegIcon } from "../../../icons";
 
 const EventDetails = () => {
   return (

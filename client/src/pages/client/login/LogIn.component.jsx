@@ -1,4 +1,4 @@
-import { ToastContainer, toast } from "react-toastify";
+import {toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
   Button,
@@ -16,12 +16,12 @@ import {
   EmailIcon,
   LockOutlinedIcon,
   NoEncryptionIcon,
-} from "../../icons/icons";
-import useTitle from "../../hooks/useTitle";
+} from "../../../icons/";
+import useTitle from "../../../hooks/useTitle";
 
-export default function LogIn() {
-  useTitle("Log In");
-
+const ClientLogIn = () => {
+  useTitle("Login")
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
@@ -39,20 +39,8 @@ export default function LogIn() {
       password: data.get("password"),
     });
   };
-  useTitle("Login");
   return (
     <>
-      <ToastContainer
-        position="top-left"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        limit={1}
-        draggable
-        pauseOnHover
-      />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -137,3 +125,5 @@ export default function LogIn() {
     </>
   );
 }
+
+export default ClientLogIn;
