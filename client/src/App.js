@@ -1,11 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
-import {
-  EventParticipants,
-  ProtectedRoutes,
-  Footer,
-  EventFormSubmitted,
-} from "./components";
+import { EventParticipants, ProtectedRoutes, Footer } from "./components";
 import { CssBaseline } from "@mui/material";
 import { theme } from "./theme";
 import { ToastContainer } from "react-toastify";
@@ -32,6 +27,9 @@ import {
   SharedLayoutSuperAdmin,
   Contact,
   Navbar,
+  AdminViewForm,
+  MentorViewForm,
+  SuperAdminViewForm,
 } from "./pages";
 
 function App() {
@@ -67,7 +65,7 @@ function App() {
             <Route index element={<ClientDashboard />} />
             <Route path="status" element={<StatusPage />} />
             <Route path="apply/:eventId" element={<EventFormPage />} />
-            <Route path="events" element={<EventDetails />}></Route>
+            <Route path="event/:eventId" element={<EventDetails />}></Route>
           </Route>
 
           {/* ADMIN LOGIN ROUTES */}
@@ -84,6 +82,7 @@ function App() {
             <Route index element={<AdminDashboard />} />
             <Route path="create" element={<CreateEvent />} />
             <Route path="event/:eventId" element={<EventParticipants />} />
+            <Route path="response/:candidateId" element={<AdminViewForm />} />
           </Route>
 
           {/* MENTOR LOGIN ROUTES*/}
@@ -98,11 +97,7 @@ function App() {
             }
           >
             <Route index element={<MentorDashboard />} />
-            <Route
-              exact
-              path="response/:CandidateId"
-              element={<EventFormSubmitted />}
-            />
+            <Route path="response/:candidateId" element={<MentorViewForm />} />
           </Route>
 
           {/* SUPER-ADMIN LOGIN ROUTES */}
@@ -121,6 +116,10 @@ function App() {
             }
           >
             <Route index element={<SuperAdminDashboard />} />
+            <Route
+              path="response/:candidateId"
+              element={<SuperAdminViewForm />}
+            />
           </Route>
 
           {/* ERROR ROUTE */}

@@ -19,6 +19,9 @@ import SharedLayoutSuperAdmin from "./superAdmin/shared-layout.page";
 import HomePage from "./home/home.page";
 import Navbar from "./home/navbar";
 import Contact from "./home/contact";
+import AdminViewForm from "./admin/view-form/view-form.page";
+import MentorViewForm from "./mentor/view-form/view-form.page";
+import SuperAdminViewForm from "./superAdmin/view-form/view-form.page";
 
 export {
   ClientLogIn,
@@ -29,8 +32,11 @@ export {
   Error,
   ClientDashboard,
   AdminDashboard,
+  AdminViewForm,
   MentorDashboard,
+  MentorViewForm,
   SuperAdminDashboard,
+  SuperAdminViewForm,
   EventDetails,
   StatusPage,
   EventFormPage,

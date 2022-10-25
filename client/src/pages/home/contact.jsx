@@ -14,7 +14,7 @@ import {
   PersonIcon,
   MessageIcon,
   SendIcon,
-} from "../../icons/icons";
+} from "../../icons";
 import useTitle from "../../hooks/useTitle";
 
 const Div = styled("div")({

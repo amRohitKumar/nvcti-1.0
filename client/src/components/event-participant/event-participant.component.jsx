@@ -14,11 +14,16 @@ import {
   TableRow,
   Modal,
   Typography,
+  Checkbox,
+  Chip,
+  TextField,
+  IconButton,
 } from "@mui/material";
 import { StatusPill } from "../status-pill/status-pill.component";
 
 import Wrapper from "./event-participant.style";
 import { modalStyle } from "./event-participant.style";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 const orders = [
   {
@@ -55,9 +60,31 @@ const orders = [
 
 const EventParticipants = (props) => {
   const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState(
+    new Array(orders.length).fill(false)
+  );
+  const [emailId, setEmailId] = useState(["this@gmail.com", "this2@gmail.com"]);
+  const [text, setText] = useState("");
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const { eventId } = useParams();
+
+  const handleCheckbox = (id) => {
+    const newState = selected.map((item, idx) => (idx === id ? !item : item));
+    setSelected(newState);
+  };
+  const handleAdd = () => {
+    if(emailId.length < 3){
+      const newEmail = [...emailId, text];
+      setEmailId(newEmail);
+    }
+    setText("");
+  }
+  const handleDelete = (id) => {
+    const newEmail = emailId.filter((_, idx) => idx !== id);
+    setEmailId(newEmail);
+  };
+
   console.log(eventId);
   return (
     <Wrapper>
@@ -68,12 +95,34 @@ const EventParticipants = (props) => {
         aria-describedby="Modal to forward students to mentor"
       >
         <Box sx={modalStyle}>
-          <Typography variant="h6" component="h2">
+          <Typography variant="h6">
             Forward {eventId} event to mentor
           </Typography>
-          <Typography sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
+          <Box sx={{my: 2, p: 1}}>
+            {emailId.map((email, idx) => (
+              <Chip sx={{m: 0.5}} label={email} onDelete={() => handleDelete(idx)} />
+            ))}
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <TextField
+              fullWidth
+              label="Outlined"
+              variant="standard"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              helperText="Maximum 3 emailIds"
+            />
+            <IconButton aria-label="add" size="large" onClick={handleAdd}>
+              <AddCircleOutlineIcon color="primary" />
+            </IconButton>
+          </Box>
+          <Button sx={{mt: 2}} variant="contained">Forward</Button>
         </Box>
       </Modal>
       <Card
@@ -112,7 +161,9 @@ const EventParticipants = (props) => {
                       </TableCell>
                     );
                   })}
-                  <TableCell></TableCell>
+                  <TableCell align="center">Applications</TableCell>
+                  {/* FOR APPLICATION BUTTON */}
+                  <TableCell></TableCell> {/* FOR CHECKBOX */}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -138,6 +189,12 @@ const EventParticipants = (props) => {
                       <Button variant="contained" size="small">
                         View application
                       </Button>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Checkbox
+                        checked={selected[idx]}
+                        onChange={() => handleCheckbox(idx)}
+                      />
                     </TableCell>
                   </TableRow>
                 ))}

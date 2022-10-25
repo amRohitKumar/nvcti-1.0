@@ -1,11 +1,22 @@
-import React from "react";
 import Wrapper, { ElemWrapper } from "./submittedForm.style";
 import { EventInput } from "./submittedForm.style";
-import { response } from "../../data";
-import { Paper, Divider, Typography, Box, Button } from "@mui/material";
+import {
+  Paper,
+  Divider,
+  Typography,
+  Box,
+  Button,
+  TextField,
+} from "@mui/material";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
-const EventFormSubmitted = () => {
+const EventFormSubmitted = ({
+  response,
+  review,
+  setReview,
+  onAccept,
+  onReject,
+}) => {
   const { title, responses } = response;
 
   return (
@@ -87,18 +98,36 @@ const EventFormSubmitted = () => {
       ))}
       <div
         style={{
+          // border: "1px solid black",
           display: "flex",
           alignItems: "center",
           justifyContent: "flex-end",
+          flexDirection: "column",
           gap: "20px",
+          marginTop: "2em",
         }}
       >
-        <Button variant="contained" color="secondary">
-          ACCEPT
-        </Button>
-        <Button variant="contained" color="error">
-          REJECT
-        </Button>
+        <TextField
+          value={review}
+          onChange={(e) => setReview(e.target.value)}
+          label="Review"
+          multiline
+          rows={4}
+          sx={{ width: "60%", "@media (max-width: 900px)": { width: "90%" } }}
+        />
+        <div>
+          <Button variant="contained" color="secondary" onClick={onAccept}>
+            ACCEPT
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            sx={{ ml: 1 }}
+            onClick={onReject}
+          >
+            REJECT
+          </Button>
+        </div>
       </div>
     </Wrapper>
   );
