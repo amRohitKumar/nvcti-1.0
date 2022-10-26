@@ -111,7 +111,8 @@ app.get('/home', isLoggedIn, async (req, res) => {
     var events = [];
     const cursor = collection.find({}).toArray((err, result) => {
         for (let i of result) events.push(i);
-        return res.render('home', { events });
+        // return res.render('home', { events });
+        return res.send(200).json({})
     })
     return;
 })
@@ -237,14 +238,15 @@ app.use('/event', eventRoute);
 //     }
 // })
 
+//THIS IS COMMENTED AS HANDLED IN REACT
 //ADMIN
-app.get('/createEvent', isLoggedIn, (req, res) => {
-    if (req.user && req.user.isAdmin === true) {
-        res.sendFile('index.html', { root: path.join(__dirname, '../build/') });
-    } else {
-        res.send("You are not allowed to view this page");
-    }
-})
+// app.get('/createEvent', isLoggedIn, (req, res) => {
+//     if (req.user && req.user.isAdmin === true) {
+//         res.sendFile('index.html', { root: path.join(__dirname, '../build/') });
+//     } else {
+//         res.send("You are not allowed to view this page");
+//     }
+// })
 
 //ADMIN
 app.post("/createEvent", isLoggedIn, (req, res) => {
@@ -254,11 +256,13 @@ app.post("/createEvent", isLoggedIn, (req, res) => {
             req.body["isOngoing"] = false;
             req.body["comps"] = { "elements": {} };
             collection.insertOne(req.body).then(() => {
-                return res.redirect('/event');
+                // return res.redirect('/event');
+                return res.send(200).json({});
             })
         })
     } else {
-        res.send("You are not allowed to view this page");
+        // res.send("You are not allowed to view this page");
+        return res.status(400).send({msg: "You are not allowed to view this page"});
     }
 })
 
@@ -290,7 +294,7 @@ app.get("/allevents", (req, res) => {
             temp["EventID"] = result[i].Event;
             fResult[i] = temp;
         }
-        res.json(fResult);
+        return res.send(200).json({});
     });
 })
 
@@ -319,7 +323,8 @@ app.post("/sendmentor", isLoggedIn, async (req, res) => {
 
     const makeUser = new User({ mentorID, mentorMail, isVerified: true});
     const result = await User.register(makeUser, password); // auto saved
-    return res.redirect('/home');
+    // return res.redirect('/home');
+    return res.send(200).json({});
 })
 
 //MENTOR
@@ -342,30 +347,32 @@ app.post("/sendmentor", isLoggedIn, async (req, res) => {
 //     })
 // })
 
-app.get('/user/profile', async(req, res) => {
-    const currUser = await User.findById(req.user.id);
-    const currUserName = currUser.username;
-    const currUserEmail = currUser.email;
 
-    let userEvents = [];
-    for(let e of currUser.enrolledEvents){
-        const [id, index] = e.split(" "); // event's id is 'id', and index of this user in applications is 'index'
-        await collection.findOne({ "Event": id }).then((resp) => {
-            userEvents.push({name: resp.eventName,  status: resp.applicants[index].status});
-        })
-    }
+//THIS IS COMMENTED AS HANDLED IN REACT
+// app.get('/user/profile', async(req, res) => {
+//     const currUser = await User.findById(req.user.id);
+//     const currUserName = currUser.username;
+//     const currUserEmail = currUser.email;
+
+//     let userEvents = [];
+//     for(let e of currUser.enrolledEvents){
+//         const [id, index] = e.split(" "); // event's id is 'id', and index of this user in applications is 'index'
+//         await collection.findOne({ "Event": id }).then((resp) => {
+//             userEvents.push({name: resp.eventName,  status: resp.applicants[index].status});
+//         })
+//     }
     
-    console.log(userEvents, currUserEmail, currUserName); 
-    // we should send events, username, mail
-    return res.send('done');
-})
+//     console.log(userEvents, currUserEmail, currUserName); 
+//     // we should send events, username, mail
+//     return res.send('done');
+// })
 
-
-app.use((err, req, res, next) => {
-    if (!err.status) err.status = 500;
-    if (!err.message) err.message = 'Something went wrong!';
-    res.render('error.ejs', { err });
-})
+// commented as handled in REACT
+// app.use((err, req, res, next) => {
+//     if (!err.status) err.status = 500;
+//     if (!err.message) err.message = 'Something went wrong!';
+//     return res.render('error.ejs', { err });
+// })
 
 
 const port = process.env.PORT || 8080;

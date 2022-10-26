@@ -15,14 +15,17 @@ const database = client.db("nvcti");
 const collection = database.collection("event");
 const eventController = require('../controllers/eventFormControllers');
 
-router.route('/:id/makeForm')
-    .get( isLoggedIn, (req, res) => {
-        if (req.user && req.user.isAdmin === true) {
-            res.sendFile('index.html', { root: path.join(__dirname, '../build/') });
-        } else {
-            res.send("You are not allowed to view this page");
-        }
-    }); // admin
+
+//THIS IS COMMENTED AS HANDLED IN REACT
+// router.route('/:id/makeForm')
+//     .get( isLoggedIn, (req, res) => {
+//         if (req.user && req.user.isAdmin === true) {
+//             res.sendFile('index.html', { root: path.join(__dirname, '../build/') });
+//         } else {
+//             res.send("You are not allowed to view this page");
+//         }
+//     }); // admin
+
 
 router.route('/:id/submit')
     .post(isLoggedIn, (req, res) => {
@@ -30,29 +33,33 @@ router.route('/:id/submit')
             collection.findOne({ "Event": req.params.id }).then((resp) => {
                 resp["comps"] = req.body.comps;
                 collection.findOneAndReplace({ "Event": req.params.id }, resp).then((resp) => {
-                    res.redirect("/allevents");
+                    // res.redirect("/allevents");
+                return res.send(200).json({})
                 })
             })
         } else {
-            res.send("You are not allowed to view this page");
+            // res.send("You are not allowed to view this page");
+          return res.status(400).send({msg: "You are not allowed to view this page"})
         }
     }); //admin
- 
-router.route('/:id/formData') // admin & student
-    .get(catchAsync(isLoggedIn, (req, res) => {
-        collection.findOne({ "Event": req.params.id }).then((resp) => {
-            resp["eventID"] = req.params.id;
-            res.send(resp);
-        }).catch((error) => {
-            console.error(error);
-            res.send("err404")
-        })
-    }));
 
-router.route('/:id/apply')
-    .get(isLoggedIn, (req, res) => {
-        res.sendFile('index.html', { root: path.join(__dirname, '../build/') });
-    }); // student
+//THIS IS COMMENTED AS HANDLED IN REACT
+// router.route('/:id/formData') // admin & student
+//     .get(catchAsync(isLoggedIn, (req, res) => {
+//         collection.findOne({ "Event": req.params.id }).then((resp) => {
+//             resp["eventID"] = req.params.id;
+//             res.send(resp);
+//         }).catch((error) => {
+//             console.error(error);
+//             res.send("err404")
+//         })
+//     }));
+
+//THIS IS COMMENTED AS HANDLED IN REACT
+// router.route('/:id/apply')
+//     .get(isLoggedIn, (req, res) => {
+//         res.sendFile('index.html', { root: path.join(__dirname, '../build/') });
+//     }); // student
 
 router.route('/:id/submitForm')
     .post(catchAsync(isLoggedIn, upload.any(), async (req, res) => {
@@ -60,7 +67,8 @@ router.route('/:id/submitForm')
         for (var key of Object.keys(req.body)) {
             if (key != "files" && req.body[key].trim() == "") {
                 eFlag = 1;
-                return res.send("error, fill all fields corectly and apply again");
+                // return res.send("error, fill all fields corectly and apply again");
+                return res.status(400).send({msg: "Fill all fields corectly and apply again"})
             }
         }
     
@@ -82,7 +90,8 @@ router.route('/:id/submitForm')
         }
     
         if(alreadyEnrolled){
-            return res.redirect('/home');
+            // return res.redirect('/home');
+           return res.status(400).send({msg: "You have already enrolled!"})
         }
         
         let l=0;
@@ -106,18 +115,19 @@ router.route('/:id/submitForm')
     
         curruser.enrolledEvents.push(temp);
         await curruser.save();
-        return res.redirect("/allevents");
+        // return res.redirect("/allevents");
+        return res.send(200).json({})
     })); // student
 
-
-router.route('/:id/view')
-    .get(isLoggedIn, (req, res) => {
-        if (req.user && req.user.isAdmin === true) {
-            res.sendFile('index.html', { root: path.join(__dirname, '../build/') });
-        } else {
-            res.send("You are not allowed to view this page");
-        }
-    })
+//THIS IS COMMENTED AS HANDLED IN REACT
+// router.route('/:id/view')
+//     .get(isLoggedIn, (req, res) => {
+//         if (req.user && req.user.isAdmin === true) {
+//             res.sendFile('index.html', { root: path.join(__dirname, '../build/') });
+//         } else {
+//             res.send("You are not allowed to view this page");
+//         }
+//     })
 
 router.route('/:id/updatestatus')
     .post(isLoggedIn, (req, res) => {
@@ -125,17 +135,22 @@ router.route('/:id/updatestatus')
             collection.findOne({ "Event": req.params.id }).then((resp) => {
                 resp.applicants[req.body.studId].status = req.body.status;
                 collection.findOneAndReplace({ "Event": req.params.id }, resp).then((resp) => {
-                    res.send("Updated");
+                    // res.send("Updated");
+                   return res.send(200).json({})
                 })
             })
         } else {
-            res.send("You are not allowed to view this page");
+            // res.send("You are not allowed to view this page");
+            return res.status(400).send({msg: "You are not allowed to view this page"})
         }
     })
 
-router.route('/')
-    .get((req, res) => {
-        res.sendFile("index.html", { root: path.join(__dirname, "../build/") });
-    })
+{
+//THIS IS COMMENTED AS HANDLED IN REACT
+// router.route('/')
+//     .get((req, res) => {
+//         res.sendFile("index.html", { root: path.join(__dirname, "../build/") });
+//     })
+}
 
 module.exports = router;
