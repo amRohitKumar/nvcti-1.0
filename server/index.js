@@ -36,15 +36,14 @@ mongoose.Promise = global.Promise;
 
 const dbURL = process.env.DBURL || 'mongodb://localhost:27017/nvcti';
 
-mongoose.connect(dbURL, {
-    useNewUrlParser: true,
-}, (err) => {
-    if (!err) {
-        console.log('MongoDB Connection Succeeded.')
-    } else {
-        console.log('Error in DB connection: ' + err)
-    }
-});
+mongoose
+  .connect(dbURL)
+  .then(() => {
+    console.log('MONGOOSE CONNECTION OPEN');
+  })
+  .catch((err) => {
+    console.log('IN MONGOOSE SOMETHING WENT WRONG', err);
+  });
 
 const client = new MongoClient(dbURL);
 const database = client.db("nvcti");
@@ -369,6 +368,8 @@ app.use((err, req, res, next) => {
 })
 
 
-const port = process.env.PORT || 3000;
-app.listen(port);
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+});
 
