@@ -19,7 +19,13 @@ const userSchema = new Schema({
     },
     enrolledEvents: [{
         type : String, // event_id + ' ' + index
-    }]
+    }],
+    phone: {
+        type: Number,
+    },
+    dob: {
+        typeof: Date
+    }
 })
 
 userSchema.plugin(passportLocalMongoose); // this will add on 'username' and 'passwords' fields for our schema. Apart from those two we need to add on what we need in 'userSchema'. 
