@@ -10,7 +10,8 @@ router.route('/:id/view')
     .get(isLoggedIn, (req, res) => {
         const mentorID = req.params.id;
         mentorCollection.findOne({ "id": mentorID }).then((resp) => {
-            res.json(resp);
+            // res.json(resp);
+           return res.send(200).json({})
         })
     })
 
@@ -21,7 +22,8 @@ router.route('/:id/update')
         mentorCollection.findOne({ "id": req.params.id }).then((resp) => {
             resp.applicants[applicantID].status = req.body.status;
             mentorCollection.findOneAndReplace({ "id": req.params.id }, resp).then((resp) => {
-                res.send(resp);
+                // res.send(resp);
+               return res.send(200).json({})
             })
         })
     })

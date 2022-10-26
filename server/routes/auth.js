@@ -7,7 +7,7 @@ const { isLoggedIn, catchAsync } = require('../middleware');
 const authController = require('../controllers/authController');
 
 router.route('/register')
-    .get(authController.registerGet) // form to register
+    // .get(authController.registerGet) // form to register handled in react
     .post(catchAsync(authController.registerPost));  //  registering in db
 
 router.route('/verify-email/:emailToken')
@@ -15,10 +15,10 @@ router.route('/verify-email/:emailToken')
 
 
 router.route('/login')
-    .get(authController.loginGet) //login form
+    // .get(authController.loginGet) //login form handled in react
     .post(passport.authenticate('local', { failureFlash: false, failureRedirect: '/auth/login' }), authController.loginPost); // login post using passport
 
 
-router.get('/logout', isLoggedIn, authController.logOut); // logout
+// router.get('/logout', isLoggedIn, authController.logOut); // logout handled in react
 
 module.exports = router;
