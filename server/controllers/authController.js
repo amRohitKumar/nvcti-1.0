@@ -9,7 +9,7 @@ const { sendMail } = require('../utilities/mailsender');
 module.exports.registerPost = async (req, res, next) => {
     try {
         const { username, email, password, phone, dob } = req.body;
-        // console.log(username, password);
+        console.log(username, password);
 
         const alreadyExists = await User.findOne({ email: email });
         // console.log(alreadyExists);

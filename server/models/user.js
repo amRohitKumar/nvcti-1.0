@@ -25,7 +25,7 @@ const userSchema = new Schema({
         required: true
     },
     dob: {
-        typeof: Date,
+        type: Date,
         require: true
     }
 })
