@@ -55,7 +55,7 @@ module.exports.registerPost = async (req, res, next) => {
         await sendMail({ to_email: email, subject_email: "Verify Your Email", text_email: textmsg, html_email: htmlmsg });
 
         // return res.render('auth/verify');
-       return res.send(200).json({})
+       return res.status(200).send({msg: "A mail has been sent to your registered emailId ! Please open your emailid to veify."})
     }
     catch (e) {
         // req.flash('error', e.message);
@@ -80,17 +80,19 @@ module.exports.verifyEmailGet = async (req, res) => {
             console.log("ALREADY VERIFIED");
             // return res.redirect('/auth/login'); 
             // redirect to login page
-            return res.send(200).json({})
+            return res.status(200).send({msg: "User already verified !", user: alreadyUser});
         }
 
         const makeUser = new User({ username, email, isVerified: true, phone, dob });
+        console.log("makeUser = ", makeUser);
         const result = await User.register(makeUser, password); // auto saved
+        console.log("result = ", result);
 
         req.login(result, err => { // login after registering
             if (err) return next(err);
             // req.flash('success', 'Welcome to CampIt!');
             // return res.redirect('/home');
-            return res.send(200).json({})
+            return res.status(200).send({msg: `Welcome ${username} !`, user: makeUser});
         })
     }
     catch (e) {
