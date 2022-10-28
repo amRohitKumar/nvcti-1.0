@@ -348,24 +348,25 @@ app.post("/sendmentor", isLoggedIn, async (req, res) => {
 // })
 
 
-//THIS IS COMMENTED AS HANDLED IN REACT
-// app.get('/user/profile', async(req, res) => {
-//     const currUser = await User.findById(req.user.id);
-//     const currUserName = currUser.username;
-//     const currUserEmail = currUser.email;
+THIS IS COMMENTED AS HANDLED IN REACT
+app.get('/user/profile', async(req, res) => {
+    const currUser = await User.findById(req.user.id);
+    const currUserName = currUser.username;
+    const currUserEmail = currUser.email;
 
-//     let userEvents = [];
-//     for(let e of currUser.enrolledEvents){
-//         const [id, index] = e.split(" "); // event's id is 'id', and index of this user in applications is 'index'
-//         await collection.findOne({ "Event": id }).then((resp) => {
-//             userEvents.push({name: resp.eventName,  status: resp.applicants[index].status});
-//         })
-//     }
+    let userEvents = [];
+    for(let e of currUser.enrolledEvents){
+        const [id, index] = e.split(" "); // event's id is 'id', and index of this user in applications is 'index'
+        await collection.findOne({ "Event": id }).then((resp) => {
+            userEvents.push({name: resp.eventName,  status: resp.applicants[index].status});
+        })
+    }
     
 //     console.log(userEvents, currUserEmail, currUserName); 
-//     // we should send events, username, mail
+    // we should send events, username, mail
 //     return res.send('done');
-// })
+    return res.send(200).json({})
+})
 
 // commented as handled in REACT
 // app.use((err, req, res, next) => {
