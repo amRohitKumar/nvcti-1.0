@@ -80,7 +80,7 @@ module.exports.verifyEmailGet = async (req, res) => {
             console.log("ALREADY VERIFIED");
             // return res.redirect('/auth/login'); 
             // redirect to login page
-            return res.status(200).send({msg: "User already verified !", user: alreadyUser});
+            return res.status(200).send({msg: "User already verified !", user: {email: alreadyUser.email, isVerified: alreadyUser.isVerified, name: alreadyUser. }});
         }
 
         const makeUser = new User({ username, email, isVerified: true, phone, dob });
