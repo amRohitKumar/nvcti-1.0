@@ -375,6 +375,7 @@ app.post("/sendmentor", isLoggedIn, async (req, res) => {
 //     console.log(userEvents, currUserEmail, currUserName);
 //     // we should send events, username, mail
 //     return res.send('done');
+    // return res.send(200).json({})
 // })
 
 // commented as handled in REACT

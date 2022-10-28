@@ -16,9 +16,9 @@ router.route('/verify-email/:emailToken')
 
 router.route('/login')
     // .get(authController.loginGet) //login form handled in react
-    .post(passport.authenticate('local', { failureFlash: false, failureRedirect: '/auth/login' }), authController.loginPost); // login post using passport
+    .post(passport.authenticate('local', { failureFlash: false }), authController.loginPost); // login post using passport
 
 
-// router.get('/logout', isLoggedIn, authController.logOut); // logout handled in react
+router.get('/logout', isLoggedIn, authController.logOut); // logout handled in react
 
 module.exports = router;

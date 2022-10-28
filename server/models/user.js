@@ -26,7 +26,11 @@ const userSchema = new Schema({
     },
     dob: {
         type: Date,
-        require: true
+        required: true
+    },
+    name: {
+        type: String,
+        required: true
     }
 })
 
