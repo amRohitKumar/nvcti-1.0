@@ -158,11 +158,12 @@ module.exports.loginPost = (req, res) => {
 };
 
 module.exports.logOut = function (req, res, next) {
+  console.log('logout');
   req.logout(function (err) {
     if (err) {
       return res.status(400).send({ msg: err });
     } else {
-      return res.status(200);
+      return res.status(200).send({});
     }
   });
 };

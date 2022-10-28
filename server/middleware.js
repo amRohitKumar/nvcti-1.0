@@ -1,8 +1,9 @@
 const User = require('./models/user');
 const isLoggedIn = (req,res,next) => {
+    console.log('middle');
      if(!req.isAuthenticated()){ // for this to work as expected we need to do app.use(passport.session()); 
         // req.flash('error', 'You must be signed in!'); 
-        return res.redirect('/auth/login');
+        return res.status(400).send({msg: "User not authorized"});
      } 
      next();
 }
