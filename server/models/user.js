@@ -27,7 +27,12 @@ const userSchema = new Schema({
     dob: {
         typeof: Date,
         require: true
+    },
+    name: {
+        typeof: String,
+        required: true
     }
+
 })
 
 userSchema.plugin(passportLocalMongoose); // this will add on 'username' and 'passwords' fields for our schema. Apart from those two we need to add on what we need in 'userSchema'. 

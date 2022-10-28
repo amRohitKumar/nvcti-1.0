@@ -8,7 +8,7 @@ const { sendMail } = require('../utilities/mailsender');
 
 module.exports.registerPost = async (req, res, next) => {
     try {
-        const { username, email, password, phone, dob } = req.body;
+        const { username, email, password, phone, dob, name } = req.body;
         // console.log(username, password);
 
         const alreadyExists = await User.findOne({ email: email });
@@ -29,7 +29,7 @@ module.exports.registerPost = async (req, res, next) => {
         //sending verification email
         let emailToken = jwt.sign(
             {
-                email, username, password, phone, dob
+                email, username, password, phone, dob, name
                 // this whole object is payload
             }, process.env.EMAIL_VERIFY_TOKEN_SECRET,
             {
@@ -72,7 +72,7 @@ module.exports.verifyEmailGet = async (req, res) => {
         const emailToken = req.params.emailToken;
         // console.log(emailToken);
 
-        const { email, username, password, phone, dob } = jwt.verify(emailToken, process.env.EMAIL_VERIFY_TOKEN_SECRET);
+        const { email, username, password, phone, dob, name } = jwt.verify(emailToken, process.env.EMAIL_VERIFY_TOKEN_SECRET);
         // if the token is generated using the secret given, it will return the entire payload
 
         const alreadyUser = await User.findOne({ email });
@@ -83,7 +83,7 @@ module.exports.verifyEmailGet = async (req, res) => {
             return res.send(200).json({})
         }
 
-        const makeUser = new User({ username, email, isVerified: true, phone, dob });
+        const makeUser = new User({ username, email, isVerified: true, phone, dob, name });
         const result = await User.register(makeUser, password); // auto saved
 
         req.login(result, err => { // login after registering
