@@ -68,7 +68,7 @@ router.route("/allevents").get((req, res) => {
     if (err) {
       return res
         .status(400)
-        .send({ msg: "Something went wrong in fetching event list" });
+        .send({ msg: "Something went wrong while fetching event list" });
     }
     let allEvents = [];
     for (var i = 0; i < result.length; i++) {

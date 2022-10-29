@@ -53,11 +53,11 @@ const orders = [
   },
 ];
 
-const PreviousStatusTable = (props) => {
+const PreviousStatusTable = ({enrolledevents, ...otherProps}) => {
   return (
     <Wrapper>
       <Card
-        {...props}
+        {...otherProps}
         sx={{
           my: 2,
           mx: 2,

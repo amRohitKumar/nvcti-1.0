@@ -3,13 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { clearUser } from "../../features/user/userSlice";
 
 import styled from "@emotion/styled";
-import {
-  AppBar,
-  Avatar,
-  Box,
-  Toolbar,
-  Button,
-} from "@mui/material";
+import { AppBar, Avatar, Box, Toolbar, Button } from "@mui/material";
 import { UserCircle as UserCircleIcon } from "../../icons/user-circle";
 import NotificationSection from "../notification-dropdown/notification-dropdown.component";
 import { AccountPopover } from "../account-popover/account-popover.component";
@@ -27,9 +21,8 @@ export const ClientDashboardNavbar = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleSignOut = () => {
-    console.log('clicked herer');
     dispatch(clearUser());
-  }
+  };
   return (
     <>
       <DashboardNavbarRoot
@@ -50,7 +43,9 @@ export const ClientDashboardNavbar = (props) => {
         >
           {/* NAVBAR LOGO */}
           <Box sx={{ flexGrow: 1 }} />
-          <Button variant="contained" onClick={() => navigate('status')}>Status</Button>
+          <Button variant="contained" onClick={() => navigate("status")}>
+            Status
+          </Button>
           <NotificationSection />
           <Avatar
             onClick={() => setOpenAccountPopover(true)}

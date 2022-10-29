@@ -8,6 +8,7 @@ import Footer from "./footer/Footer.component";
 import TimeLine from "./timeline/timeline.component";
 // import EventForm from "./event-form-display/event-form-display.component";
 import EventApplicationForm from "./event-application-form.jsx/eventApplicationForm";
+import LogIn from "./login/login.component";
 
 
 // ADMIN
@@ -24,6 +25,7 @@ import SuperAdminDashboardNavbar from "./dashboard-navbar/superAdmin-dashboard-n
 import EventFormSubmitted from "./submitted-event-form/submittedForm";
 
 export {
+  LogIn,
   ClientDashboardNavbar,
   AdminDashboardNavbar,
   MentorDashboardNavbar,

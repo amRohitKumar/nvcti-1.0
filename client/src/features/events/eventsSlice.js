@@ -21,7 +21,8 @@ const eventsSlice = createSlice({
     [fetchEvents.pending]: (state) => {
       state.isLoading = true;
     },
-    [fetchEvents.fulfilled]: (state, { allEvents }) => {
+    [fetchEvents.fulfilled]: (state, { payload }) => {
+      const { allEvents } = payload;
       state.isLoading = false;
       state.events = allEvents;
     },
