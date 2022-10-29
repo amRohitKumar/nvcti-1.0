@@ -30,7 +30,8 @@ const eventController = require('../controllers/eventFormControllers');
 router.route('/:id/submit')
     .post(isLoggedIn, (req, res) => {
         if (req.user && req.user.isAdmin === true) {
-            collection.findOne({ "Event": req.params.id }).then((resp) => {
+            const id = new ObjectId(req.params.id);
+            collection.findOne({ _id: id }).then((resp) => {
                 resp["comps"] = req.body.comps;
                 collection.findOneAndReplace({ "Event": req.params.id }, resp).then((resp) => {
                     // res.redirect("/allevents");
@@ -96,7 +97,8 @@ router.route('/:id/submitForm')
 
         let l = 0;
 
-        await collection.findOne({ "Event": req.params.id }).then((resp) => {
+        const id = new ObjectId(req.params.id);
+        await collection.findOne({ _id: id }).then((resp) => {
             data = resp;
             if (!data["applicants"]) {
                 data["applicants"] = []
@@ -132,7 +134,8 @@ router.route('/:id/submitForm')
 router.route('/:id/updatestatus')
     .post(isLoggedIn, (req, res) => {
         if (req.user && req.user.isAdmin === true) {
-            collection.findOne({ "Event": req.params.id }).then((resp) => {
+            const id = new ObjectId(req.params.id);
+            collection.findOne({ _id: id }).then((resp) => {
                 resp.applicants[req.body.studId].status = req.body.status;
                 collection.findOneAndReplace({ "Event": req.params.id }, resp).then((resp) => {
                     // res.send("Updated");
