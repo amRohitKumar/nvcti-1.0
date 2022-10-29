@@ -1,4 +1,3 @@
-import {toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
   Button,
@@ -12,33 +11,26 @@ import {
   InputAdornment,
   Avatar,
 } from "@mui/material";
-import {
-  EmailIcon,
-  LockOutlinedIcon,
-  NoEncryptionIcon,
-} from "../../../icons/";
+import { EmailIcon, LockOutlinedIcon, NoEncryptionIcon } from "../../../icons/";
 import useTitle from "../../../hooks/useTitle";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../../features/user/userSlice";
+import { useUserState } from "../../../hooks";
 
 const ClientLogIn = () => {
-  useTitle("Login")
-  
+  useTitle("Login");
+  const dispatch = useDispatch();
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
-
-    const res = true;
-    if (res) {
-      toast.success("You are successfully logged in!!");
-      toast.clearWaitingQueue();
-    } else {
-      toast.error("Invalid credentials!!");
-      toast.clearWaitingQueue();
-    }
-    console.log({
+    const obj = {
       email: data.get("email"),
       password: data.get("password"),
-    });
+    };
+    dispatch(loginUser(obj));
   };
+  useUserState("LOGIN", '/client'); // to redirect user if user state changes
+
   return (
     <>
       <Container component="main" maxWidth="xs">
@@ -124,6 +116,6 @@ const ClientLogIn = () => {
       </Container>
     </>
   );
-}
+};
 
 export default ClientLogIn;

@@ -22,6 +22,9 @@ export const AdminDashboardNavbar = (props) => {
   const settingsRef = useRef(null);
   const [openAccountPopover, setOpenAccountPopover] = useState(false);
   const navigate = useNavigate();
+  const handleSignOut = () => {
+    
+  }
 
   return (
     <>
@@ -64,6 +67,7 @@ export const AdminDashboardNavbar = (props) => {
         anchorEl={settingsRef.current}
         open={openAccountPopover}
         onClose={() => setOpenAccountPopover(false)}
+        handleSignOut={handleSignOut}
       />
     </>
   );

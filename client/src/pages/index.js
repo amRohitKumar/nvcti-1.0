@@ -22,6 +22,7 @@ import Contact from "./home/contact";
 import AdminViewForm from "./admin/view-form/view-form.page";
 import MentorViewForm from "./mentor/view-form/view-form.page";
 import SuperAdminViewForm from "./superAdmin/view-form/view-form.page";
+import VerifyEmail from "./client/register/email-verify.component";
 
 export {
   ClientLogIn,
@@ -30,6 +31,7 @@ export {
   SuperAdminLogIn,
   Register,
   Error,
+  VerifyEmail,
   ClientDashboard,
   AdminDashboard,
   AdminViewForm,

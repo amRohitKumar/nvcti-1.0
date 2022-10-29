@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { clearUser } from "../../features/user/userSlice";
 
 import styled from "@emotion/styled";
 import {
@@ -12,6 +13,7 @@ import {
 import { UserCircle as UserCircleIcon } from "../../icons/user-circle";
 import NotificationSection from "../notification-dropdown/notification-dropdown.component";
 import { AccountPopover } from "../account-popover/account-popover.component";
+import { useDispatch } from "react-redux";
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -23,7 +25,11 @@ export const ClientDashboardNavbar = (props) => {
   const settingsRef = useRef(null);
   const [openAccountPopover, setOpenAccountPopover] = useState(false);
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  const handleSignOut = () => {
+    console.log('clicked herer');
+    dispatch(clearUser());
+  }
   return (
     <>
       <DashboardNavbarRoot
@@ -66,6 +72,7 @@ export const ClientDashboardNavbar = (props) => {
         anchorEl={settingsRef.current}
         open={openAccountPopover}
         onClose={() => setOpenAccountPopover(false)}
+        handleSignOut={handleSignOut}
       />
     </>
   );

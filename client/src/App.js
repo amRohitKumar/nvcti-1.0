@@ -30,6 +30,7 @@ import {
   AdminViewForm,
   MentorViewForm,
   SuperAdminViewForm,
+  VerifyEmail,
 } from "./pages";
 
 function App() {
@@ -51,8 +52,9 @@ function App() {
           />
 
           {/* CLIENT LOGIN/REGISTER ROUTES */}
-          <Route exact path="/login" element={<ClientLogIn />}></Route>
-          <Route exact path="/register" element={<Register />}></Route>
+          <Route exact path="/login" element={<ClientLogIn />} />
+          <Route exact path="/register" element={<Register />} />
+          <Route exact path="/auth/verify-email/:emailToken" element={<VerifyEmail />} />
           {/* CLIENT PROTECTED ROUTES */}
           <Route
             path="/client"

@@ -1,11 +1,9 @@
-import { useLayoutEffect } from "react";
 import { Carousel, OngoingEventsTable } from "../../../components";
 import { ongoingEvents } from "../../../data";
+import { useTitle } from "../../../hooks";
 
 const ClientDashboard = () => {
-  useLayoutEffect(() => {
-    document.title = "ROHIT TRIAL"
-  },[])
+  useTitle("Dashboard");
   return (
     <>
       <Carousel data={ongoingEvents} />

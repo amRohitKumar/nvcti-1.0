@@ -1,5 +1,3 @@
-import * as React from "react";
-import { useState } from "react";
 import {
   Avatar,
   Button,
@@ -8,10 +6,6 @@ import {
   Link,
   Grid,
   Box,
-  InputLabel,
-  MenuItem,
-  FormControl,
-  Select,
   Typography,
   Container,
   InputAdornment,
@@ -24,29 +18,32 @@ import {
   PhoneIcon,
   CalendarMonthIcon,
 } from "../../../icons";
-import useTitle from "../../../hooks/useTitle";
+import { useTitle, useUserState } from "../../../hooks";
+
+import { registerUser } from "../../../features/user/userSlice";
+import { useDispatch } from "react-redux";
 
 export default function Register() {
-  useTitle("Register")
-  
+  const dispatch = useDispatch();
+  useTitle("Register");
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const response = {
-      fullname: data.get("fullname"),
+      name: data.get("fullname"),
       email: data.get("email"),
       password: data.get("password"),
       phone: data.get("phone"),
       dob: data.get("dob"),
-      gender: data.get("gender"),
     };
     console.log(response);
+    dispatch(registerUser(response));
   };
 
-  const [Gender, setGender] = useState("");
-  const handleChange = (e) => {
-    setGender(e.target.value);
-  };
+  // to redirect if user logs in
+  useUserState("LOGIN", "/client");
+
   return (
     <>
       <Container component="main" maxWidth="xs">
@@ -167,32 +164,6 @@ export default function Register() {
                     ),
                   }}
                 />
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <FormControl fullWidth size="small" color="secondary">
-                  <InputLabel id="label">Gender</InputLabel>
-                  <Select
-                    name="gender"
-                    labelId="label"
-                    id="gender"
-                    value={Gender}
-                    label="Gender"
-                    required
-                    onChange={handleChange}
-                  >
-                    <MenuItem value={"Male"}>Male</MenuItem>
-                    <MenuItem value={"Female"}>Female</MenuItem>
-                    <MenuItem value={"Other"}>Other</MenuItem>
-                  </Select>
-                </FormControl>
               </Grid>
             </Grid>
             <Button
