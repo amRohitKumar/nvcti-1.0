@@ -109,6 +109,7 @@ app.use("/event", eventRoute);
 app.post("/createEvent", isLoggedIn, (req, res) => {
   if (req.user && req.user.isAdmin === true) {
     collection.countDocuments({ _id: { $exists: true } }).then((resp) => {
+      // Won't be using "Event" as the id
       req.body["Event"] = (resp + 1).toString();
       req.body["isOngoing"] = false;
       req.body["comps"] = { elements: {} };
@@ -138,7 +139,7 @@ app.get("/allevents", (req, res) => {
       temp = {};
       temp["Name"] = result[i].eventName;
       temp["Organizer"] = result[i].eventOrganizer;
-      temp["EventID"] = result[i].Event;
+      temp["EventID"] = result[i]._id.toString();
       fResult[i] = temp;
     }
     return res.send(200).json({});
@@ -189,7 +190,8 @@ app.get('/user/profile', async (req, res) => {
   let userEvents = [];
   for (let e of currUser.enrolledEvents) {
     const [id, index] = e.split(" "); // event's id is 'id', and index of this user in applications is 'index'
-    await collection.findOne({ "Event": id }).then((resp) => {
+    const id = new ObjectId(req.params.id);
+    await collection.findOne({ _id: id }).then((resp) => {
       userEvents.push({ name: resp.eventName, status: resp.applicants[index].status });
     })
   }
