@@ -1,34 +1,20 @@
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
+const bcrypt = require('bcryptjs')
 const { sendMail } = require("../utilities/mailsender");
+const { createAuthTokens } = require('../utilities/tokenHelper')
 
-// module.exports.registerGet = (req, res) => {
-//     return res.render('auth/register');
-// };
 
-module.exports.registerPost = async (req, res, next) => {
+module.exports.register = async (req, res, next) => {
   try {
     const { username, email, password, phone, dob, name } = req.body;
-    console.log(name);
 
     const alreadyExists = await User.findOne({ email: email });
-    // console.log(alreadyExists);
-    if (alreadyExists) {
-      // console.log("A user with the given mail already exists");
-      // return res.redirect('/auth/register');
-      return res
-        .status(400)
-        .send({ msg: "A user with the given email already exists" });
-    }
+    if (alreadyExists) return res.status(400).send({ status: "fail", message: "email already exists!" });
 
     const usernameExists = await User.findOne({ username });
-    if (usernameExists) {
-      // console.log("A user with the given username already exists");
-      // return res.redirect('/auth/register');
-      return res
-        .status(400)
-        .send({ msg: "A user with the given email already exists" });
-    }
+    if (usernameExists) return res.status(400).send({ status: "fail", message: "username already exists!" });
+
 
     //sending verification email
     let emailToken = jwt.sign(
@@ -47,7 +33,7 @@ module.exports.registerPost = async (req, res, next) => {
         expiresIn: "1d",
       }
     );
-    // console.log(emailToken);
+
 
     const url = `${process.env.CLIENT_ADDRESS2}/auth/verify-email/${emailToken}`;
 
@@ -69,22 +55,18 @@ module.exports.registerPost = async (req, res, next) => {
       html_email: htmlmsg,
     });
 
-    // return res.render('auth/verify');
     return res.status(200).send({
-      msg: "A mail has been sent to your registered emailId ! Please open your emailid to veify.",
+      status: "success",
+      message: "A mail has been sent to your registered emailId ! Please open your emailid to veify.",
     });
   } catch (e) {
-    // req.flash('error', e.message);
-    // console.log(e.message);
-    // return res.redirect('/auth/register');
-    return res.status(400).send({ msg: e.message });
+    return res.status(400).send({ status: "fail", mesaage: e.message });
   }
 };
 
-module.exports.verifyEmailGet = async (req, res) => {
+module.exports.verifyEmail = async (req, res) => {
   try {
     const emailToken = req.params.emailToken;
-    // console.log(emailToken);
 
     const { email, username, password, phone, dob, name } = jwt.verify(
       emailToken,
@@ -94,76 +76,168 @@ module.exports.verifyEmailGet = async (req, res) => {
 
     const alreadyUser = await User.findOne({ email });
     if (alreadyUser) {
-      console.log("ALREADY VERIFIED");
-      // return res.redirect('/auth/login');
-      // redirect to login page
-      return res.status(200).send({
-        msg: "User already verified !",
+      const [token, refreshToken] = await createAuthTokens({
         user: {
-          email: alreadyUser.email,
-          isVerified: alreadyUser.isVerified,
-          name: alreadyUser.name,
+          _id: alreadyUser._id, email: alreadyUser.email, name: alreadyUser.name, isVerified: alreadyUser.isVerified,
           dob: alreadyUser.dob,
           enrolledEvents: alreadyUser.enrolledEvents,
           isAdmin: alreadyUser.isAdmin,
-        },
+        }, secret: process.env.ACCESS_TOKEN_SECRET, secret2: process.env.REFRESH_TOKEN_SECRET + alreadyUser.password
       });
+      res.cookie('refresh_token', refreshToken, {
+        maxAge: 86_400_000,
+        httpOnly: true,
+      });
+
+      res.header('refresh-token', refreshToken);
+      res.header('auth-token', token).send({
+        status: "success", payload: {
+          user: {
+            _id: alreadyUser._id, email: alreadyUser.email, name: alreadyUser.name, isVerified: alreadyUser.isVerified,
+            dob: alreadyUser.dob,
+            enrolledEvents: alreadyUser.enrolledEvents,
+            isAdmin: alreadyUser.isAdmin,
+            accessToken: token, refreshToken: refreshToken
+          }
+        }
+      });
+
     }
 
-    const makeUser = new User({
-      username,
-      email,
-      isVerified: true,
-      phone,
-      dob,
-      name,
-    });
-    const result = await User.register(makeUser, password); // auto saved
-    console.log("result = ", result);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-    req.login(result, (err) => {
-      // login after registering
-      if (err) return next(err);
-      // req.flash('success', 'Welcome to CampIt!');
-      // return res.redirect('/home');
-      return res
-        .status(200)
-        .send({ msg: `Welcome ${username} !`, user: makeUser });
+    const makeUser = new User({
+      username: username,
+      email: email,
+      isVerified: true,
+      phone: phone,
+      dob: dob,
+      name: name,
+      password: hashedPassword
+    });
+    const savedUser = await makeUser.save();
+    const [token, refreshToken] = await createAuthTokens({
+      user: {
+        _id: savedUser._id, email: savedUser.email, name: savedUser.name, isVerified: savedUser.isVerified,
+        dob: savedUser.dob,
+        enrolledEvents: savedUser.enrolledEvents,
+        isAdmin: savedUser.isAdmin,
+      }, secret: process.env.ACCESS_TOKEN_SECRET, secret2: process.env.REFRESH_TOKEN_SECRET + savedUser.password
+    });
+
+    res.cookie('refresh_token', refreshToken, {
+      maxAge: 86_400_000,
+      httpOnly: true,
+    });
+
+    res.header('refresh-token', refreshToken);
+    res.header('auth-token', token).send({
+      status: "success", payload: {
+        user: {
+          _id: savedUser._id, email: savedUser.email, name: savedUser.name, isVerified: savedUser.isVerified,
+          dob: savedUser.dob,
+          enrolledEvents: savedUser.enrolledEvents,
+          isAdmin: savedUser.isAdmin,
+          accessToken: token, refreshToken: refreshToken
+        }
+      }
     });
   } catch (e) {
-    // console.log(e.message);
-    // return res.redirect('/auth/register');
-    return res.status(400).send({ msg: e.message });
+    return res.status(400).send({ status: "fail", message: e.message });
   }
 };
 
-// HANDLED IN REACT
-// module.exports.loginGet = (req, res) => {
-//     return res.render('auth/login');
-// };
 
-module.exports.loginPost = (req, res) => {
-  // req.flash('success', `Welcome back ${req.user.username}`);
-  const user = req.user;
-  return res.status(200).send({
-    user: {
-      email: user.email,
-      isVerified: user.isVerified,
-      name: user.name,
-      dob: user.dob,
-      enrolledEvents: user.enrolledEvents,
-      isAdmin: user.isAdmin,
-    },
-  });
+module.exports.refreshAuth = async (req, res) => {
+  try {
+    var refreshToken = req.cookies.refresh_token;
+    if (!refreshToken) return res.status(401).send({ status: "Fail", message: "Unauthorize acecsss" });
+    const { _id } = jwt.decode(refreshToken);
+    if (!_id) return res.status(401).send({ status: "Fail", message: "Unauthorize acecsss" });
+
+    const userInDb = await User.findById(_id);
+    if (!userInDb) return res.status(401).send({ status: "Fail", message: "Unauthorize acecsss" });
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET + userInDb.password);
+    const [newToken, newRefreshToken] = await createAuthTokens({
+      user: {
+        _id: userInDb._id, email: userInDb.email, name: userInDb.name, isVerified: userInDb.isVerified,
+        dob: userInDb.dob,
+        enrolledEvents: userInDb.enrolledEvents,
+        isAdmin: userInDb.isAdmin,
+      }, secret: process.env.ACCESS_TOKEN_SECRET, secret2: process.env.REFRESH_TOKEN_SECRET + userInDb.password
+    });
+
+    res.cookie('refresh_token', newRefreshToken, {
+      maxAge: 86_400_000,
+      httpOnly: true,
+    });
+
+    res.header('refresh-token', newRefreshToken);
+    res.header('auth-token', newToken).send({
+      status: "success", payload: {
+        user: {
+          _id: userInDb._id, email: userInDb.email, name: userInDb.name, isVerified: userInDb.isVerified,
+          dob: userInDb.dob,
+          enrolledEvents: userInDb.enrolledEvents,
+          isAdmin: userInDb.isAdmin,
+          accessToken: newToken, refreshToken: newRefreshToken
+        }
+      }
+    });
+
+  } catch (error) {
+    res.status(401).send({ status: "Fail", error, message: "Unauthorise Access!" });
+  }
+}
+module.exports.login = async (req, res) => {
+  try {
+    const user = req.body;
+    var userInDb = await User.findOne({ email: user.email });
+    if (!userInDb) return res.status(400).send({ status: "fail", message: "username or password is wrong" });
+
+    if (userInDb) var validPass = await bcrypt.compare(user.password, userInDb.password);
+    if (!validPass) return res.status(400).send({ status: "fail", message: "username or password is wrong" });
+
+
+    const [token, refreshToken] = await createAuthTokens({
+      user: {
+        _id: userInDb._id, email: userInDb.email, name: userInDb.name, isVerified: userInDb.isVerified,
+        dob: userInDb.dob,
+        enrolledEvents: userInDb.enrolledEvents,
+        isAdmin: userInDb.isAdmin,
+      }, secret: process.env.ACCESS_TOKEN_SECRET, secret2: process.env.REFRESH_TOKEN_SECRET + userInDb.password
+    });
+
+    res.cookie('refresh_token', refreshToken, {
+      maxAge: 86_400_000,
+      httpOnly: true,
+    });
+
+    res.header('refresh-token', refreshToken);
+    res.header('auth-token', token).send({
+      status: "success", payload: {
+        user: {
+          _id: userInDb._id, email: userInDb.email, name: userInDb.name, isVerified: userInDb.isVerified,
+          dob: userInDb.dob,
+          enrolledEvents: userInDb.enrolledEvents,
+          isAdmin: userInDb.isAdmin,
+          accessToken: token, refreshToken: refreshToken
+        }
+      }
+    });
+  } catch (error) {
+    res.status(401).send({ status: "Fail", message: 'Something wrong happened from our side plz mail us', error: error });
+  }
+
 };
 
 module.exports.logOut = function (req, res, next) {
-  console.log('logout');
-  req.logout(function (err) {
-    if (err) {
-      return res.status(400).send({ msg: err });
-    } else {
-      return res.status(200).send({});
-    }
-  });
+  try {
+    res.clearCookie('refresh_token');
+    res.send({ status: "Success", message: "LogedOut Sucessfully" });
+  } catch (error) {
+    console.log(error);
+    res.send(400).send({ payload: { error }, status: "Fail", message: "Something Went Wrong" });
+  }
 };

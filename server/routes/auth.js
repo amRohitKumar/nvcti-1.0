@@ -2,27 +2,30 @@ const express = require("express");
 const passport = require("passport");
 const router = express.Router();
 
-const { isLoggedIn, catchAsync } = require("../middleware");
+const { isLoggedIn } = require("../middleware");
 const authController = require("../controllers/authController");
 
 router
   .route("/register")
   // .get(authController.registerGet) // form to register handled in react
-  .post(catchAsync(authController.registerPost)); //  registering in db
+  .post(authController.register); //  registering in db
 
 router
   .route("/verify-email/:emailToken")
-  .get(catchAsync(authController.verifyEmailGet)); // verify and add user to DB
+  .get(authController.verifyEmail); // verify and add user to DB
 
 router
   .route("/login")
-  // .get(authController.loginGet) //login form handled in react
   .post(
-    passport.authenticate("local", { failureFlash: false }),
-    authController.loginPost
-  ); // login post using passport
+    authController.login
+  );
+router
+  .route("/refresh-auth")
+  .get(
+    authController.refreshAuth
+  );
 
 router
-    .route("/logout")
-    .get(isLoggedIn, authController.logOut);
+  .route("/logout")
+  .get(isLoggedIn, authController.logOut);
 module.exports = router;
