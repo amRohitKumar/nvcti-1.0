@@ -7,34 +7,27 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const cors = require("cors");
-const methodOverride = require("method-override");
-const ejsMate = require("ejs-mate");
-const session = require("express-session");
-const cookieParser = require('cookie-parser');
-
+const cookieParser = require("cookie-parser");
+const User = require("./models/user");
+const { isLoggedIn } = require("./middleware");
 
 // FORM
 const { MongoClient } = require("mongodb");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
-var bodyParser = require("body-parser");
+const bodyParser = require("body-parser");
 
-app.set("view engine", "ejs");
-app.engine("ejs", ejsMate);
-app.set("views", path.join(__dirname, "views"));
+// ROUTES
+const authRoute = require("./routes/auth");
+const eventRoute = require("./routes/event");
 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride("_method"));
 app.use(bodyParser.json());
 app.use("/static", express.static(path.join(__dirname, "../build/static")));
 
 const mongoose = require("mongoose");
-const { sendMail } = require("./utilities/mailsender");
-const jwt = require("jsonwebtoken");
-
-mongoose.Promise = global.Promise;
 
 const dbURL = process.env.DBURL || "mongodb://localhost:27017/nvcti";
 
@@ -46,7 +39,6 @@ mongoose
   .catch((err) => {
     console.log("IN MONGOOSE SOMETHING WENT WRONG", err);
   });
-
 
 app.use(
   cors({
@@ -66,16 +58,6 @@ app.use(
   })
 );
 
-
-
-
-
-
-const User = require("./models/user");
-const { isLoggedIn } = require("./middleware");
-
-
-
 app.get("/home", isLoggedIn, async (req, res) => {
   var events = [];
   const cursor = collection.find({}).toArray((err, result) => {
@@ -86,24 +68,10 @@ app.get("/home", isLoggedIn, async (req, res) => {
   return;
 });
 
-const authRoute = require("./routes/auth");
-const eventRoute = require("./routes/event");
 
-const e = require("express");
 app.use("/auth", authRoute);
 app.use("/event", eventRoute);
 /*--------------------*/
-
-
-//THIS IS COMMENTED AS HANDLED IN REACT
-//ADMIN
-// app.get('/createEvent', isLoggedIn, (req, res) => {
-//     if (req.user && req.user.isAdmin === true) {
-//         res.sendFile('index.html', { root: path.join(__dirname, '../build/') });
-//     } else {
-//         res.send("You are not allowed to view this page");
-//     }
-// })
 
 //ADMIN
 app.post("/createEvent", isLoggedIn, (req, res) => {
@@ -124,8 +92,6 @@ app.post("/createEvent", isLoggedIn, (req, res) => {
       .send({ msg: "You are not allowed to view this page" });
   }
 });
-
-
 
 // app.get("/event", (req, res) => {
 //     res.sendFile("index.html", { root: path.join(__dirname, "../build/") });
@@ -179,9 +145,7 @@ app.post("/sendmentor", isLoggedIn, async (req, res) => {
   return res.send(200).json({});
 });
 
-
-
-app.get('/user/profile', async (req, res) => {
+app.get("/user/profile", async (req, res) => {
   const currUser = await User.findById(req.user.id);
   const currUserName = currUser.username;
   const currUserEmail = currUser.email;
@@ -189,16 +153,19 @@ app.get('/user/profile', async (req, res) => {
   let userEvents = [];
   for (let e of currUser.enrolledEvents) {
     const [id, index] = e.split(" "); // event's id is 'id', and index of this user in applications is 'index'
-    await collection.findOne({ "Event": id }).then((resp) => {
-      userEvents.push({ name: resp.eventName, status: resp.applicants[index].status });
-    })
+    await collection.findOne({ Event: id }).then((resp) => {
+      userEvents.push({
+        name: resp.eventName,
+        status: resp.applicants[index].status,
+      });
+    });
   }
 
   console.log(userEvents, currUserEmail, currUserName);
   // we should send events, username, mail
-  return res.send('done');
-  return res.send(200).json({})
-})
+  return res.send("done");
+  return res.send(200).json({});
+});
 
 // commented as handled in REACT
 // app.use((err, req, res, next) => {
@@ -207,9 +174,9 @@ app.get('/user/profile', async (req, res) => {
 //     return res.render('error.ejs', { err });
 // })
 
-app.get('/', (req, res) => {
-  res.send({ status: "Helo World" })
-})
+app.get("/", (req, res) => {
+  res.send({ status: "Helo World" });
+});
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
