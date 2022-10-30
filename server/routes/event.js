@@ -25,17 +25,13 @@ const eventController = require("../controllers/eventFormControllers");
 //         }
 //     }); // admin
 
-router.route("/:id/submit").post(isLoggedIn, (req, res) => {
+router.route("/submit").post(isLoggedIn, (req, res) => {
   if (req.user && req.user.isAdmin === true) {
-    const id = new ObjectId(req.params.id);
-    collection.findOne({ _id: id }).then((resp) => {
-      resp["comps"] = req.body.comps;
-      collection
-        .findOneAndReplace({ Event: req.params.id }, resp)
-        .then((resp) => {
-          // res.redirect("/allevents");
-          return res.send(200).json({});
-        });
+    var data = req.body;
+    data["responses"] = [];
+    collection.insertOne(data).then((resp) => {
+      return res
+        .send({ msg: "Event created successfully" });
     });
   } else {
     // res.send("You are not allowed to view this page");
