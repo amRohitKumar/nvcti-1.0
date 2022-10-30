@@ -110,7 +110,7 @@ function App() {
           ></Route>
           {/* SUPER-ADMIN PROTEDTED ROUTES */}
           <Route
-            path="/superAdmin"
+            path="/superadmin"
             element={
               <ProtectedRoutes userRole="superAdmin">
                 <SharedLayoutSuperAdmin />

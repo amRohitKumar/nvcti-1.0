@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { EmailIcon, LockOutlinedIcon, NoEncryptionIcon } from "../../icons";
 
-const LogIn = ({ role }) => {
+const LogIn = ({ role, redirecturl }) => {
   const dispatch = useDispatch();
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,7 +26,7 @@ const LogIn = ({ role }) => {
     };
     dispatch(loginUser(obj));
   };
-  useUserState("LOGIN", "/client"); // to redirect user if user state changes
+  useUserState("LOGIN", redirecturl); // to redirect user if user state changes
 
   return (
     <>

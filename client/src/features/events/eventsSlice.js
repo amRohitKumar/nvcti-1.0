@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
-import { fetchEventsThunk } from "./eventsThunk";
+import { fetchEventsThunk, addEventThunk } from "./eventsThunk";
 
 const initialState = {
   isLoading: false,
@@ -12,6 +12,8 @@ export const fetchEvents = createAsyncThunk(
   "events/fetchEvents",
   fetchEventsThunk
 );
+
+export const addEvent = createAsyncThunk("events/addEvent", addEventThunk);
 
 const eventsSlice = createSlice({
   name: "events",
@@ -29,6 +31,17 @@ const eventsSlice = createSlice({
     [fetchEvents.rejected]: (state) => {
       state.isLoading = false;
       toast.error("Something went wrong while fetching the events");
+    },
+    [addEvent.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [addEvent.fulfilled]: (state) => {
+      state.isLoading = false;
+      toast.success("Event added successfully !");
+    },
+    [addEvent.rejected]: (state) => {
+      state.isLoading = false;
+      toast.error("Something went wrong while adding event");
     },
   },
 });

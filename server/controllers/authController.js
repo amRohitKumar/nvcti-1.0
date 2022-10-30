@@ -62,7 +62,7 @@ module.exports.verifyEmail = async (req, res) => {
   try {
     const emailToken = req.params.emailToken;
 
-    const { email, username, password, phone, dob, name } = jwt.verify(
+    const { email, password, phone, dob, name } = jwt.verify(
       emailToken,
       process.env.EMAIL_VERIFY_TOKEN_SECRET
     );
@@ -111,13 +111,13 @@ module.exports.verifyEmail = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const makeUser = new User({
-      username: username,
       email: email,
       isVerified: true,
       phone: phone,
       dob: dob,
       name: name,
       password: hashedPassword,
+      isAdmin: true, // to create admin
     });
     const savedUser = await makeUser.save();
     const [token, refreshToken] = await createAuthTokens({

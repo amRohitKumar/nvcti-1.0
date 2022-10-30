@@ -19,7 +19,7 @@ const ClientDashboard = () => {
   }, []);
 
   if (isLoading) {
-    return <CircularProgress />;
+    return <CircularProgress sx={{ mx: "auto" }} />;
   }
 
   if (events.length === 0) {

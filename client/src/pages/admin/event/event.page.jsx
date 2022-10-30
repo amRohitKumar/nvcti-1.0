@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { addEvent } from "../../../features/events/eventsSlice";
 import Wrapper from "./event.style";
 import {
   EventInput,
@@ -220,6 +223,8 @@ const AddElement = ({
 };
 
 const CreateEvent = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [eventTitle, setEventTitle] = useState("Untitled event");
   const [description, setDescription] = useState("Form description");
   const [questions, setQuestion] = useState("[]");
@@ -231,7 +236,8 @@ const CreateEvent = () => {
       description: description,
       questions: JSON.parse(questions),
     };
-    console.log(eventObj);
+    dispatch(addEvent(eventObj))
+      .then(() => navigate("/admin"));
     /*
       Structure - 
       {

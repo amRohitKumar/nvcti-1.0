@@ -238,13 +238,13 @@ app.use('/auth', authRoute);
 // });
 
 
-app.get('/event/:id/makeForm', (req, res) => {
-    if (user == "admin") {
-        res.sendFile('index.html', {root: path.join(__dirname, '../build/')});
-    } else {
-        res.send("You are not allowed to view this page");
-    }
-});
+// app.get('/event/:id/makeForm', (req, res) => {
+//     if (user == "admin") {
+//         res.sendFile('index.html', {root: path.join(__dirname, '../build/')});
+//     } else {
+//         res.send("You are not allowed to view this page");
+//     }
+// });
 
 // app.post("/event/submit", isLoggedIn, (req, res) => { // admin
 //     if (!req.body){
