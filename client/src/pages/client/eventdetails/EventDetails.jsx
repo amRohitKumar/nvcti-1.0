@@ -10,11 +10,12 @@ import {
 import { event } from "../../../data/index";
 import { TimeLine } from "../../../components";
 import { InfoIcon, HowToRegIcon } from "../../../icons";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const EventDetails = () => {
   const navigate = useNavigate();
-  const {eventId} = useParams();
+  const { eventId } = useParams();
+  const { state: eventObj } = useLocation();
   return (
     <Container
       component="main"
@@ -28,8 +29,13 @@ const EventDetails = () => {
         <Grid item md={8.5} sm={12} component="section">
           <ImageList sx={{ borderRadius: "12px" }}>
             <ImageListItem cols={2} sx={{ position: "relative" }}>
-              <img src={event.imgUrl} alt="" loading="lazy" />
-              <a id="link" href="#details" style={{color:"black"}}>
+              <img
+                src={eventObj.banner}
+                alt="Event banner"
+                loading="lazy"
+                style={{ maxHeight: "500px", aspectRatio: "1/1" }}
+              />
+              <a id="link" href="#details" style={{ color: "black" }}>
                 <InfoIcon
                   sx={{
                     position: "absolute",
@@ -76,7 +82,10 @@ const EventDetails = () => {
               }}
             >
               {/******************************************************************************************/}
-              <TimeLine />
+              <TimeLine
+                startDate={eventObj.startDate}
+                endDate={eventObj.endDate}
+              />
               {/******************************************************************************************/}
             </Box>
             <Button
@@ -98,13 +107,7 @@ const EventDetails = () => {
       </Grid>
       <Grid container component="section">
         <Grid item component="article" id="details">
-          Entrepreneurs, Students of IIHTs and other educational
-          Institutions/Universities, Innovators, researchers across India.
-          Companies incorporated under the Companies Act 1956/2013, primarily a
-          Micro, Small and Medium Enterprises (MSME) as defined in the MSMED
-          Act, 2006. Any company registered as a Start-up, as defined, and
-          recognized by the Department for Promotion of Industry and Internal
-          Tra
+          {eventObj.description}
         </Grid>
       </Grid>
     </Container>

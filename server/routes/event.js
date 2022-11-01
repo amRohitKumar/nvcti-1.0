@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const {cloudinary} = require('../cloudinary');
 
 const { isLoggedIn, catchAsync, isAdmin } = require("../middleware");
 
@@ -14,6 +13,8 @@ const client = new MongoClient(dbURL);
 const database = client.db("nvcti");
 const collection = database.collection("event");
 const eventController = require("../controllers/eventFormControllers");
+const User = require("../models/user");
+const  ObjectID = require('mongodb').ObjectId;
 
 //THIS IS COMMENTED AS HANDLED IN REACT
 // router.route('/:id/makeForm')
@@ -118,13 +119,14 @@ router
     const curruser = await User.findById(req.user.id);
 
     let alreadyEnrolled = 0;
-    for (let c in curruser.enrolledEvents) {
-      if (c == req.params.id) {
+    for (let c of curruser.enrolledEvents) {
+      const eventId = c.split(" ")[0];
+      if (eventId == req.params.id) {
         alreadyEnrolled = 1;
         break;
       }
     }
-
+    
     if (alreadyEnrolled) {
       // return res.redirect('/home');
       return res.status(400).send({ msg: "You have already enrolled!" });
@@ -132,30 +134,27 @@ router
 
     let l = 0;
 
-    const id = new ObjectId(req.params.id);
+    const id = new ObjectID(req.params.id);
     await collection.findOne({ _id: id }).then((resp) => {
       data = resp;
-      if (!data["applicants"]) {
-        data["applicants"] = [];
+      if (!data["responses"]) {
+        data["responses"] = [];
       }
       // req.body["files"] = files;
       req.body.push({"status": "pending"});
-      data["applicants"].push(req.body);
+      data["responses"].push(req.body);
 
-      l = data["applicants"].length - 1;
+      l = data["responses"].length - 1;
       console.log(l);
       collection
-        .findOneAndReplace({ Event: req.params.id }, data)
-        .then((resp) => {});
+        .findOneAndReplace({ _id: id }, data);
     });
 
     const temp = req.params.id + " " + l;
-
     curruser.enrolledEvents.push(temp);
     await curruser.save();
     const userdata = await User.findById(req.user.id);
-    // return res.redirect("/allevents");
-    return res.send(200).json(userdata);
+    return res.status(200).send({user: userdata});
   }); // student
 
 //THIS IS COMMENTED AS HANDLED IN REACT

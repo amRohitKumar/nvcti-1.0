@@ -6,9 +6,12 @@ import {
   Avatar,
   Box,
   Toolbar,
+  Button,
 } from "@mui/material";
 import { UserCircle as UserCircleIcon } from "../../icons/user-circle";
 import { AccountPopover } from "../account-popover/account-popover.component";
+import NVCTILogo from "../logo/logo.component";
+import { useNavigate } from "react-router-dom";
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -16,6 +19,7 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
 }));
 
 export const SuperAdminDashboardNavbar = (props) => {
+  const navigate = useNavigate();
   const { onSidebarOpen, ...other } = props;
   const settingsRef = useRef(null);
   const [openAccountPopover, setOpenAccountPopover] = useState(false);
@@ -39,7 +43,15 @@ export const SuperAdminDashboardNavbar = (props) => {
           }}
         >
           {/* NAVBAR LOGO */}
+          <NVCTILogo />
           <Box sx={{ flexGrow: 1 }} />
+          <Button
+            variant="contained"
+            onClick={() => navigate("/superadmin")}
+            sx={{ mr: 2 }}
+          >
+            Dashboard
+          </Button>
           <Avatar
             onClick={() => setOpenAccountPopover(true)}
             ref={settingsRef}

@@ -1,12 +1,12 @@
 import * as React from "react";
 import { Box, Typography, Container, Link, Grid } from "@mui/material";
-import nvctii from "../../assets/nvcti_logo.svg";
 import iitism2 from "../../assets/ism_transparent_logo.png";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import YouTubeIcon from "@mui/icons-material/YouTube";
+import NVCTILogo from "../logo/logo.component";
 
 const socialNetworks = [
   {
@@ -77,11 +77,7 @@ export default function Footer() {
           justifyContent: "center",
         }}
       >
-        <img
-          src={nvctii}
-          alt="nvcti"
-          style={{ width: "45px", height: "45px" }}
-        />
+        <NVCTILogo/>
       </Grid>
       <Grid item xs={4}>
         <Box

@@ -1,7 +1,9 @@
 import { Box, MenuItem, MenuList, Popover, Typography } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 export const AccountPopover = (props) => {
   const {anchorEl, onClose, open, handleSignOut, ...other} = props;
+  const name = useSelector(store => store?.user?.user?.name);
   return (
     <Popover
       anchorEl={anchorEl}
@@ -29,7 +31,7 @@ export const AccountPopover = (props) => {
           color="text.secondary"
           variant="body2"
         >
-          John Doe
+          {name}
         </Typography>
       </Box>
       <MenuList

@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { UserCircle as UserCircleIcon } from "../../icons/user-circle";
 import { AccountPopover } from "../account-popover/account-popover.component";
+import NVCTILogo from "../logo/logo.component";
 
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
@@ -48,7 +49,15 @@ export const AdminDashboardNavbar = (props) => {
           }}
         >
           {/* NAVBAR LOGO */}
+          <NVCTILogo />
           <Box sx={{ flexGrow: 1 }} />
+          <Button
+            variant="contained"
+            onClick={() => navigate("/admin")}
+            sx={{ mr: 2 }}
+          >
+            Dashboard
+          </Button>
           <Button variant="contained" onClick={() => navigate('create')}>Create New</Button>
           <Avatar
             onClick={() => setOpenAccountPopover(true)}

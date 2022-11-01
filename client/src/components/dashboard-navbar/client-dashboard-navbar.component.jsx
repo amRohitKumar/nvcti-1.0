@@ -8,6 +8,7 @@ import { UserCircle as UserCircleIcon } from "../../icons/user-circle";
 import NotificationSection from "../notification-dropdown/notification-dropdown.component";
 import { AccountPopover } from "../account-popover/account-popover.component";
 import { useDispatch } from "react-redux";
+import NVCTILogo from "../logo/logo.component";
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -42,8 +43,12 @@ export const ClientDashboardNavbar = (props) => {
           }}
         >
           {/* NAVBAR LOGO */}
+          <NVCTILogo />
           <Box sx={{ flexGrow: 1 }} />
-          <Button variant="contained" onClick={() => navigate("status")}>
+          <Button variant="contained" onClick={() => navigate("/client")}>
+            Dashboard
+          </Button>
+          <Button variant="contained" onClick={() => navigate("status")} sx={{ml: 2}}>
             Status
           </Button>
           <NotificationSection />

@@ -60,7 +60,7 @@ const OngoingEventsAdmin = ({ events, ...otherProps }) => {
         }}
       >
         <CardHeader
-          title="Ongoing Events"
+          title="Events"
           titleTypographyProps={{ fontSize: "2em" }}
           sx={{ ml: 5 }}
         />

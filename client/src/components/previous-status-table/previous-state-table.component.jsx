@@ -1,4 +1,6 @@
 import { format } from "date-fns";
+import { useSelector } from "react-redux";
+
 import PerfectScrollbar from "react-perfect-scrollbar";
 import {
   Box,
@@ -53,7 +55,24 @@ const orders = [
   },
 ];
 
-const PreviousStatusTable = ({enrolledevents, ...otherProps}) => {
+const PreviousStatusTable = ({ enrolledevents, ...otherProps }) => {
+  const events = useSelector((store) => store.events?.events);
+  console.log("events = ", events);
+  const userEvents = [];
+  enrolledevents.forEach((event) => {
+    const [eventId, idx] = event.split(" ");
+    events.forEach((event) => {
+      if (event._id === eventId) {
+        userEvents.push({
+          title: event.title,
+          endDate: event.endDate,
+          startDate: event.startDate,
+          status: event.responses[idx].at(-1).status,
+        });
+      }
+    });
+  });
+  // console.log(userEvents);
   return (
     <Wrapper>
       <Card
@@ -75,35 +94,28 @@ const PreviousStatusTable = ({enrolledevents, ...otherProps}) => {
               <TableHead>
                 <TableRow>
                   <TableCell>Serial No.</TableCell>
-                  {Object.keys(orders[0]).map((item, idx) => {
-                    return (
-                      <TableCell key={idx} className="tableHeading">
-                        {item}
-                      </TableCell>
-                    );
-                  })}
+                  <TableCell>Name</TableCell>
+                  <TableCell>Started On</TableCell>
+                  <TableCell>Deadline</TableCell>
+                  <TableCell>Status</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {orders.map((order, idx) => (
+                {userEvents.map((event, idx) => (
                   <TableRow hover key={idx}>
                     <TableCell>{idx + 1}</TableCell>
-                    <TableCell>{order.name}</TableCell>
-                    <TableCell>
-                      {format(order.deadline, "dd/MM/yyyy")}
-                    </TableCell>
-                    <TableCell>
-                      {format(order.filledOn, "dd/MM/yyyy")}
-                    </TableCell>
+                    <TableCell>{event.title}</TableCell>
+                    <TableCell>{event.startDate}</TableCell>
+                    <TableCell>{event.endDate}</TableCell>
                     <TableCell>
                       <StatusPill
                         color={
-                          (order.status === "accepted" && "success") ||
-                          (order.status === "rejected" && "error") ||
+                          (event.status === "accepted" && "success") ||
+                          (event.status === "rejected" && "error") ||
                           "warning"
                         }
                       >
-                        {order.status}
+                        {(event.status).toUpperCase()}
                       </StatusPill>
                     </TableCell>
                   </TableRow>

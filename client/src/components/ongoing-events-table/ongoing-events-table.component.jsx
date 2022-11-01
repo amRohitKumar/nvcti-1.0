@@ -73,11 +73,22 @@ const OngoingEventsTable = ({ events, ...otherProps }) => {
                   <TableRow hover key={idx}>
                     <TableCell>{idx + 1}</TableCell>
                     <TableCell>{event.title}</TableCell>
-                    <TableCell>
-                      {event.endDate}
-                    </TableCell>
+                    <TableCell>{event.endDate}</TableCell>
                     <TableCell align="center">
-                      <Button variant="contained" size="small" onClick={() => navigate(`event/${event._id}`)}>
+                      <Button
+                        variant="contained"
+                        size="small"
+                        onClick={() =>
+                          navigate(`event/${event._id}`, {
+                            state: {
+                              banner: event.banner,
+                              description: event.description,
+                              endDate: event.endDate,
+                              startDate: event.startDate,
+                            },
+                          })
+                        }
+                      >
                         Know more
                       </Button>
                     </TableCell>

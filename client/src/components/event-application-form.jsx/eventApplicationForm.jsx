@@ -10,9 +10,15 @@ import {
 } from "./questions";
 import { EventInput, EventInputMultiline } from "./eventApplicationForm.styles";
 import Wrapper from "./eventApplicationForm.styles";
+import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { submitEvent } from "../../features/user/userSlice";
 // import { eventFormData } from "../../data";
 
-const EventApplicationForm = ({eventFormData}) => {
+const EventApplicationForm = ({ eventFormData }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { eventId } = useParams();
   const { title, description, questions } = eventFormData;
   const [loading, setLoading] = useState(true);
   const [answerArray, setAnswerArray] = useState("[]");
@@ -31,7 +37,9 @@ const EventApplicationForm = ({eventFormData}) => {
 
   const handleSubmit = () => {
     console.log(JSON.parse(answerArray));
-    
+    dispatch(submitEvent({ eventId, answer: JSON.parse(answerArray) })).then(
+      () => navigate("/client")
+    );
   };
 
   return (
