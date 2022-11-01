@@ -6,7 +6,29 @@ const Wrapper = styled(Box)({
     // width: '60%',
     height: 'max-content',
     margin: '0 auto',
+    
+    '.timelineHeading': {
+        fontSize: '2em',
+        padding: '0.15em 0.25em',
+        margin: '0.25em 0.25em',
+        letterSpacing: '1px',
+        fontWeight: '400',
+        
+    },
+    '.innercontent': {
+        marginLeft: '2em',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
+    '.date_label': {
+        margin: '0.5em 0',
+        fontWeight: '500',
 
+        'input': {
+            marginLeft: '1em',
+        }
+    }
     // '@media (max-width: 900px)': {
     //     width: '95%',
     // },

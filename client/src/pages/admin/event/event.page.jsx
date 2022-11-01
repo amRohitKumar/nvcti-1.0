@@ -20,6 +20,7 @@ import {
   Divider,
   Tooltip,
   IconButton,
+  Box,
 } from "@mui/material";
 
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -32,14 +33,9 @@ import {
   DropdownAnswer,
   inputTypes,
 } from "./questions-type";
+import axios from "axios";
 
-const AddElement = ({
-  id,
-  exist,
-  questions,
-  setQuestion,
-  handleEventSubmit,
-}) => {
+const AddElement = ({ id, exist, questions, setQuestion }) => {
   const prevQuestions = JSON.parse(questions);
 
   const initialTitle = exist ? prevQuestions[id].question : "";
@@ -193,18 +189,9 @@ const AddElement = ({
         />
         <Divider orientation="vertical" flexItem />
         {!exist ? (
-          <>
-            <Button variant="outlined" onClick={handleSubmit} sx={{ ml: 1 }}>
-              Add
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={handleEventSubmit}
-              sx={{ ml: 1 }}
-            >
-              Submit Event
-            </Button>
-          </>
+          <Button variant="outlined" onClick={handleSubmit} sx={{ ml: 1 }}>
+            Add
+          </Button>
         ) : (
           <>
             <Tooltip title="Remove">
@@ -225,19 +212,33 @@ const AddElement = ({
 const CreateEvent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [pageNumber, setPageNumber] = useState(1);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [image, setImage] = useState(null);
   const [eventTitle, setEventTitle] = useState("Untitled event");
   const [description, setDescription] = useState("Form description");
   const [questions, setQuestion] = useState("[]");
 
-  const handleEventSubmit = () => {
+  const handleEventSubmit = async () => {
     // EVENT SUBMIT LOGIC
+
+    const formData = new FormData();
+    formData.append("file", image);
+    formData.append("upload_preset", "ml_default");
+    const res = await axios.post(
+      "https://api.cloudinary.com/v1_1/dauxdhnsr/image/upload",
+      formData
+    );
     const eventObj = {
       title: eventTitle,
       description: description,
+      banner: res.data.secure_url,
+      startDate,
+      endDate,
       questions: JSON.parse(questions),
     };
-    dispatch(addEvent(eventObj))
-      .then(() => navigate("/admin"));
+    dispatch(addEvent(eventObj)).then(() => navigate("/admin"));
     /*
       Structure - 
       {
@@ -258,45 +259,123 @@ const CreateEvent = () => {
 
   return (
     <Wrapper sx={{ width: { lg: "50%", md: "70%", sm: "80%", xs: "95%" } }}>
-      {/* EVENT INFO SECTION */}
-      <Paper
-        elevation={1}
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          p: "1em",
-          borderTop: "10px solid #828DF8",
-        }}
-      >
-        <EventInput
-          type="text"
-          size="large"
-          value={eventTitle}
-          onChange={(e) => setEventTitle(e.target.value)}
-        />
-        <EventInputMultiline
-          type="text"
-          rows="3"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-      </Paper>
-      {/* EVENT QUESTIONS DISPLAY */}
-      {JSON.parse(questions).map((_, idx) => (
-        <AddElement
-          key={idx}
-          questions={questions}
-          setQuestion={setQuestion}
-          exist={true}
-          id={idx}
-        />
-      ))}
-      {/* EVENT QUESTIONS */}
-      <AddElement
-        questions={questions}
-        setQuestion={setQuestion}
-        handleEventSubmit={handleEventSubmit}
-      />
+      {pageNumber === 1 ? (
+        <>
+          {/* EVENT INFO SECTION */}
+          <Paper
+            elevation={1}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              p: "1em",
+              borderTop: "10px solid #828DF8",
+            }}
+          >
+            <EventInput
+              type="text"
+              size="large"
+              value={eventTitle}
+              onChange={(e) => setEventTitle(e.target.value)}
+            />
+            <EventInputMultiline
+              type="text"
+              rows="3"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </Paper>
+          <Paper component="form" sx={{ p: 3, m: 3 }}>
+            {/* EVENT TIMELINE SECTION */}
+            <h2 className="timelineHeading">Timeline</h2>
+            <div className="innercontent">
+              <label htmlFor="start_day" className="date_label">
+                Opens on
+                <input
+                  type="date"
+                  name="start_day"
+                  id="start_day"
+                  value={startDate}
+                  onChange={(evt) => setStartDate(evt.target.value)}
+                />
+              </label>
+              <label htmlFor="end_day" className="date_label">
+                Closes on
+                <input
+                  type="date"
+                  name="end_day"
+                  id="end_day"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+              </label>
+            </div>
+            <h2 className="timelineHeading">Banner</h2>
+            <div className="innercontent">
+              <input
+                type="file"
+                name="banner"
+                id="banner"
+                accept="image/png, image/jpg, image/jpeg"
+                onChange={(e) => setImage(e.target.files[0])}
+              />
+            </div>
+          </Paper>
+          <Box
+            sx={{
+              m: 2,
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+            }}
+          >
+            <Button
+              variant="outlined"
+              onClick={() => setPageNumber(2)}
+              sx={{ ml: 1 }}
+            >
+              Next
+            </Button>
+          </Box>
+        </>
+      ) : (
+        <>
+          {/* EVENT QUESTIONS DISPLAY */}
+          {JSON.parse(questions).map((_, idx) => (
+            <AddElement
+              key={idx}
+              questions={questions}
+              setQuestion={setQuestion}
+              exist={true}
+              id={idx}
+            />
+          ))}
+          {/* ADD EVENT QUESTIONS */}
+          <AddElement questions={questions} setQuestion={setQuestion} />
+          <Box
+            sx={{
+              m: 2,
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+            }}
+          >
+            <Button
+              variant="outlined"
+              onClick={() => setPageNumber(1)}
+              sx={{ ml: 1 }}
+            >
+              Previous
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={handleEventSubmit}
+              sx={{ ml: 1 }}
+            >
+              Submit Event
+            </Button>
+          </Box>
+        </>
+      )}
     </Wrapper>
   );
 };

@@ -13,41 +13,43 @@ import {
 } from "@mui/material";
 
 import Wrapper from "./ongoing-evetns.style";
+import { changedateformat } from "../../utils/dateformat";
 
-const orders = [
-  {
-    name: "Ekaterina Tankova",
-    deadline: 1555016400000,
-    count: 54,
-  },
-  {
-    name: "Cao Yu",
-    deadline: 1555016400000,
-    count: 44,
-  },
-  {
-    name: "Alexa Richardson",
-    deadline: 1554930000000,
-    count: 58,
-  },
-  {
-    name: "Anje Keizer",
-    deadline: 1554757200000,
-    count: 27,
-  },
-  {
-    name: "Clarke Gillebert",
-    deadline: 1554670800000,
-    count: 8,
-  },
-  {
-    name: "Adam Denisov",
-    deadline: 1554670800000,
-    count: 96,
-  },
-];
+// const orders = [
+//   {
+//     name: "Ekaterina Tankova",
+//     deadline: 1555016400000,
+//     count: 54,
+//   },
+//   {
+//     name: "Cao Yu",
+//     deadline: 1555016400000,
+//     count: 44,
+//   },
+//   {
+//     name: "Alexa Richardson",
+//     deadline: 1554930000000,
+//     count: 58,
+//   },
+//   {
+//     name: "Anje Keizer",
+//     deadline: 1554757200000,
+//     count: 27,
+//   },
+//   {
+//     name: "Clarke Gillebert",
+//     deadline: 1554670800000,
+//     count: 8,
+//   },
+//   {
+//     name: "Adam Denisov",
+//     deadline: 1554670800000,
+//     count: 96,
+//   },
+// ];
 
 const OngoingEventsAdmin = ({ events, ...otherProps }) => {
+  console.log(events);
   return (
     <Wrapper>
       <Card
@@ -68,28 +70,24 @@ const OngoingEventsAdmin = ({ events, ...otherProps }) => {
               <TableHead>
                 <TableRow>
                   <TableCell>Serial No.</TableCell>
-                  {Object.keys(orders[0]).map((item, idx) => {
-                    return (
-                      <TableCell key={idx} className="tableHeading">
-                        {item}
-                      </TableCell>
-                    );
-                  })}
-                  <TableCell></TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Deadline</TableCell>
+                  <TableCell align="center">Count</TableCell>
+                  <TableCell align="center">Responses</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {orders.map((order, idx) => (
+                {events.map((event, idx) => (
                   <TableRow hover key={idx}>
-                    <TableCell>{idx + 1}</TableCell>
-                    <TableCell>{order.name}</TableCell>
+                    <TableCell >{idx + 1}</TableCell>
+                    <TableCell>{event.title}</TableCell>
                     <TableCell>
-                      {format(order.deadline, "dd/MM/yyyy")}
+                      {changedateformat(event.endDate)}
                     </TableCell>
-                    <TableCell>{order.count}</TableCell>
+                    <TableCell align="center">{event.responses.length}</TableCell>
                     <TableCell align="center">
                       <Button variant="contained" size="small">
-                        View applications
+                        View responses
                       </Button>
                     </TableCell>
                   </TableRow>

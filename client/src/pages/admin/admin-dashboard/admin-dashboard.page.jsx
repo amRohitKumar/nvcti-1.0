@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEvents } from "../../../features/events/eventsSlice";
 import { OngoingEventsAdmin } from "../../../components";
-import { CircularProgress, Alert } from "@mui/material";
+import { CircularProgress, Alert, Box } from "@mui/material";
 import Wrapper from "./admin-dashboard.style";
 
 const AdminDashboard = () => {
@@ -14,10 +14,14 @@ const AdminDashboard = () => {
     //eslint-disable-next-line
   }, []);
 
-  if (isLoading) {
-    return <CircularProgress sx={{ mx: "auto" }} />;
+  if (isLoading || !events) {
+    return (
+      <Box sx={{display: 'flex'}}>
+        <CircularProgress sx={{ mx: "auto", mt: 3 }} />;
+      </Box>
+    );
   }
-  if (events.length === 0) {
+  if (events && events.length === 0) {
     return (
       <Alert
         severity="info"

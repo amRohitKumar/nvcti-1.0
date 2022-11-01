@@ -1,6 +1,6 @@
 const express = require("express");
-const app = express();
 const router = express.Router();
+const {cloudinary} = require('../cloudinary');
 
 const { isLoggedIn, catchAsync, isAdmin } = require("../middleware");
 
@@ -25,19 +25,32 @@ const eventController = require("../controllers/eventFormControllers");
 //         }
 //     }); // admin
 
-router.route("/submit").post(isLoggedIn, (req, res) => {
-  if (req.user && req.user.isAdmin === true) {
-    var data = req.body;
-    data["responses"] = [];
-    collection.insertOne(data).then((resp) => {
+router.route("/submit").post(isLoggedIn, async (req, res) => {
+  try{
+    if (req.user && req.user.isAdmin === true) {
+      const data = req.body;
+      const {banner} = req.body;
+      console.log("ss = ", req.body);
+      // const cloudinaryResult = await cloudinary.uploader.upload(banner, {
+      //   resource_type: 'image',
+      //   folder: 'NVCTI',
+      //   allowedFormats: ['jpeg', 'png', 'jpg'],
+      // });
+      data["responses"] = [];
+      // data.banner = cloudinaryResult.url;
+      collection.insertOne(data).then((resp) => {
+        return res.status(200).send({ msg: "Event created successfully" });
+      });
+    } else {
       return res
-        .send({ msg: "Event created successfully" });
-    });
-  } else {
-    // res.send("You are not allowed to view this page");
-    return res
-      .status(400)
-      .send({ msg: "You are not allowed to view this page" });
+        .status(400)
+        .send({ msg: "You are not allowed to view this page" });
+      }
+    } catch(err){
+      console.log(err);
+      return res
+        .status(400)
+        .send({ msg: "Something went wrong in add event" });
   }
 }); //admin
 
@@ -66,15 +79,16 @@ router.route("/allevents").get((req, res) => {
         .status(400)
         .send({ msg: "Something went wrong while fetching event list" });
     }
-    let allEvents = [];
-    for (var i = 0; i < result.length; i++) {
-      let temp = {};
-      temp["Name"] = result[i].eventName;
-      temp["Organizer"] = result[i].eventOrganizer;
-      temp["EventID"] = result[i]._id.toString();
-      allEvents.push(temp);
-    }
-    return res.status(200).send({ allEvents });
+    // console.log(result);
+    // let allEvents = [];
+    // for (var i = 0; i < result.length; i++) {
+    //   let temp = {};
+    //   temp["Name"] = result[i].title;
+    //   // temp["Organizer"] = result[i].;
+    //   temp["EventID"] = result[i]._id.toString();
+    //   allEvents.push(temp);
+    // }
+    return res.status(200).send({ allEvents: result });
   });
 });
 

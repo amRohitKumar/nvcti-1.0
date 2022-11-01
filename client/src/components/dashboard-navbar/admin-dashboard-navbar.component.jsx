@@ -1,5 +1,8 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { clearUser } from "../../features/user/userSlice";
+
 
 import styled from "@emotion/styled";
 import {
@@ -12,19 +15,19 @@ import {
 import { UserCircle as UserCircleIcon } from "../../icons/user-circle";
 import { AccountPopover } from "../account-popover/account-popover.component";
 
+
 const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
   boxShadow: theme.shadows[3],
 }));
 
 export const AdminDashboardNavbar = (props) => {
+  const dispatch = useDispatch();
   const { onSidebarOpen, ...other } = props;
   const settingsRef = useRef(null);
   const [openAccountPopover, setOpenAccountPopover] = useState(false);
   const navigate = useNavigate();
-  const handleSignOut = () => {
-    
-  }
+  const handleSignOut = () => dispatch(clearUser());
 
   return (
     <>

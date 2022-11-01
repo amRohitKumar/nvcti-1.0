@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { fetchEventsThunk, addEventThunk } from "./eventsThunk";
 
 const initialState = {
-  isLoading: false,
+  isLoading: true,
   events: [],
 };
 

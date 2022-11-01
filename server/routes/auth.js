@@ -13,7 +13,5 @@ router
 router.route("/verify-email/:emailToken").get(authController.verifyEmail); // verify and add user to DB
 
 router.route("/login").post(authController.login);
-router.route("/refresh-auth").get(authController.refreshAuth);
 
-router.route("/logout").get(isLoggedIn, authController.logOut);
 module.exports = router;

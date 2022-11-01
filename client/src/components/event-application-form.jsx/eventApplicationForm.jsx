@@ -10,9 +10,9 @@ import {
 } from "./questions";
 import { EventInput, EventInputMultiline } from "./eventApplicationForm.styles";
 import Wrapper from "./eventApplicationForm.styles";
-import { eventFormData } from "../../data";
+// import { eventFormData } from "../../data";
 
-const EventApplicationForm = () => {
+const EventApplicationForm = ({eventFormData}) => {
   const { title, description, questions } = eventFormData;
   const [loading, setLoading] = useState(true);
   const [answerArray, setAnswerArray] = useState("[]");
@@ -26,10 +26,12 @@ const EventApplicationForm = () => {
     });
     setAnswerArray(JSON.stringify(newAnswerArray));
     setLoading(false);
+    //eslint-disable-next-line
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = () => {
     console.log(JSON.parse(answerArray));
+    
   };
 
   return (

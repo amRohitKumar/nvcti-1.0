@@ -70,26 +70,10 @@ module.exports.verifyEmail = async (req, res) => {
 
     const alreadyUser = await User.findOne({ email });
     if (alreadyUser) {
-      const [token, refreshToken] = await createAuthTokens({
-        user: {
-          _id: alreadyUser._id,
-          email: alreadyUser.email,
-          name: alreadyUser.name,
-          isVerified: alreadyUser.isVerified,
-          dob: alreadyUser.dob,
-          enrolledEvents: alreadyUser.enrolledEvents,
-          isAdmin: alreadyUser.isAdmin,
-        },
-        secret: process.env.ACCESS_TOKEN_SECRET,
-        secret2: process.env.REFRESH_TOKEN_SECRET + alreadyUser.password,
+      const token = jwt.sign({ userId: alreadyUser._id }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_LIFETIME,
       });
-      res.cookie("refresh_token", refreshToken, {
-        maxAge: 86_400_000,
-        httpOnly: true,
-      });
-
-      res.header("refresh-token", refreshToken);
-      res.header("auth-token", token).send({
+      res.status(200).send({
         status: "success",
         payload: {
           user: {
@@ -100,8 +84,7 @@ module.exports.verifyEmail = async (req, res) => {
             dob: alreadyUser.dob,
             enrolledEvents: alreadyUser.enrolledEvents,
             isAdmin: alreadyUser.isAdmin,
-            accessToken: token,
-            refreshToken: refreshToken,
+            token,
           },
         },
       });
@@ -110,7 +93,7 @@ module.exports.verifyEmail = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const makeUser = new User({
+    const newUser = await User.create({
       email: email,
       isVerified: true,
       phone: phone,
@@ -119,39 +102,22 @@ module.exports.verifyEmail = async (req, res) => {
       password: hashedPassword,
       isAdmin: true, // to create admin
     });
-    const savedUser = await makeUser.save();
-    const [token, refreshToken] = await createAuthTokens({
-      user: {
-        _id: savedUser._id,
-        email: savedUser.email,
-        name: savedUser.name,
-        isVerified: savedUser.isVerified,
-        dob: savedUser.dob,
-        enrolledEvents: savedUser.enrolledEvents,
-        isAdmin: savedUser.isAdmin,
-      },
-      secret: process.env.ACCESS_TOKEN_SECRET,
-      secret2: process.env.REFRESH_TOKEN_SECRET + savedUser.password,
+
+    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_LIFETIME,
     });
 
-    res.cookie("refresh_token", refreshToken, {
-      maxAge: 86_400_000,
-      httpOnly: true,
-    });
-
-    res.header("refresh-token", refreshToken);
-    res.header("auth-token", token).send({
+    res.status(200).send({
       status: "success",
       user: {
-        _id: savedUser._id,
-        email: savedUser.email,
-        name: savedUser.name,
-        isVerified: savedUser.isVerified,
-        dob: savedUser.dob,
-        enrolledEvents: savedUser.enrolledEvents,
-        isAdmin: savedUser.isAdmin,
-        accessToken: token,
-        refreshToken: refreshToken,
+        _id: newUser._id,
+        email: newUser.email,
+        name: newUser.name,
+        isVerified: newUser.isVerified,
+        dob: newUser.dob,
+        enrolledEvents: newUser.enrolledEvents,
+        isAdmin: newUser.isAdmin,
+        token,
       },
     });
   } catch (e) {
@@ -159,68 +125,7 @@ module.exports.verifyEmail = async (req, res) => {
   }
 };
 
-module.exports.refreshAuth = async (req, res) => {
-  try {
-    var refreshToken = req.cookies.refresh_token;
-    if (!refreshToken)
-      return res
-        .status(401)
-        .send({ status: "Fail", msg: "Unauthorize acecsss" });
-    const { _id } = jwt.decode(refreshToken);
-    if (!_id)
-      return res
-        .status(401)
-        .send({ status: "Fail", msg: "Unauthorize acecsss" });
 
-    const userInDb = await User.findById(_id);
-    if (!userInDb)
-      return res
-        .status(401)
-        .send({ status: "Fail", msg: "Unauthorize acecsss" });
-    jwt.verify(
-      refreshToken,
-      process.env.REFRESH_TOKEN_SECRET + userInDb.password
-    );
-    const [newToken, newRefreshToken] = await createAuthTokens({
-      user: {
-        _id: userInDb._id,
-        email: userInDb.email,
-        name: userInDb.name,
-        isVerified: userInDb.isVerified,
-        dob: userInDb.dob,
-        enrolledEvents: userInDb.enrolledEvents,
-        isAdmin: userInDb.isAdmin,
-      },
-      secret: process.env.ACCESS_TOKEN_SECRET,
-      secret2: process.env.REFRESH_TOKEN_SECRET + userInDb.password,
-    });
-
-    res.cookie("refresh_token", newRefreshToken, {
-      maxAge: 86_400_000,
-      httpOnly: true,
-    });
-
-    res.header("refresh-token", newRefreshToken);
-    res.header("auth-token", newToken).send({
-      status: "success",
-      payload: {
-        user: {
-          _id: userInDb._id,
-          email: userInDb.email,
-          name: userInDb.name,
-          isVerified: userInDb.isVerified,
-          dob: userInDb.dob,
-          enrolledEvents: userInDb.enrolledEvents,
-          isAdmin: userInDb.isAdmin,
-          accessToken: newToken,
-          refreshToken: newRefreshToken,
-        },
-      },
-    });
-  } catch (error) {
-    res.status(401).send({ status: "Fail", error, msg: "Unauthorise Access!" });
-  }
-};
 module.exports.login = async (req, res) => {
   try {
     const user = req.body;
@@ -229,35 +134,19 @@ module.exports.login = async (req, res) => {
       return res
         .status(400)
         .send({ status: "fail", msg: "username or password is wrong" });
-
-    if (userInDb)
-      var validPass = await bcrypt.compare(user.password, userInDb.password);
-    if (!validPass)
-      return res
-        .status(400)
-        .send({ status: "fail", msg: "username or password is wrong" });
-
-    const [token, refreshToken] = await createAuthTokens({
-      user: {
-        _id: userInDb._id,
-        email: userInDb.email,
-        name: userInDb.name,
-        isVerified: userInDb.isVerified,
-        dob: userInDb.dob,
-        enrolledEvents: userInDb.enrolledEvents,
-        isAdmin: userInDb.isAdmin,
-      },
-      secret: process.env.ACCESS_TOKEN_SECRET,
-      secret2: process.env.REFRESH_TOKEN_SECRET + userInDb.password,
+    if (userInDb){
+      const validPass = await bcrypt.compare(user.password, userInDb.password);
+      if (!validPass){
+        return res
+          .status(400)
+          .send({ status: "fail", msg: "username or password is wrong" });
+      }
+    }
+    const token = jwt.sign({ userId: userInDb._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_LIFETIME,
     });
 
-    res.cookie("refresh_token", refreshToken, {
-      maxAge: 86_400_000,
-      httpOnly: true,
-    });
-
-    res.header("refresh-token", refreshToken);
-    res.header("auth-token", token).send({
+    res.status(200).send({
       status: "success",
       user: {
         _id: userInDb._id,
@@ -267,8 +156,7 @@ module.exports.login = async (req, res) => {
         dob: userInDb.dob,
         enrolledEvents: userInDb.enrolledEvents,
         isAdmin: userInDb.isAdmin,
-        accessToken: token,
-        refreshToken: refreshToken,
+        token,
       },
     });
   } catch (error) {
@@ -280,15 +168,3 @@ module.exports.login = async (req, res) => {
   }
 };
 
-module.exports.logOut = function (req, res, next) {
-  try {
-    res.clearCookie("refresh_token");
-    res.send({ status: "Success", msg: "LogedOut Sucessfully" });
-  } catch (error) {
-    console.log(error);
-    res.status(400).send({
-      status: "Fail",
-      msg: error,
-    });
-  }
-};

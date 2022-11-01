@@ -40,11 +40,15 @@ mongoose
     console.log("IN MONGOOSE SOMETHING WENT WRONG", err);
   });
 
-app.use(
-  cors({
-    origin: "http://localhost:3000", // frontend url
-  })
-);
+app.use(cors());
+// app.use((req, res, next) => {
+//   res.setHeader(
+//     "Access-Control-Allow-Headers",
+//     "Origin,X-Requested-With,Content-Type,Accept,Authorization"
+//   );
+//   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+//   next();
+// });
 
 const client = new MongoClient(dbURL);
 const database = client.db("nvcti");
@@ -58,6 +62,13 @@ app.use(
   })
 );
 
+// app.use("*", (req, res, next) => {
+//   console.log("middleware = ");
+//   console.log(req.baseUrl);
+//   console.log(req.body);
+//   next();
+// });
+
 app.get("/home", isLoggedIn, async (req, res) => {
   var events = [];
   const cursor = collection.find({}).toArray((err, result) => {
@@ -67,7 +78,6 @@ app.get("/home", isLoggedIn, async (req, res) => {
   });
   return;
 });
-
 
 app.use("/auth", authRoute);
 app.use("/event", eventRoute);
@@ -141,8 +151,11 @@ app.get("/user/profile", async (req, res) => {
   for (let e of currUser.enrolledEvents) {
     const id = new ObjectId(req.params.id);
     await collection.findOne({ _id: id }).then((resp) => {
-      userEvents.push({ name: resp.eventName, status: resp.applicants[index].status });
-    })
+      userEvents.push({
+        name: resp.eventName,
+        status: resp.applicants[index].status,
+      });
+    });
   }
 
   console.log(userEvents, currUserEmail, currUserName);

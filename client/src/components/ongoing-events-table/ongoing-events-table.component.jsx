@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import {
   Box,
@@ -42,6 +42,7 @@ import Wrapper from "./ongoing-events-table.style";
 // ];
 
 const OngoingEventsTable = ({ events, ...otherProps }) => {
+  const navigate = useNavigate();
   return (
     <Wrapper>
       <Card
@@ -62,13 +63,8 @@ const OngoingEventsTable = ({ events, ...otherProps }) => {
               <TableHead>
                 <TableRow>
                   <TableCell>Serial No.</TableCell>
-                  {Object.keys(events[0]).map((item, idx) => {
-                    return (
-                      <TableCell key={idx} className="tableHeading">
-                        {item}
-                      </TableCell>
-                    );
-                  })}
+                  <TableCell>Name</TableCell>
+                  <TableCell>Deadline</TableCell>
                   <TableCell></TableCell>
                 </TableRow>
               </TableHead>
@@ -76,12 +72,12 @@ const OngoingEventsTable = ({ events, ...otherProps }) => {
                 {events.map((event, idx) => (
                   <TableRow hover key={idx}>
                     <TableCell>{idx + 1}</TableCell>
-                    <TableCell>{event.name}</TableCell>
+                    <TableCell>{event.title}</TableCell>
                     <TableCell>
-                      {format(event.deadline, "dd/MM/yyyy")}
+                      {event.endDate}
                     </TableCell>
                     <TableCell align="center">
-                      <Button variant="contained" size="small">
+                      <Button variant="contained" size="small" onClick={() => navigate(`event/${event._id}`)}>
                         Know more
                       </Button>
                     </TableCell>

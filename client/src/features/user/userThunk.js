@@ -28,7 +28,6 @@ export const loginUserThunk = async (user, thunkAPI) => {
 };
 export const logoutUserThunk = async (_, thunkAPI) => {
   try{
-    // await customFetch.get("/auth/logout");
     thunkAPI.dispatch(logoutUser());
     return Promise.resolve();
   } catch(error){

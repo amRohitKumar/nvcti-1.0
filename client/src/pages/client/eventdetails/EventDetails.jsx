@@ -10,8 +10,11 @@ import {
 import { event } from "../../../data/index";
 import { TimeLine } from "../../../components";
 import { InfoIcon, HowToRegIcon } from "../../../icons";
+import { useNavigate, useParams } from "react-router-dom";
 
 const EventDetails = () => {
+  const navigate = useNavigate();
+  const {eventId} = useParams();
   return (
     <Container
       component="main"
@@ -86,6 +89,7 @@ const EventDetails = () => {
               }}
               color="secondary"
               startIcon={<HowToRegIcon />}
+              onClick={() => navigate(`/client/apply/${eventId}`)}
             >
               Apply now
             </Button>
