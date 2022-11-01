@@ -81,22 +81,25 @@ router.route("/allevents").get((req, res) => {
 router
   .route("/:id/submitForm")
   .post(isLoggedIn, upload.any(), async (req, res) => {
-    for (var key of Object.keys(req.body)) {
-      if (key != "files" && req.body[key].trim() == "") {
-        eFlag = 1;
-        // return res.send("error, fill all fields corectly and apply again");
-        return res
-          .status(400)
-          .send({ msg: "Fill all fields corectly and apply again" });
-      }
-    }
 
-    let data = {};
-    let files = {};
+    // IMPLEMENT LATER FOR HANDELING FILES
 
-    for (var f of req.files) {
-      files[f["fieldname"]] = f["filename"];
-    }
+    // for (var key of Object.keys(req.body)) {
+    //   if (key != "files" && req.body[key].trim() == "") {
+    //     eFlag = 1;
+    //     // return res.send("error, fill all fields corectly and apply again");
+    //     return res
+    //       .status(400)
+    //       .send({ msg: "Fill all fields corectly and apply again" });
+    //   }
+    // }
+
+    // let data = {};
+    // let files = {};
+
+    // for (var f of req.files) {
+    //   files[f["fieldname"]] = f["filename"];
+    // }
 
     const curruser = await User.findById(req.user.id);
 
@@ -121,8 +124,8 @@ router
       if (!data["applicants"]) {
         data["applicants"] = [];
       }
-      req.body["files"] = files;
-      req.body["status"] = "pending";
+      // req.body["files"] = files;
+      req.body.push({"status": "pending"});
       data["applicants"].push(req.body);
 
       l = data["applicants"].length - 1;
@@ -136,8 +139,9 @@ router
 
     curruser.enrolledEvents.push(temp);
     await curruser.save();
+    const userdata = await User.findById(req.user.id);
     // return res.redirect("/allevents");
-    return res.send(200).json({});
+    return res.send(200).json(userdata);
   }); // student
 
 //THIS IS COMMENTED AS HANDLED IN REACT
