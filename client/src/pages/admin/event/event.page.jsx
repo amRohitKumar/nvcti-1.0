@@ -21,361 +21,352 @@ import {
   Tooltip,
   IconButton,
   Box,
+  Radio,
+  RadioGroup,
+  Typography,
+  Checkbox,
+  FormGroup,
+  Grid,
+  InputLabel,
 } from "@mui/material";
 
-import DeleteIcon from "@mui/icons-material/Delete";
-
-import {
-  ShortAnswer,
-  ParagraphAnswer,
-  MultipleAnswer,
-  CheckboxesAnswer,
-  DropdownAnswer,
-  inputTypes,
-} from "./questions-type";
-import axios from "axios";
-
-const AddElement = ({ id, exist, questions, setQuestion }) => {
-  const prevQuestions = JSON.parse(questions);
-
-  const initialTitle = exist ? prevQuestions[id].question : "";
-  const initialType = exist ? prevQuestions[id].type : "short_anwer";
-  const isRequired = exist ? prevQuestions[id].isRequired : false;
-  const isOther = exist ? prevQuestions[id].other : false;
-  let initialOptions = "[]";
-
-  if (exist) {
-    if (prevQuestions[id].options) {
-      initialOptions = prevQuestions[id].options;
-    }
-  }
-
-  const [title, setTitle] = useState(initialTitle);
-  const [type, setType] = useState(initialType);
-  const [options, setOptions] = useState(initialOptions);
-  const [other, setOther] = useState(isOther);
-  const [required, setRequired] = useState(isRequired);
-
-  useEffect(() => {
-    setTitle(initialTitle);
-    setType(initialType);
-    setOptions(initialOptions);
-    setOther(isOther);
-    setRequired(isRequired);
-  }, [questions]);
-
-  const handleChange = (event) => {
-    setType(event.target.value);
-  };
-
-  const handleSubmit = () => {
-    let questionObj;
-    if (type === "short_anwer" || type === "paragraph") {
-      questionObj = {
-        type,
-        question: title,
-        isRequired: required,
-        other: false,
-      };
-    } else {
-      questionObj = {
-        type,
-        question: title,
-        options: options,
-        other,
-        isRequired: required,
-      };
-    }
-
-    const newQuestions = [...prevQuestions, questionObj];
-    setQuestion(JSON.stringify(newQuestions));
-    setOptions("[]");
-    setType("short_anwer");
-    setTitle("");
-    setOther("false");
-  };
-  const handleUpdate = () => {
-    let questionObj;
-    if (type === "short_anwer" || type === "paragraph") {
-      questionObj = {
-        type,
-        question: title,
-        isRequired: required,
-        other: false,
-      };
-    } else {
-      questionObj = {
-        type,
-        question: title,
-        options: options,
-        isRequired: required,
-        other: other,
-      };
-    }
-    let newQuestions = prevQuestions;
-    newQuestions[id] = questionObj;
-    setQuestion(JSON.stringify(newQuestions));
-  };
-  const handleRemove = () => {
-    let newQuestions = JSON.parse(questions);
-    newQuestions.splice(id, 1);
-    setQuestion(JSON.stringify(newQuestions));
-  };
-
-  return (
-    <CreateDivWrapper
-      elevation={3}
-      sx={{ backgroundColor: !exist ? "#4f60f617" : "" }}
-    >
-      <div className="control-div">
-        <TextField
-          className="question-input"
-          hiddenLabel
-          fullWidth
-          multiline
-          variant="filled"
-          value={title}
-          placeholder="Title"
-          onChange={(e) => setTitle(e.target.value)}
-          sx={{ p: 0 }}
-        />
-        <FormControl variant="filled" sx={{ mx: 1, minWidth: 150 }}>
-          <Select
-            hiddenLabel
-            id="demo-simple-select-filled"
-            value={type}
-            onChange={handleChange}
-          >
-            {inputTypes.map((item, idx) => (
-              <MenuItem key={idx} value={item.value}>
-                {item.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
-      <div>
-        {type && type === "short_anwer" && <ShortAnswer />}
-        {type && type === "paragraph" && <ParagraphAnswer />}
-        {type && type === "multiple" && (
-          <MultipleAnswer
-            options={options}
-            setOptions={setOptions}
-            other={other}
-            setOther={setOther}
-          />
-        )}
-        {type && type === "checkboxes" && (
-          <CheckboxesAnswer
-            options={options}
-            setOptions={setOptions}
-            other={other}
-            setOther={setOther}
-          />
-        )}
-        {type && type === "dropdown" && (
-          <DropdownAnswer options={options} setOptions={setOptions} />
-        )}
-      </div>
-      <div className="header-div">
-        <FormControlLabel
-          control={
-            <Switch
-              checked={required}
-              onChange={() => setRequired(!required)}
-            />
-          }
-          label="Required"
-        />
-        <Divider orientation="vertical" flexItem />
-        {!exist ? (
-          <Button variant="outlined" onClick={handleSubmit} sx={{ ml: 1 }}>
-            Add
-          </Button>
-        ) : (
-          <>
-            <Tooltip title="Remove">
-              <IconButton onClick={handleRemove} sx={{ ml: 1 }}>
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
-            <Button variant="outlined" onClick={handleUpdate}>
-              Update
-            </Button>
-          </>
-        )}
-      </div>
-    </CreateDivWrapper>
-  );
-};
+import MemberDetail from "./member-detail";
 
 const CreateEvent = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [pageNumber, setPageNumber] = useState(1);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [image, setImage] = useState(null);
-  const [eventTitle, setEventTitle] = useState("Untitled event");
-  const [description, setDescription] = useState("Form description");
-  const [questions, setQuestion] = useState("[]");
-
-  const handleEventSubmit = async () => {
-    // EVENT SUBMIT LOGIC
-
-    const formData = new FormData();
-    formData.append("file", image);
-    formData.append("upload_preset", "ml_default");
-    const res = await axios.post(
-      "https://api.cloudinary.com/v1_1/dauxdhnsr/image/upload",
-      formData
-    );
-    const eventObj = {
-      title: eventTitle,
-      description: description,
-      banner: res.data.secure_url,
-      startDate,
-      endDate,
-      questions: JSON.parse(questions),
-    };
-    dispatch(addEvent(eventObj)).then(() => navigate("/admin"));
-    /*
-      Structure - 
-      {
-        title,
-        description
-        questions: [
-          {
-            type,
-            question,
-            isRequired,
-            other (false in case of short,para,dropdonwn)
-            option (in case of multiple, checkbox, dropdown) => string (array in JSON form, parse before use)
-          }
-        ]
-      }
-    */
-  };
-
+  const [memberCount, setMemberCount] = useState(0);
+  const [fields, setFields] = useState(0);
+  console.log(memberCount);
   return (
-    <Wrapper sx={{ width: { lg: "50%", md: "70%", sm: "80%", xs: "95%" } }}>
-      {pageNumber === 1 ? (
-        <>
-          {/* EVENT INFO SECTION */}
-          <Paper
-            elevation={1}
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              p: "1em",
-              borderTop: "10px solid #828DF8",
-            }}
+    <Wrapper sx={{ width: { lg: "75%", md: "80%", sm: "85%", xs: "95%" } }}>
+      <Box>
+        <Typography variant="h2" gutterBottom align="center">
+          APPLICATION FORM TO ACCESS THE NVCTI LAB
+        </Typography>
+        <Typography variant="h5" gutterBottom align="center">
+          (Please fill and submit your application to NVCTI office)
+        </Typography>
+      </Box>
+      <Paper className="column-center" sx={{ my: 2, p: 2 }}>
+        <Typography>
+          <span className="boldTypo">Application Category*</span> (✓ tick the
+          appropriate)
+        </Typography>
+        <Typography>
+          <RadioGroup
+            row
+            aria-labelledby="application-category-radio"
+            name="row-radio-buttons-group"
           >
-            <EventInput
-              type="text"
-              size="large"
-              value={eventTitle}
-              onChange={(e) => setEventTitle(e.target.value)}
+            <FormControlLabel
+              value="commercial"
+              control={<Radio />}
+              label="Commercial"
             />
-            <EventInputMultiline
-              type="text"
-              rows="3"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+            <FormControlLabel
+              value="r&d"
+              control={<Radio />}
+              label="R&D Institute"
             />
-          </Paper>
-          <Paper component="form" sx={{ p: 3, m: 3 }}>
-            {/* EVENT TIMELINE SECTION */}
-            <h2 className="timelineHeading">Timeline</h2>
-            <div className="innercontent">
-              <label htmlFor="start_day" className="date_label">
-                Opens on
-                <input
-                  type="date"
-                  name="start_day"
-                  id="start_day"
-                  value={startDate}
-                  onChange={(evt) => setStartDate(evt.target.value)}
-                />
-              </label>
-              <label htmlFor="end_day" className="date_label">
-                Closes on
-                <input
-                  type="date"
-                  name="end_day"
-                  id="end_day"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                />
-              </label>
-            </div>
-            <h2 className="timelineHeading">Banner</h2>
-            <div className="innercontent">
-              <input
-                type="file"
-                name="banner"
-                id="banner"
-                accept="image/png, image/jpg, image/jpeg"
-                onChange={(e) => setImage(e.target.files[0])}
+            <FormControlLabel
+              value="research"
+              control={<Radio />}
+              label="Research Student (Internal/External)"
+            />
+            <FormControlLabel
+              value="ug/pg"
+              control={<Radio />}
+              label="Internal UG/PG Students"
+            />
+          </RadioGroup>
+        </Typography>
+        <Typography sx={{ mt: 3 }}>
+          <span className="boldTypo">NVTIL UNIT whose access is requested</span>{" "}
+          (✓ tick the appropriate)
+        </Typography>
+        <FormGroup row sx={{ gap: 1 }}>
+          <FormControlLabel
+            control={<Checkbox />}
+            label="Mechanical and Rapid Prototyping Unit"
+          />
+          <FormControlLabel
+            control={<Checkbox />}
+            label="Electronics Circuits and IoT Unit"
+          />
+          <FormControlLabel
+            control={<Checkbox />}
+            label="Gaming and Animation Design Unit"
+          />
+          <FormControlLabel
+            control={<Checkbox />}
+            label="Pouch Battery Cell Assembly Unit"
+          />
+          <FormControlLabel
+            control={<Checkbox />}
+            label="Robotics and Automation Unit"
+          />
+        </FormGroup>
+      </Paper>
+      <Paper elevation={3} sx={{ mt: 4, p: 3 }}>
+        <Grid container spacing={2} sx={{ mb: 2 }}>
+          <Grid item xs={12} sm={6}>
+            <Typography>
+              <span className="boldTypo">Name of the Applicant </span>
+              (Name of Team Leader in case of Team)
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              size="small"
+              name="leader-name"
+              type="text"
+              required
+              fullWidth
+              color="primary"
+            />
+          </Grid>
+        </Grid>
+        <Grid container spacing={2} sx={{ mb: 2 }}>
+          <Grid item xs={12} sm={3}>
+            <FormControl fullWidth size="small">
+              <InputLabel id="leader-gender-select">Gender</InputLabel>
+              <Select
+                labelId="leader-gender-select"
+                id="demo-simple-select"
+                // value={age}
+                label="Gender"
+                fullWidth
+                // onChange={handleChange}
+              >
+                <MenuItem value="male">Male</MenuItem>
+                <MenuItem value="female">Female</MenuItem>
+                <MenuItem value="other">Other</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Typography>
+              <span className="boldTypo">Admission No.</span> (For
+              Students)/Emp. No. (for faculty and staff) / Aadhar No (for
+              externals)
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={5}>
+            <TextField
+              size="small"
+              name="leader-uid"
+              type="text"
+              required
+              fullWidth
+              label="Admission No."
+              color="primary"
+            />
+          </Grid>
+        </Grid>
+        <Grid container spacing={2} sx={{ mb: 2 }}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              size="small"
+              name="leader-uid"
+              type="text"
+              required
+              fullWidth
+              label="Department/Institute/Organization"
+              color="primary"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              size="small"
+              name="leader-uid"
+              type="text"
+              required
+              fullWidth
+              label="Address (IIT-ISM students should write the Hostel address )"
+              color="primary"
+            />
+          </Grid>
+        </Grid>
+        <Grid container spacing={2} sx={{ mb: 2 }}>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              size="small"
+              name="leader-uid"
+              type="text"
+              required
+              fullWidth
+              label="Email Id"
+              color="primary"
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              size="small"
+              name="leader-uid"
+              type="text"
+              required
+              fullWidth
+              label="Mobile Number"
+              color="primary"
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <input type="file" name="leader-img" id="" />
+          </Grid>
+        </Grid>
+        <Grid container spacing={2} sx={{ mb: 2 }}>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              id=""
+              label="Source of Funding (For category I to III):"
+              multiline
+              fullWidth
+              rows={4}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              id=""
+              label="Title of the Project"
+              multiline
+              fullWidth
+              rows={4}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              id=""
+              label="Objective of the Project (Max. two sentences)"
+              multiline
+              fullWidth
+              rows={4}
+            />
+          </Grid>
+        </Grid>
+        <Box sx={{ mt: 5, letterSpacing: "1.1px" }}>
+          <Typography>
+            <span className="boldTypo">Pitch/Idea of the Project</span>{" "}
+            (Describe in brief the concept and expected outcome of the project
+            (Attach extra sheet if needed) A PDF file describing the background
+            (origin of idea), Concepts involved, Method and Expected outcome,
+            needs to attached by category I, II and III applicants.
+          </Typography>
+          <Grid container spacing={2} sx={{ my: 2 }}>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                id=""
+                label="Origin of the Idea (Max. five sentences)"
+                multiline
+                fullWidth
+                rows={4}
               />
-            </div>
-          </Paper>
-          <Box
-            sx={{
-              m: 2,
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center",
-            }}
-          >
-            <Button
-              variant="outlined"
-              onClick={() => setPageNumber(2)}
-              sx={{ ml: 1 }}
-            >
-              Next
-            </Button>
-          </Box>
-        </>
-      ) : (
-        <>
-          {/* EVENT QUESTIONS DISPLAY */}
-          {JSON.parse(questions).map((_, idx) => (
-            <AddElement
-              key={idx}
-              questions={questions}
-              setQuestion={setQuestion}
-              exist={true}
-              id={idx}
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                id=""
+                label="Methodology (Max. five sentences)"
+                multiline
+                fullWidth
+                rows={4}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                id=""
+                label="Expected Outcome (Max. five sentences)"
+                multiline
+                fullWidth
+                rows={4}
+              />
+            </Grid>
+          </Grid>
+        </Box>
+        <Grid container spacing={2} sx={{ mb: 2 }}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              size="small"
+              name="leader-uid"
+              type="text"
+              required
+              fullWidth
+              label="Expected time to complete the Project (in months)"
+              color="primary"
             />
-          ))}
-          {/* ADD EVENT QUESTIONS */}
-          <AddElement questions={questions} setQuestion={setQuestion} />
-          <Box
-            sx={{
-              m: 2,
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center",
-            }}
-          >
-            <Button
-              variant="outlined"
-              onClick={() => setPageNumber(1)}
-              sx={{ ml: 1 }}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={handleEventSubmit}
-              sx={{ ml: 1 }}
-            >
-              Submit Event
-            </Button>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              size="small"
+              name="leader-uid"
+              type="text"
+              required
+              fullWidth
+              label="Name of the Mentor (if any)"
+              color="primary"
+            />
+          </Grid>
+        </Grid>
+      </Paper>
+      <Paper sx={{ mt: 4, p: 3 }}>
+        <TextField
+          label="Number of team members"
+          variant="outlined"
+          type="number"
+          value={memberCount}
+          onChange={(e) => setMemberCount(e.target.value)}
+        />
+        <MemberDetail />
+      </Paper>
+      <Paper sx={{ mt: 4, p: 3, fontSize: "1.2em" }}>
+        <Typography variant="h3" align="center">
+          DECLARATION
+        </Typography>
+        <Box>
+          <Box sx={{ letterSpacing: "1.2px", mb: 2 }}>
+            I,……………………..(name of team leader) on my personal and on behalf of
+            all my members, do hereby state that
           </Box>
-        </>
-      )}
+          <ul>
+            <li>
+              I/we shall access the facilities of NVCTI with due diligence and
+              care, abiding by all the guidelines/instructions laid down by the
+              center.
+            </li>
+            <li>
+              I/we shall be responsible for any damage caused by me to the
+              laboratory/infrastructural facility provided during the project.
+            </li>
+            <li>
+              I/we hereby grant an exclusive right over the intellectual
+              property generated under the research project done by me to IIT
+              (ISM) Dhanbad.
+            </li>
+            <li>
+              I/we hereby agree to follow all the rules and regulations of IIT
+              (ISM) Dhanbad, including the IP Policy. 5.I/we hereby agree to
+              inform IIT (ISM) Dhanbad about any commercialization of IP
+              generated under the project, including commercialization through a
+              start-up promoted by me. All the information provided here are
+              correct
+            </li>
+          </ul>
+        </Box>
+        <Box
+          sx={{
+            dispay: "flex",
+            m: 2,
+            p: 2,
+            justifyContent: "space-between",
+            flexDirection: "row",
+          }}
+        >
+          <div>
+            <span className="boldTypo">Date : </span>{" "}
+            <span className="date-span">{Date()}</span>
+          </div>
+          <div>
+            <input type="file" name="leader-sign" id="" />
+          </div>
+        </Box>
+      </Paper>
     </Wrapper>
   );
 };

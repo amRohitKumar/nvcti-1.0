@@ -2,34 +2,31 @@ if (process.env.NODE_ENV != "production") {
   require("dotenv").config();
 }
 
-//SET-UP
+//MODULE IMPORTS
 const express = require("express");
 const app = express();
-const path = require("path");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+
+// MODELS
 const User = require("./models/user");
+
+// MIDDLEWARES
 const { isLoggedIn } = require("./middleware");
 
-// FORM
-const { MongoClient } = require("mongodb");
-const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
-const bodyParser = require("body-parser");
-
 // ROUTES
+const homeRoute = require("./routes/home");
 const authRoute = require("./routes/auth");
 const eventRoute = require("./routes/event");
 
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use("/static", express.static(path.join(__dirname, "../build/static")));
 
-const mongoose = require("mongoose");
 
-const dbURL = process.env.DBURL || "mongodb://localhost:27017/nvcti";
+const dbURL = process.env.DBURL || "mongodb://localhost:27017/nvcti-lab";
 
 mongoose
   .connect(dbURL)
@@ -41,18 +38,6 @@ mongoose
   });
 
 app.use(cors());
-// app.use((req, res, next) => {
-//   res.setHeader(
-//     "Access-Control-Allow-Headers",
-//     "Origin,X-Requested-With,Content-Type,Accept,Authorization"
-//   );
-//   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
-//   next();
-// });
-
-const client = new MongoClient(dbURL);
-const database = client.db("nvcti");
-const collection = database.collection("event");
 
 // SECURITY
 const mongoSanitize = require("express-mongo-sanitize");
@@ -62,12 +47,6 @@ app.use(
   })
 );
 
-// app.use("*", (req, res, next) => {
-//   console.log("middleware = ");
-//   console.log(req.baseUrl);
-//   console.log(req.body);
-//   next();
-// });
 
 app.get("/home", isLoggedIn, async (req, res) => {
   var events = [];
@@ -79,6 +58,7 @@ app.get("/home", isLoggedIn, async (req, res) => {
   return;
 });
 
+app.use('/', homeRoute);
 app.use("/auth", authRoute);
 app.use("/event", eventRoute);
 /*--------------------*/
@@ -103,10 +83,6 @@ app.post("/createEvent", isLoggedIn, (req, res) => {
       .send({ msg: "You are not allowed to view this page" });
   }
 });
-
-// app.get("/event", (req, res) => {
-//     res.sendFile("index.html", { root: path.join(__dirname, "../build/") });
-// })
 
 function makeid(length) {
   var result = "";

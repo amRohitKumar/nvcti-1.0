@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const { sendMail } = require("../utilities/mailsender");
 const { createAuthTokens } = require("../utilities/tokenHelper");
 
-module.exports.register = async (req, res, next) => {
+module.exports.register = async (req, res) => {
   try {
     const { email, password, phone, dob, name } = req.body;
     const alreadyExists = await User.findOne({ email: email });
