@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import PerfectScrollbar from "react-perfect-scrollbar";
 
 import {
@@ -59,6 +59,7 @@ const orders = [
 ];
 
 const EventParticipants = (props) => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(
     new Array(orders.length).fill(false)
@@ -68,6 +69,7 @@ const EventParticipants = (props) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const { eventId } = useParams();
+  const {state: {eventName, responses}} = useLocation();
 
   const handleCheckbox = (id) => {
     const newState = selected.map((item, idx) => (idx === id ? !item : item));
@@ -96,11 +98,11 @@ const EventParticipants = (props) => {
       >
         <Box sx={modalStyle}>
           <Typography variant="h6">
-            Forward {eventId} event to mentor
+            Forward {eventName} event to mentor
           </Typography>
           <Box sx={{my: 2, p: 1}}>
             {emailId.map((email, idx) => (
-              <Chip sx={{m: 0.5}} label={email} onDelete={() => handleDelete(idx)} />
+              <Chip key={idx} sx={{m: 0.5}} label={email} onDelete={() => handleDelete(idx)} />
             ))}
           </Box>
           <Box
@@ -140,7 +142,7 @@ const EventParticipants = (props) => {
           }}
         >
           <CardHeader
-            title={`Event ${eventId}`}
+            title={`Event ${eventName}`}
             titleTypographyProps={{ fontSize: "2em" }}
             sx={{ ml: 5 }}
           />
@@ -154,39 +156,35 @@ const EventParticipants = (props) => {
               <TableHead>
                 <TableRow>
                   <TableCell>Serial No.</TableCell>
-                  {Object.keys(orders[0]).map((item, idx) => {
-                    return (
-                      <TableCell key={idx} className="tableHeading">
-                        {item}
-                      </TableCell>
-                    );
-                  })}
+                  <TableCell>Name</TableCell>
+                  {/* <TableCell>division</TableCell> */}
+                  <TableCell>Status</TableCell>
                   <TableCell align="center">Applications</TableCell>
                   {/* FOR APPLICATION BUTTON */}
                   <TableCell></TableCell> {/* FOR CHECKBOX */}
                 </TableRow>
               </TableHead>
               <TableBody>
-                {orders.map((order, idx) => (
+                {responses.map((res, idx) => (
                   <TableRow hover key={idx}>
                     <TableCell>{idx + 1}</TableCell>
-                    <TableCell>{order.name}</TableCell>
-                    <TableCell sx={{ textTransform: "capitalize" }}>
+                    <TableCell>{res.at(-1).name}</TableCell>
+                    {/* <TableCell sx={{ textTransform: "capitalize" }}>
                       {order.division}
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell>
                       <StatusPill
                         color={
-                          (order.status === "accepted" && "success") ||
-                          (order.status === "rejected" && "error") ||
+                          (res.at(-1).status === "accepted" && "success") ||
+                          (res.at(-1).status === "rejected" && "error") ||
                           "warning"
                         }
                       >
-                        {order.status}
+                        {res.at(-1).status}
                       </StatusPill>
                     </TableCell>
                     <TableCell align="center">
-                      <Button variant="contained" size="small">
+                      <Button variant="contained" size="small" onClick={() => navigate(`response/${res.at(-1).id}`)}>
                         View application
                       </Button>
                     </TableCell>

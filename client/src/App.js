@@ -84,7 +84,7 @@ function App() {
             <Route index element={<AdminDashboard />} />
             <Route path="create" element={<CreateEvent />} />
             <Route path="event/:eventId" element={<EventParticipants />} />
-            <Route path="response/:candidateId" element={<AdminViewForm />} />
+            <Route path="event/:eventId/response/:userId" element={<AdminViewForm />} />
           </Route>
 
           {/* MENTOR LOGIN ROUTES*/}

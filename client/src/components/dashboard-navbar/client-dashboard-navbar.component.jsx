@@ -45,10 +45,14 @@ export const ClientDashboardNavbar = (props) => {
           {/* NAVBAR LOGO */}
           <NVCTILogo />
           <Box sx={{ flexGrow: 1 }} />
-          <Button variant="contained" onClick={() => navigate("/client")}>
+          <Button
+            variant="contained"
+            onClick={() => navigate("/client")}
+            sx={{ mr: 2 }}
+          >
             Dashboard
           </Button>
-          <Button variant="contained" onClick={() => navigate("status")} sx={{ml: 2}}>
+          <Button variant="contained" onClick={() => navigate("status")}>
             Status
           </Button>
           <NotificationSection />

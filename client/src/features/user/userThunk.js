@@ -1,5 +1,6 @@
 import customFetch from "../../utils/axios";
 import authHeader from "../../utils/userAuthHeaders";
+import { clearEvents } from "../events/eventsSlice";
 import { logoutUser } from "./userSlice";
 
 export const registerUserThunk = async (user, thunkAPI) => {
@@ -29,6 +30,7 @@ export const loginUserThunk = async (user, thunkAPI) => {
 };
 export const logoutUserThunk = async (_, thunkAPI) => {
   try{
+    thunkAPI.dispatch(clearEvents());
     thunkAPI.dispatch(logoutUser());
     return Promise.resolve();
   } catch(error){
