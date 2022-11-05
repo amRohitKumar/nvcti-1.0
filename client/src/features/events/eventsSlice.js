@@ -18,7 +18,11 @@ export const addEvent = createAsyncThunk("events/addEvent", addEventThunk);
 const eventsSlice = createSlice({
   name: "events",
   initialState,
-  reducers: {},
+  reducers: {
+    clearEvents: (state) => {
+      state.events = [];
+    }
+  },
   extraReducers: {
     [fetchEvents.pending]: (state) => {
       state.isLoading = true;
@@ -46,4 +50,5 @@ const eventsSlice = createSlice({
   },
 });
 
+export const {clearEvents} = eventsSlice.actions;
 export default eventsSlice.reducer;

@@ -126,7 +126,7 @@ router
         break;
       }
     }
-    
+
     if (alreadyEnrolled) {
       // return res.redirect('/home');
       return res.status(400).send({ msg: "You have already enrolled!" });
@@ -141,7 +141,7 @@ router
         data["responses"] = [];
       }
       // req.body["files"] = files;
-      req.body.push({"status": "pending"});
+      req.body.push({"status": "pending", name: curruser.name, id: curruser._id});
       data["responses"].push(req.body);
 
       l = data["responses"].length - 1;

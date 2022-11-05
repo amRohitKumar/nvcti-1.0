@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import {
   Box,
@@ -14,6 +13,7 @@ import {
 
 import Wrapper from "./ongoing-evetns.style";
 import { changedateformat } from "../../utils/dateformat";
+import { useNavigate } from "react-router-dom";
 
 // const orders = [
 //   {
@@ -49,6 +49,7 @@ import { changedateformat } from "../../utils/dateformat";
 // ];
 
 const OngoingEventsAdmin = ({ events, ...otherProps }) => {
+  const navigate = useNavigate();
   console.log(events);
   return (
     <Wrapper>
@@ -79,14 +80,22 @@ const OngoingEventsAdmin = ({ events, ...otherProps }) => {
               <TableBody>
                 {events.map((event, idx) => (
                   <TableRow hover key={idx}>
-                    <TableCell >{idx + 1}</TableCell>
+                    <TableCell>{idx + 1}</TableCell>
                     <TableCell>{event.title}</TableCell>
-                    <TableCell>
-                      {changedateformat(event.endDate)}
-                    </TableCell>
-                    <TableCell align="center">{event.responses.length}</TableCell>
+                    <TableCell>{changedateformat(event.endDate)}</TableCell>
                     <TableCell align="center">
-                      <Button variant="contained" size="small">
+                      {event.responses.length}
+                    </TableCell>
+                    <TableCell align="center">
+                      <Button
+                        variant="contained"
+                        size="small"
+                        onClick={() =>
+                          navigate(`event/${event._id}`, {
+                            state: {eventName: event.title, responses: event.responses},
+                          })
+                        }
+                      >
                         View responses
                       </Button>
                     </TableCell>
