@@ -1,6 +1,4 @@
-const { ObjectID } = require('bson');
 const mongoose = require('mongoose');
-const passportLocalMongoose = require('passport-local-mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -13,12 +11,13 @@ const userSchema = new Schema({
         type: Boolean,
         default: false
     },
-    isAdmin: {
-        type: Boolean,
-        default: false,
+    position: {
+        type: Number,
+        default: 0, // 0 -> user, 1 -> admin, 2-> evaluator, 3->superAdmin
     },
-    enrolledEvents: [{
-        type: String, // event_id + ' ' + index
+    formSubmitted: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Form'
     }],
     phone: {
         type: Number,

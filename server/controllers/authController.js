@@ -83,7 +83,7 @@ module.exports.verifyEmail = async (req, res) => {
             isVerified: alreadyUser.isVerified,
             dob: alreadyUser.dob,
             enrolledEvents: alreadyUser.enrolledEvents,
-            isAdmin: alreadyUser.isAdmin,
+            position: alreadyUser.position,
             token,
           },
         },
@@ -100,7 +100,7 @@ module.exports.verifyEmail = async (req, res) => {
       dob: dob,
       name: name,
       password: hashedPassword,
-      isAdmin: true, // to create admin
+      position: true, // to create admin
     });
 
     const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, {
@@ -116,7 +116,7 @@ module.exports.verifyEmail = async (req, res) => {
         isVerified: newUser.isVerified,
         dob: newUser.dob,
         enrolledEvents: newUser.enrolledEvents,
-        isAdmin: newUser.isAdmin,
+        position: newUser.position,
         token,
       },
     });
@@ -155,7 +155,7 @@ module.exports.login = async (req, res) => {
         isVerified: userInDb.isVerified,
         dob: userInDb.dob,
         enrolledEvents: userInDb.enrolledEvents,
-        isAdmin: userInDb.isAdmin,
+        position: userInDb.position,
         token,
       },
     });

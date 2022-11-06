@@ -19,9 +19,22 @@ module.exports.isLoggedIn = async (req, res, next) => {
   }
 };
 
-module.exports.isAdmin = async (req, res) => {
-  const id = req.user.id;
-  const currUser = await User.findById(id);
-  if (currUser.isAdmin === true) return 1;
-  return 0;
+module.exports.isAdmin = async (req, res, next) => {
+  if (
+    req.user.position === 1 ||
+    req.user.position === 2 ||
+    req.user.position === 3
+  ) {
+    next();
+  } else {
+    return res.status(404).send({ msg: "User not authorized !" });
+  }
+};
+
+module.exports.isAuthor = async (req, res, next) => {
+  if (req.user._id === req.body.userId) {
+    next();
+  } else {
+    return res.status(404).send({ msg: "User not authorized !" });
+  }
 };
