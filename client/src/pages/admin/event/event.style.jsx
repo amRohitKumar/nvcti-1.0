@@ -22,7 +22,7 @@ const Wrapper = styled(Box)({
     },
     '.date-span': {
         display: 'flex',
-        maxWidth: '400px',
+        maxWidth: '200px',
         'flexWrap': 'wrap'
     }
 });

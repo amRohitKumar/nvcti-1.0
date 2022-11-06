@@ -10,7 +10,7 @@ import {
   InputLabel,
 } from "@mui/material";
 
-const MemberDetail = () => {
+const MemberDetail = ({memberCount}) => {
   return (
     <Wrapper>
       <Paper elevation={3} sx={{ mt: 4, p: 3 }}>

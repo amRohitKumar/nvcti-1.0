@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addEvent } from "../../../features/events/eventsSlice";
+import { Time } from "../../../components";
 import Wrapper from "./event.style";
 import {
   EventInput,
@@ -34,8 +35,14 @@ import MemberDetail from "./member-detail";
 
 const CreateEvent = () => {
   const [memberCount, setMemberCount] = useState(0);
-  const [fields, setFields] = useState(0);
-  console.log(memberCount);
+  const handleMemberCount = (e) => {
+    let members;
+    if (!e.target.value || e.target.value <= 0) {
+      members = 0;
+    } else members = parseInt(e.target.value, 10);
+    setMemberCount(members);
+  };
+
   return (
     <Wrapper sx={{ width: { lg: "75%", md: "80%", sm: "85%", xs: "95%" } }}>
       <Box>
@@ -51,34 +58,32 @@ const CreateEvent = () => {
           <span className="boldTypo">Application Category*</span> (✓ tick the
           appropriate)
         </Typography>
-        <Typography>
-          <RadioGroup
-            row
-            aria-labelledby="application-category-radio"
-            name="row-radio-buttons-group"
-          >
-            <FormControlLabel
-              value="commercial"
-              control={<Radio />}
-              label="Commercial"
-            />
-            <FormControlLabel
-              value="r&d"
-              control={<Radio />}
-              label="R&D Institute"
-            />
-            <FormControlLabel
-              value="research"
-              control={<Radio />}
-              label="Research Student (Internal/External)"
-            />
-            <FormControlLabel
-              value="ug/pg"
-              control={<Radio />}
-              label="Internal UG/PG Students"
-            />
-          </RadioGroup>
-        </Typography>
+        <RadioGroup
+          row
+          aria-labelledby="application-category-radio"
+          name="row-radio-buttons-group"
+        >
+          <FormControlLabel
+            value="commercial"
+            control={<Radio />}
+            label="Commercial"
+          />
+          <FormControlLabel
+            value="r&d"
+            control={<Radio />}
+            label="R&D Institute"
+          />
+          <FormControlLabel
+            value="research"
+            control={<Radio />}
+            label="Research Student (Internal/External)"
+          />
+          <FormControlLabel
+            value="ug/pg"
+            control={<Radio />}
+            label="Internal UG/PG Students"
+          />
+        </RadioGroup>
         <Typography sx={{ mt: 3 }}>
           <span className="boldTypo">NVTIL UNIT whose access is requested</span>{" "}
           (✓ tick the appropriate)
@@ -311,11 +316,14 @@ const CreateEvent = () => {
           variant="outlined"
           type="number"
           value={memberCount}
-          onChange={(e) => setMemberCount(e.target.value)}
+          onChange={handleMemberCount}
         />
-        <MemberDetail />
+        {[...Array(memberCount)].map((_, idx) => (
+          <MemberDetail key={idx} />
+        ))}
+        {/* <MemberDetail /> */}
       </Paper>
-      <Paper sx={{ mt: 4, p: 3, fontSize: "1.2em" }}>
+      <Paper sx={{ mt: 4, p: 5, fontSize: "1.2em" }}>
         <Typography variant="h3" align="center">
           DECLARATION
         </Typography>
@@ -349,22 +357,9 @@ const CreateEvent = () => {
             </li>
           </ul>
         </Box>
-        <Box
-          sx={{
-            dispay: "flex",
-            m: 2,
-            p: 2,
-            justifyContent: "space-between",
-            flexDirection: "row",
-          }}
-        >
-          <div>
-            <span className="boldTypo">Date : </span>{" "}
-            <span className="date-span">{Date()}</span>
-          </div>
-          <div>
-            <input type="file" name="leader-sign" id="" />
-          </div>
+        <Box sx={{m: 2, p: 2}}>
+          <span style={{fontWeight: 'bold'}}>Team Leader signature:</span> &nbsp;
+          <input type="file" name="leader-sign" />
         </Box>
       </Paper>
     </Wrapper>
