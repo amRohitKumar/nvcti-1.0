@@ -9,10 +9,21 @@ router.route("/getform/:formId").get(
   isLoggedIn,
   isAuthor,
   catchAsync(async (req, res) => {
-    const {formId} = req.params;
-    // await 
+    const formId = req.params.formId;
+    const resp = await Form.findById(formId);
+    res.status(200).send(resp);
   })
 );
+
+router.route("/getforms/:userId").get(
+  isLoggedIn,
+  isAuthor,
+  catchAsync(async (req, res) => {
+    const userId = req.params.userId;
+    const enrolled = await User.findById(userId).populate("formSubmitted");
+    res.status(200).send(enrolled);
+  })
+)
 
 router.route("/submit").post(
   isLoggedIn,
@@ -22,6 +33,7 @@ router.route("/submit").post(
       category,
       unit,
       name,
+      imgUrl,
       uniqueId,
       institute,
       gender,
@@ -36,12 +48,15 @@ router.route("/submit").post(
       outcome,
       timeOfCompletion,
       mentor,
-      members,
+      members
     } = req.body;
+    const userId = req.user._id;
     const newForm = new Form({
       category,
       unit,
       name,
+      userId,
+      imgUrl,
       uniqueId,
       institute,
       gender,
@@ -53,9 +68,12 @@ router.route("/submit").post(
       ideaOfProject: { origin, methodology, outcome },
       timeOfCompletion,
       mentor,
-      members,
+      members
     });
     await newForm.save();
+    const user = await User.findById(userId);
+    user.formSubmitted.push(newForm);
+    await user.save();
     res.status(200).send({ msg: "Form submitted successfully !" });
   })
 );

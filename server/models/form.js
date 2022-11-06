@@ -5,10 +5,12 @@ const formSchema = new Schema(
   {
     category: {
       type: String,
+      enum: ['Commercial', 'R&D Institute', 'Research Student (Internal/External)', 'Internal UG/PG students'],
       required: true,
     },
     unit: {
       type: String,
+      enum: ['Mechanical and Rapid Prototyping Unit', 'Electronics Circuits and IoT Unit', 'Gaming and Animation Design Unit', 'Pouch Battery Cell Assembly Unit', 'Robotics and Automation Unit'],
       required: true,
     },
     name: {
