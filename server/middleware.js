@@ -32,7 +32,7 @@ module.exports.isAdmin = async (req, res, next) => {
 };
 
 module.exports.isAuthor = async (req, res, next) => {
-  if (req.user._id === req.body.userId) {
+  if (req.user._id === req.body.userId || req.user.position === 1) {
     next();
   } else {
     return res.status(404).send({ msg: "User not authorized !" });
