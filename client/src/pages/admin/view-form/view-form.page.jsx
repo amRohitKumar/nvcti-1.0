@@ -9,7 +9,7 @@ import customFetch from "../../../utils/axios";
 const AdminViewForm = () => {
   const onAccept = () => {};
   const onReject = () => {};
-  const dispathc = useDispatch();
+  const dispatch = useDispatch();
   const { eventId, userId } = useParams();
   const reqObj = {};
   useEffect(() => {
