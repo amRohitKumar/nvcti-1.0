@@ -1,32 +1,28 @@
 const express = require('express');
-const passport = require('passport');
 const router = express.Router();
 
-const { isLoggedIn } = require('../middleware');
+const { isLoggedIn, isAdmin } = require('../middleware');
+const catchAsync = require("../utilities/catchAsync");
+const Form = require("../models/form");
+const mentorCollection = require("../models/mentor");
+const { default: mongoose } = require('mongoose');
 
-const mentorCollection = database.collection("mentors");
-
-router.route('/:id/view')
-    .get(isLoggedIn, (req, res) => {
+router.route('/:id/applicants')
+    .get(isLoggedIn, isAdmin, catchAsync(async (req, res) => {
         const mentorID = req.params.id;
-        mentorCollection.findOne({ "id": mentorID }).then((resp) => {
-            // res.json(resp);
-            return res.send(200).json({})
-        })
+        const mentor = await mentorCollection.findById(mentorID).populate("applicants");
+        res.status(200).send(mentor.applicants);
     })
+);
 
 router.route('/:id/update')
-    .post((req, res) => {
-        const applicantID = req.body.applicantID;
-
-        mentorCollection.findOne({ "id": req.params.id }).then((resp) => {
-            resp.applicants[applicantID].status = req.body.status;
-            mentorCollection.findOneAndReplace({ "id": req.params.id }, resp).then((resp) => {
-                // res.send(resp);
-                return res.send(200).json({})
-            })
-        })
+    .post(isLoggedIn, isAdmin, catchAsync(async (req, res) => {
+        const mentor = await mentorCollection.findById(req.params.id);
+        const applicant = Form.findById(mentor.applicants[mongoose.Types.ObjectId(req.body.applicantId)]);
+        applicant.status = req.params.status;
+        await applicant.save();
+        return res.status(200).send({msg: "status updated successfully"});
     })
-
+);
 
 module.exports = router;
