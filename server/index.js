@@ -20,6 +20,7 @@ const { isLoggedIn } = require("./middleware");
 const homeRoutes = require("./routes/home");
 const authRoutes = require("./routes/auth");
 const formRoutes = require("./routes/form");
+const evaluatorRoutes = require("./routes/evaluator");
 
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
@@ -50,58 +51,7 @@ app.use(
 app.use('/', homeRoutes);
 app.use("/auth", authRoutes);
 app.use("/form", formRoutes);
-
-
-//ADMIN
-
-// app.post("/sendmentor", isLoggedIn, async (req, res) => {
-//   const mentorMail = req.body.emailID;
-//   const applicants = req.body.applicants;
-
-//   const mentorID = Date.now();
-//   const password = makeid(16);
-
-//   const data = {
-//     id: mentorID.toString(),
-//     mail: mentorMail,
-//     applicants: applicants,
-//   };
-//   mentorCollection.insertOne(data);
-
-//   const makeUser = new User({ mentorID, mentorMail, isVerified: true });
-//   const result = await User.register(makeUser, password); // auto saved
-//   // return res.redirect('/home');
-//   return res.send(200).json({});
-// });
-
-// app.get("/user/profile", async (req, res) => {
-//   const currUser = await User.findById(req.user.id);
-//   const currUserName = currUser.username;
-//   const currUserEmail = currUser.email;
-
-//   let userEvents = [];
-//   for (let e of currUser.enrolledEvents) {
-//     const id = new ObjectId(req.params.id);
-//     await collection.findOne({ _id: id }).then((resp) => {
-//       userEvents.push({
-//         name: resp.eventName,
-//         status: resp.applicants[index].status,
-//       });
-//     });
-//   }
-
-//   console.log(userEvents, currUserEmail, currUserName);
-//   // we should send events, username, mail
-//   return res.send("done");
-//   return res.send(200).json({});
-// });
-
-// commented as handled in REACT
-// app.use((err, req, res, next) => {
-//     if (!err.status) err.status = 500;
-//     if (!err.message) err.message = 'Something went wrong!';
-//     return res.render('error.ejs', { err });
-// })
+app.use("/evaluator", evaluatorRoutes);
 
 app.get("/", (req, res) => {
   res.send({ status: "Helo World" });
