@@ -52,8 +52,12 @@ export const ClientDashboardNavbar = (props) => {
           >
             Dashboard
           </Button>
-          <Button variant="contained" onClick={() => navigate("status")}>
-            Status
+          <Button
+            variant="contained"
+            onClick={() => navigate("/apply")}
+            sx={{ mr: 2 }}
+          >
+            Apply
           </Button>
           <NotificationSection />
           <Avatar

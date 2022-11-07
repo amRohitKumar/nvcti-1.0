@@ -1,7 +1,6 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchEvents } from "../../../features/events/eventsSlice";
-import { Carousel, OngoingEventsTable } from "../../../components";
+import { useEffect, useState } from "react";
+import customFetch from "../../../utils/axios";
+import { Carousel, PreviousStatusTable } from "../../../components";
 import { ongoingEvents } from "../../../data";
 import { useTitle } from "../../../hooks";
 
@@ -10,12 +9,16 @@ import Alert from "@mui/material/Alert";
 
 const ClientDashboard = () => {
   useTitle("Dashboard");
-  const dispatch = useDispatch();
-  const { isLoading, events } = useSelector((store) => store.events);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [events, setEvents] = useState(false);
   useEffect(() => {
-    dispatch(fetchEvents());
-    //eslint-disable-next-line
+    const fetchEvents = async () => {
+      setIsLoading(true);
+      const resp = await customFetch.get("/event/allevents");
+      setEvents(resp.data);
+      setIsLoading(false);
+    };
+    fetchEvents();
   }, []);
 
   if (isLoading) {
@@ -36,7 +39,7 @@ const ClientDashboard = () => {
   return (
     <>
       <Carousel data={ongoingEvents} />
-      <OngoingEventsTable events={events} />
+      <PreviousStatusTable enrolledevents={events} />
     </>
   );
 };

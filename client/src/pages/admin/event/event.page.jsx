@@ -1,14 +1,6 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { addEvent } from "../../../features/events/eventsSlice";
-import { Time } from "../../../components";
 import Wrapper from "./event.style";
-import {
-  EventInput,
-  EventInputMultiline,
-  CreateDivWrapper,
-} from "./event.style";
+
 import {
   Paper,
   TextField,
@@ -34,7 +26,46 @@ import {
 import MemberDetail from "./member-detail";
 
 const CreateEvent = () => {
+  // form inputs
+  const [category, setCategory] = useState("R&D Institute");
+  const [unit, setUnit] = useState([false, false, false, false]);
+  const [leader, setLeader] = useState({
+    name: "",
+    uniqueId: "",
+    imgUrl: "",
+    institute: "",
+    gender: "",
+    address: "",
+    email: "",
+    mobile: "",
+  });
+  const [projectDetail, setProjectDetail] = useState({
+    sourceOfFunding: "",
+    projectTitle: "",
+    projectObjective: "",
+  });
+  const [projectIdea, setProjectIdea] = useState({
+    origin: '',
+    methodology: '',
+    outcome: '',
+    timeOfCompletion: '',
+    mentor: ''
+  });
+
   const [memberCount, setMemberCount] = useState(0);
+  const handleUnit = (idx) => {
+    const data = unit.map((el, i) => (i === idx ? !el : el));
+    setUnit(data);
+  };
+  const handleLeader = (e) => {
+    setLeader({ ...leader, [e.target.name]: e.target.value });
+  };
+  const handleProjectDetail = (e) => {
+    setProjectDetail({...projectDetail, [e.target.name]: e.target.value});
+  }
+  const handleProjectIdea = (e) => {
+    setProjectIdea({...projectIdea, [e.target.name]: e.target.value});
+  }
   const handleMemberCount = (e) => {
     let members;
     if (!e.target.value || e.target.value <= 0) {
@@ -62,24 +93,26 @@ const CreateEvent = () => {
           row
           aria-labelledby="application-category-radio"
           name="row-radio-buttons-group"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
         >
           <FormControlLabel
-            value="commercial"
+            value="Commercial"
             control={<Radio />}
             label="Commercial"
           />
           <FormControlLabel
-            value="r&d"
+            value="R&D Institute"
             control={<Radio />}
             label="R&D Institute"
           />
           <FormControlLabel
-            value="research"
+            value="Research Student (Internal/External)"
             control={<Radio />}
             label="Research Student (Internal/External)"
           />
           <FormControlLabel
-            value="ug/pg"
+            value="Internal UG/PG students"
             control={<Radio />}
             label="Internal UG/PG Students"
           />
@@ -90,23 +123,33 @@ const CreateEvent = () => {
         </Typography>
         <FormGroup row sx={{ gap: 1 }}>
           <FormControlLabel
-            control={<Checkbox />}
+            control={
+              <Checkbox checked={unit[0]} onChange={() => handleUnit(0)} />
+            }
             label="Mechanical and Rapid Prototyping Unit"
           />
           <FormControlLabel
-            control={<Checkbox />}
+            control={
+              <Checkbox checked={unit[1]} onChange={() => handleUnit(1)} />
+            }
             label="Electronics Circuits and IoT Unit"
           />
           <FormControlLabel
-            control={<Checkbox />}
+            control={
+              <Checkbox checked={unit[2]} onChange={() => handleUnit(2)} />
+            }
             label="Gaming and Animation Design Unit"
           />
           <FormControlLabel
-            control={<Checkbox />}
+            control={
+              <Checkbox checked={unit[3]} onChange={() => handleUnit(3)} />
+            }
             label="Pouch Battery Cell Assembly Unit"
           />
           <FormControlLabel
-            control={<Checkbox />}
+            control={
+              <Checkbox checked={unit[4]} onChange={() => handleUnit(4)} />
+            }
             label="Robotics and Automation Unit"
           />
         </FormGroup>
@@ -122,11 +165,13 @@ const CreateEvent = () => {
           <Grid item xs={12} sm={6}>
             <TextField
               size="small"
-              name="leader-name"
+              name="name"
               type="text"
               required
               fullWidth
               color="primary"
+              value={leader.name}
+              onChange={(e) => setLeader({ ...leader, name: e.target.value })}
             />
           </Grid>
         </Grid>
@@ -137,14 +182,15 @@ const CreateEvent = () => {
               <Select
                 labelId="leader-gender-select"
                 id="demo-simple-select"
-                // value={age}
+                name="gender"
+                value={leader.gender}
                 label="Gender"
                 fullWidth
-                // onChange={handleChange}
+                onChange={handleLeader}
               >
-                <MenuItem value="male">Male</MenuItem>
-                <MenuItem value="female">Female</MenuItem>
-                <MenuItem value="other">Other</MenuItem>
+                <MenuItem value="Male">Male</MenuItem>
+                <MenuItem value="Female">Female</MenuItem>
+                <MenuItem value="Other">Other</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -158,8 +204,10 @@ const CreateEvent = () => {
           <Grid item xs={12} sm={5}>
             <TextField
               size="small"
-              name="leader-uid"
+              name="uniqueId"
               type="text"
+              value={leader.uniqueId}
+              onChange={handleLeader}
               required
               fullWidth
               label="Admission No."
@@ -171,8 +219,10 @@ const CreateEvent = () => {
           <Grid item xs={12} sm={6}>
             <TextField
               size="small"
-              name="leader-uid"
+              name="institute"
               type="text"
+              value={leader.institute}
+              onChange={handleLeader}
               required
               fullWidth
               label="Department/Institute/Organization"
@@ -182,8 +232,10 @@ const CreateEvent = () => {
           <Grid item xs={12} sm={6}>
             <TextField
               size="small"
-              name="leader-uid"
+              name="address"
               type="text"
+              value={leader.address}
+              onChange={handleLeader}
               required
               fullWidth
               label="Address (IIT-ISM students should write the Hostel address )"
@@ -195,8 +247,10 @@ const CreateEvent = () => {
           <Grid item xs={12} sm={4}>
             <TextField
               size="small"
-              name="leader-uid"
+              name="email"
               type="text"
+              value={leader.email}
+              onChange={handleLeader}
               required
               fullWidth
               label="Email Id"
@@ -206,8 +260,10 @@ const CreateEvent = () => {
           <Grid item xs={12} sm={4}>
             <TextField
               size="small"
-              name="leader-uid"
+              name="mobile"
               type="text"
+              value={leader.mobile}
+              onChange={handleLeader}
               required
               fullWidth
               label="Mobile Number"
@@ -221,7 +277,9 @@ const CreateEvent = () => {
         <Grid container spacing={2} sx={{ mb: 2 }}>
           <Grid item xs={12} sm={4}>
             <TextField
-              id=""
+              name="sourceOfFunding"
+              value={projectDetail.sourceOfFunding}
+              onChange={handleProjectDetail}
               label="Source of Funding (For category I to III):"
               multiline
               fullWidth
@@ -230,16 +288,20 @@ const CreateEvent = () => {
           </Grid>
           <Grid item xs={12} sm={4}>
             <TextField
-              id=""
+              name="projectTitle"
+              value={projectDetail.projectTitle}
+              onChange={handleProjectDetail}
               label="Title of the Project"
               multiline
               fullWidth
               rows={4}
-            />
+              />
           </Grid>
           <Grid item xs={12} sm={4}>
             <TextField
-              id=""
+              name="projectObjective"
+              value={projectDetail.projectObjective}
+              onChange={handleProjectDetail}
               label="Objective of the Project (Max. two sentences)"
               multiline
               fullWidth
@@ -258,16 +320,20 @@ const CreateEvent = () => {
           <Grid container spacing={2} sx={{ my: 2 }}>
             <Grid item xs={12} sm={4}>
               <TextField
-                id=""
+                name="origin"
+                value={projectIdea.origin}
+                onChange={handleProjectIdea}
                 label="Origin of the Idea (Max. five sentences)"
                 multiline
                 fullWidth
                 rows={4}
-              />
+                />
             </Grid>
             <Grid item xs={12} sm={4}>
               <TextField
-                id=""
+                name="methodology"
+                value={projectIdea.methodology}
+                onChange={handleProjectIdea}
                 label="Methodology (Max. five sentences)"
                 multiline
                 fullWidth
@@ -276,7 +342,9 @@ const CreateEvent = () => {
             </Grid>
             <Grid item xs={12} sm={4}>
               <TextField
-                id=""
+                name="outcome"
+                value={projectIdea.outcome}
+                onChange={handleProjectIdea}
                 label="Expected Outcome (Max. five sentences)"
                 multiline
                 fullWidth
@@ -289,19 +357,23 @@ const CreateEvent = () => {
           <Grid item xs={12} sm={6}>
             <TextField
               size="small"
-              name="leader-uid"
               type="text"
+              name="timeOfCompletion"
+              value={projectIdea.timeOfCompletion}
+              onChange={handleProjectIdea}
               required
               fullWidth
               label="Expected time to complete the Project (in months)"
               color="primary"
-            />
+              />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               size="small"
-              name="leader-uid"
               type="text"
+              name="mentor"
+              value={projectIdea.mentor}
+              onChange={handleProjectIdea}
               required
               fullWidth
               label="Name of the Mentor (if any)"
@@ -321,7 +393,6 @@ const CreateEvent = () => {
         {[...Array(memberCount)].map((_, idx) => (
           <MemberDetail key={idx} />
         ))}
-        {/* <MemberDetail /> */}
       </Paper>
       <Paper sx={{ mt: 4, p: 5, fontSize: "1.2em" }}>
         <Typography variant="h3" align="center">
@@ -357,8 +428,9 @@ const CreateEvent = () => {
             </li>
           </ul>
         </Box>
-        <Box sx={{m: 2, p: 2}}>
-          <span style={{fontWeight: 'bold'}}>Team Leader signature:</span> &nbsp;
+        <Box sx={{ m: 2, p: 2 }}>
+          <span style={{ fontWeight: "bold" }}>Team Leader signature:</span>{" "}
+          &nbsp;
           <input type="file" name="leader-sign" />
         </Box>
       </Paper>

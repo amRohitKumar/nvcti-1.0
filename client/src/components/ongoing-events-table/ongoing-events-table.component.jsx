@@ -64,7 +64,7 @@ const OngoingEventsTable = ({ events, ...otherProps }) => {
                 <TableRow>
                   <TableCell>Serial No.</TableCell>
                   <TableCell>Name</TableCell>
-                  <TableCell>Deadline</TableCell>
+                  <TableCell>Category</TableCell>
                   <TableCell></TableCell>
                 </TableRow>
               </TableHead>
@@ -73,6 +73,7 @@ const OngoingEventsTable = ({ events, ...otherProps }) => {
                   <TableRow hover key={idx}>
                     <TableCell>{idx + 1}</TableCell>
                     <TableCell>{event.title}</TableCell>
+                    <TableCell>{event.category}</TableCell>
                     <TableCell>{event.endDate}</TableCell>
                     <TableCell align="center">
                       <Button

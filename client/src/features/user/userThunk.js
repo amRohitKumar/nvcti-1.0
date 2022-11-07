@@ -1,6 +1,5 @@
 import customFetch from "../../utils/axios";
 import authHeader from "../../utils/userAuthHeaders";
-import { clearEvents } from "../events/eventsSlice";
 import { logoutUser } from "./userSlice";
 
 export const registerUserThunk = async (user, thunkAPI) => {
@@ -15,6 +14,7 @@ export const registerUserThunk = async (user, thunkAPI) => {
 export const verifyUserThunk = async (token, thunkAPI) => {
   try{
     const resp = await customFetch.get(`/auth/verify-email/${token}`);
+    console.log(resp.data);
     return resp.data;
   } catch(error){
     return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -30,7 +30,6 @@ export const loginUserThunk = async (user, thunkAPI) => {
 };
 export const logoutUserThunk = async (_, thunkAPI) => {
   try{
-    thunkAPI.dispatch(clearEvents());
     thunkAPI.dispatch(logoutUser());
     return Promise.resolve();
   } catch(error){

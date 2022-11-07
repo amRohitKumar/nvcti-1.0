@@ -1,7 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchEvents } from "../../features/events/eventsSlice";
+import customFetch from "../../utils/axios";
 
 import { CircularProgress, Box } from "@mui/material";
 import { EventApplicationForm } from "..";
@@ -9,12 +8,17 @@ import Wrapper from "./event-form.style";
 
 const EventFormPage = () => {
   const { eventId } = useParams();
-  const dispatch = useDispatch();
   console.log(eventId);
-  const { isLoading, events } = useSelector((store) => store.events);
-  useEffect(() => {
-    dispatch(fetchEvents());
-    //eslint-disable-next-line
+  const [isLoading, setIsLoading] = useState(false);
+  const [events, setEvents] = useState(false);
+  useEffect( () => {
+    const fetchEvents = async () => {
+      setIsLoading(true);
+      const resp = await customFetch.get("/event/allevents");
+      setEvents(resp.data);
+      setIsLoading(false);
+    }
+    fetchEvents();
   }, []);
 
   if (isLoading || !events) {

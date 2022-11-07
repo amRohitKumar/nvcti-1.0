@@ -2,7 +2,6 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { sendMail } = require("../utilities/mailsender");
-const { createAuthTokens } = require("../utilities/tokenHelper");
 
 module.exports.register = async (req, res) => {
   try {
@@ -11,7 +10,7 @@ module.exports.register = async (req, res) => {
     if (alreadyExists)
       return res
         .status(400)
-        .send({ status: "fail", msg: "email already exists!" });
+        .send({ status: "fail", msg: "Email already exists!" });
 
     //sending verification email
     let emailToken = jwt.sign(
@@ -60,32 +59,33 @@ module.exports.register = async (req, res) => {
 
 module.exports.verifyEmail = async (req, res) => {
   try {
+    console.log("vefigy starts ...");
     const emailToken = req.params.emailToken;
-
     const { email, password, phone, dob, name } = jwt.verify(
       emailToken,
       process.env.EMAIL_VERIFY_TOKEN_SECRET
     );
     // if the token is generated using the secret given, it will return the entire payload
-
     const alreadyUser = await User.findOne({ email });
     if (alreadyUser) {
-      const token = jwt.sign({ userId: alreadyUser._id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_LIFETIME,
-      });
-      res.status(200).send({
+      const token = jwt.sign(
+        { userId: alreadyUser._id },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: process.env.JWT_LIFETIME,
+        }
+      );
+      return res.status(200).send({
         status: "success",
-        payload: {
-          user: {
-            _id: alreadyUser._id,
-            email: alreadyUser.email,
-            name: alreadyUser.name,
-            isVerified: alreadyUser.isVerified,
-            dob: alreadyUser.dob,
-            enrolledEvents: alreadyUser.enrolledEvents,
-            position: alreadyUser.position,
-            token,
-          },
+        user: {
+          _id: alreadyUser._id,
+          email: alreadyUser.email,
+          name: alreadyUser.name,
+          isVerified: alreadyUser.isVerified,
+          dob: alreadyUser.dob,
+          enrolledEvents: alreadyUser.enrolledEvents,
+          position: alreadyUser.position,
+          token,
         },
       });
     }
@@ -100,14 +100,14 @@ module.exports.verifyEmail = async (req, res) => {
       dob: dob,
       name: name,
       password: hashedPassword,
-      position: true, // to create admin
+      position: 0, // to create user
     });
 
     const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_LIFETIME,
     });
 
-    res.status(200).send({
+    return res.status(200).send({
       status: "success",
       user: {
         _id: newUser._id,
@@ -125,7 +125,6 @@ module.exports.verifyEmail = async (req, res) => {
   }
 };
 
-
 module.exports.login = async (req, res) => {
   try {
     const user = req.body;
@@ -134,9 +133,9 @@ module.exports.login = async (req, res) => {
       return res
         .status(400)
         .send({ status: "fail", msg: "username or password is wrong" });
-    if (userInDb){
+    if (userInDb) {
       const validPass = await bcrypt.compare(user.password, userInDb.password);
-      if (!validPass){
+      if (!validPass) {
         return res
           .status(400)
           .send({ status: "fail", msg: "username or password is wrong" });
@@ -167,4 +166,3 @@ module.exports.login = async (req, res) => {
     });
   }
 };
-
