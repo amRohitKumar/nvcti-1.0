@@ -10,7 +10,7 @@ import {
   InputLabel,
 } from "@mui/material";
 
-const MemberDetail = ({memberCount}) => {
+const MemberDetail = ({index, member, handleMembers}) => {
   return (
     <Wrapper>
       <Paper elevation={3} sx={{ mt: 4, p: 3 }}>
@@ -23,12 +23,14 @@ const MemberDetail = ({memberCount}) => {
           <Grid item xs={12} sm={4}>
             <TextField
               size="small"
-              name="leader-name"
+              name="name"
+              value={member.name}
+              onChange={(e) => handleMembers(e,index)}
               type="text"
               required
               fullWidth
               color="primary"
-            />
+              />
           </Grid>
           <Grid item xs={12} sm={4}>
             <FormControl fullWidth size="small">
@@ -36,6 +38,9 @@ const MemberDetail = ({memberCount}) => {
               <Select
                 labelId="leader-gender-select"
                 id="demo-simple-select"
+                name="gender"
+                value={member.gender}
+                onChange={(e) => handleMembers(e,index)}
                 label="Gender"
                 fullWidth
               >
@@ -57,56 +62,66 @@ const MemberDetail = ({memberCount}) => {
           <Grid item xs={12} sm={6}>
             <TextField
               size="small"
-              name="leader-uid"
+              name="uniqueId"
               type="text"
+              value={member.uniqueId}
+              onChange={(e) => handleMembers(e,index)}
               required
               fullWidth
               label="Admission No."
               color="primary"
-            />
+              />
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ mb: 2 }}>
           <Grid item xs={12} sm={6}>
             <TextField
               size="small"
-              name="leader-uid"
+              name="institute"
               type="text"
+              value={member.institute}
+              onChange={(e) => handleMembers(e,index)}
               required
               fullWidth
               label="Department/Institute/Organization"
               color="primary"
-            />
+              />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               size="small"
-              name="leader-uid"
+              name="address"
               type="text"
+              value={member.address}
+              onChange={(e) => handleMembers(e,index)}
               required
               fullWidth
               label="Address (IIT-ISM students should write the Hostel address )"
               color="primary"
-            />
+              />
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ mb: 2 }}>
           <Grid item xs={12} sm={4}>
             <TextField
               size="small"
-              name="leader-uid"
-              type="text"
+              name="email"
+              type="email"
+              value={member.email}
+              onChange={(e) => handleMembers(e,index)}
               required
               fullWidth
               label="Email Id"
               color="primary"
-            />
+              />
           </Grid>
           <Grid item xs={12} sm={4}>
             <TextField
               size="small"
-              name="leader-uid"
-              type="text"
+              name="mobile"
+              type="number"
+              value={member.mobile}
+              onChange={(e) => handleMembers(e,index)}
               required
               fullWidth
               label="Mobile Number"

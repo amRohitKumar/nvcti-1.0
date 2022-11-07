@@ -24,13 +24,20 @@ import {
 } from "@mui/material";
 
 import MemberDetail from "./member-detail";
+import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+const NVCTIunit = ["Mechanical and Rapid Prototyping Unit", "Electronics Circuits and IoT Unit", "Gaming and Animation Design Unit", "Pouch Battery Cell Assembly Unit", "Robotics and Automation Unit"];
 
 const CreateEvent = () => {
+  const oo = useLocation();
+  console.log(oo);
+  // getting leader name (current user)
+  const leaderName = useSelector(store => store.user.user.name);
   // form inputs
   const [category, setCategory] = useState("R&D Institute");
   const [unit, setUnit] = useState([false, false, false, false]);
   const [leader, setLeader] = useState({
-    name: "",
+    name: leaderName.toUpperCase(),
     uniqueId: "",
     imgUrl: "",
     institute: "",
@@ -45,14 +52,14 @@ const CreateEvent = () => {
     projectObjective: "",
   });
   const [projectIdea, setProjectIdea] = useState({
-    origin: '',
-    methodology: '',
-    outcome: '',
-    timeOfCompletion: '',
-    mentor: ''
+    origin: "",
+    methodology: "",
+    outcome: "",
+    timeOfCompletion: "",
+    mentor: "",
   });
-
   const [memberCount, setMemberCount] = useState(0);
+  const [members, setMembers] = useState([]);
   const handleUnit = (idx) => {
     const data = unit.map((el, i) => (i === idx ? !el : el));
     setUnit(data);
@@ -61,18 +68,48 @@ const CreateEvent = () => {
     setLeader({ ...leader, [e.target.name]: e.target.value });
   };
   const handleProjectDetail = (e) => {
-    setProjectDetail({...projectDetail, [e.target.name]: e.target.value});
-  }
+    setProjectDetail({ ...projectDetail, [e.target.name]: e.target.value });
+  };
   const handleProjectIdea = (e) => {
-    setProjectIdea({...projectIdea, [e.target.name]: e.target.value});
-  }
+    setProjectIdea({ ...projectIdea, [e.target.name]: e.target.value });
+  };
   const handleMemberCount = (e) => {
     let members;
     if (!e.target.value || e.target.value <= 0) {
       members = 0;
     } else members = parseInt(e.target.value, 10);
+    setMembers(
+      Array(members).fill({
+        name: "",
+        imgUrl: "",
+        uniqueId: "",
+        institute: "",
+        address: "",
+        email: "",
+        mobile: "",
+        gender: "",
+      })
+    );
     setMemberCount(members);
   };
+  const handleMembers = (e,idx) => {
+    const data = members.map((el, i) => {
+      if(i===idx){
+        return {...el, [e.target.name]: e.target.value};
+      }
+      return el;
+    });
+    setMembers(data);
+  }
+
+  const handleSubmit = () => {
+    let unitObj = unit.map((e,i) => e&&NVCTIunit[i]);
+    unitObj = unitObj.filter(e => {
+      if(e) return e;
+    });
+    const obj = {category, unit: unitObj, ...leader, ...projectDetail, ...projectIdea, members};
+    console.table(obj);
+  }
 
   return (
     <Wrapper sx={{ width: { lg: "75%", md: "80%", sm: "85%", xs: "95%" } }}>
@@ -172,6 +209,7 @@ const CreateEvent = () => {
               color="primary"
               value={leader.name}
               onChange={(e) => setLeader({ ...leader, name: e.target.value })}
+              disabled
             />
           </Grid>
         </Grid>
@@ -248,7 +286,7 @@ const CreateEvent = () => {
             <TextField
               size="small"
               name="email"
-              type="text"
+              type="email"
               value={leader.email}
               onChange={handleLeader}
               required
@@ -261,7 +299,7 @@ const CreateEvent = () => {
             <TextField
               size="small"
               name="mobile"
-              type="text"
+              type="number"
               value={leader.mobile}
               onChange={handleLeader}
               required
@@ -295,7 +333,7 @@ const CreateEvent = () => {
               multiline
               fullWidth
               rows={4}
-              />
+            />
           </Grid>
           <Grid item xs={12} sm={4}>
             <TextField
@@ -327,7 +365,7 @@ const CreateEvent = () => {
                 multiline
                 fullWidth
                 rows={4}
-                />
+              />
             </Grid>
             <Grid item xs={12} sm={4}>
               <TextField
@@ -365,7 +403,7 @@ const CreateEvent = () => {
               fullWidth
               label="Expected time to complete the Project (in months)"
               color="primary"
-              />
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
@@ -390,8 +428,8 @@ const CreateEvent = () => {
           value={memberCount}
           onChange={handleMemberCount}
         />
-        {[...Array(memberCount)].map((_, idx) => (
-          <MemberDetail key={idx} />
+        {!!memberCount&&[...Array(memberCount)].map((_, idx) => (
+          <MemberDetail key={idx} index={idx} member={members[idx]} handleMembers={handleMembers} />
         ))}
       </Paper>
       <Paper sx={{ mt: 4, p: 5, fontSize: "1.2em" }}>
@@ -400,7 +438,7 @@ const CreateEvent = () => {
         </Typography>
         <Box>
           <Box sx={{ letterSpacing: "1.2px", mb: 2 }}>
-            I,……………………..(name of team leader) on my personal and on behalf of
+            I,&nbsp;{leaderName.toUpperCase()}&nbsp;(name of team leader) on my personal and on behalf of
             all my members, do hereby state that
           </Box>
           <ul>
@@ -428,10 +466,13 @@ const CreateEvent = () => {
             </li>
           </ul>
         </Box>
-        <Box sx={{ m: 2, p: 2 }}>
-          <span style={{ fontWeight: "bold" }}>Team Leader signature:</span>{" "}
-          &nbsp;
-          <input type="file" name="leader-sign" />
+        <Box sx={{ my: 2, py: 2, display: 'flex', justifyContent: 'space-between' }}>
+          <div>
+            <span style={{ fontWeight: "bold" }}>Team Leader signature:</span>{" "}
+            &nbsp;
+            <input type="file" name="leader-sign" />
+          </div>
+          <Button variant="contained" onClick={handleSubmit}>Submit</Button>
         </Box>
       </Paper>
     </Wrapper>
