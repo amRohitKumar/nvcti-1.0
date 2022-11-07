@@ -9,8 +9,7 @@ const formSchema = new Schema(
       required: true,
     },
     unit: {
-      type: String,
-      enum: ['Mechanical and Rapid Prototyping Unit', 'Electronics Circuits and IoT Unit', 'Gaming and Animation Design Unit', 'Pouch Battery Cell Assembly Unit', 'Robotics and Automation Unit'],
+      type: Array,
       required: true,
     },
     name: {
