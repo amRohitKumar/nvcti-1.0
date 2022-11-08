@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Form = require("../models/form");
 const User = require("../models/user");
+const Evaluator = require("../models/evaluator")
 const { isLoggedIn, isAuthor } = require("../middleware");
 const catchAsync = require("../utilities/catchAsync");
 
@@ -74,6 +75,10 @@ router.route("/submit").post(
     const user = await User.findById(userId);
     user.formSubmitted.push(newForm);
     await user.save();
+    // change adminId for the id in mongodb
+    const admin = await Evaluator.findById(adminId);
+    admin.applicants.push(newForm._id);
+    await admin.save()
     res.status(200).send({ msg: "Form submitted successfully !" });
   })
 );
