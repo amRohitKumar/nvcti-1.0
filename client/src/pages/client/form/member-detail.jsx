@@ -1,4 +1,4 @@
-import Wrapper from "./event.style";
+import Wrapper from "./form.style";
 import {
   Paper,
   Grid,

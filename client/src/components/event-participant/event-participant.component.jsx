@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { format } from "date-fns";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import PerfectScrollbar from "react-perfect-scrollbar";
 
@@ -25,69 +26,33 @@ import Wrapper from "./event-participant.style";
 import { modalStyle } from "./event-participant.style";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-const orders = [
-  {
-    name: "Ekaterina Tankova",
-    division: "cyber",
-    status: "pending",
-  },
-  {
-    name: "Cao Yu",
-    division: "electrical",
-    status: "accepted",
-  },
-  {
-    name: "Alexa Richardson",
-    division: "electrical",
-    status: "pending",
-  },
-  {
-    name: "Anje Keizer",
-    division: "mechanical",
-    status: "rejected",
-  },
-  {
-    name: "Clarke Gillebert",
-    division: "cyber",
-    status: "accepted",
-  },
-  {
-    name: "Adam Denisov",
-    division: "cyber",
-    status: "rejected",
-  },
-];
-
-const EventParticipants = (props) => {
+const EventParticipants = ({ events, ...props }) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(
-    new Array(orders.length).fill(false)
+    new Array(events.length).fill(false)
   );
   const [emailId, setEmailId] = useState(["this@gmail.com", "this2@gmail.com"]);
   const [text, setText] = useState("");
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const { eventId } = useParams();
-  const {state: {eventName, responses}} = useLocation();
 
   const handleCheckbox = (id) => {
     const newState = selected.map((item, idx) => (idx === id ? !item : item));
     setSelected(newState);
   };
   const handleAdd = () => {
-    if(emailId.length < 3){
+    if (emailId.length < 3) {
       const newEmail = [...emailId, text];
       setEmailId(newEmail);
     }
     setText("");
-  }
+  };
   const handleDelete = (id) => {
     const newEmail = emailId.filter((_, idx) => idx !== id);
     setEmailId(newEmail);
   };
 
-  console.log(eventId);
   return (
     <Wrapper>
       <Modal
@@ -98,11 +63,16 @@ const EventParticipants = (props) => {
       >
         <Box sx={modalStyle}>
           <Typography variant="h6">
-            Forward {eventName} event to mentor
+            Forward to evaluator
           </Typography>
-          <Box sx={{my: 2, p: 1}}>
+          <Box sx={{ my: 2, p: 1 }}>
             {emailId.map((email, idx) => (
-              <Chip key={idx} sx={{m: 0.5}} label={email} onDelete={() => handleDelete(idx)} />
+              <Chip
+                key={idx}
+                sx={{ m: 0.5 }}
+                label={email}
+                onDelete={() => handleDelete(idx)}
+              />
             ))}
           </Box>
           <Box
@@ -124,7 +94,9 @@ const EventParticipants = (props) => {
               <AddCircleOutlineIcon color="primary" />
             </IconButton>
           </Box>
-          <Button sx={{mt: 2}} variant="contained">Forward</Button>
+          <Button sx={{ mt: 2 }} variant="contained">
+            Forward
+          </Button>
         </Box>
       </Modal>
       <Card
@@ -142,7 +114,7 @@ const EventParticipants = (props) => {
           }}
         >
           <CardHeader
-            title={`Event ${eventName}`}
+            title="Applications"
             titleTypographyProps={{ fontSize: "2em" }}
             sx={{ ml: 5 }}
           />
@@ -157,34 +129,35 @@ const EventParticipants = (props) => {
                 <TableRow>
                   <TableCell>Serial No.</TableCell>
                   <TableCell>Name</TableCell>
-                  {/* <TableCell>division</TableCell> */}
+                  <TableCell>Applied on</TableCell>
                   <TableCell>Status</TableCell>
-                  <TableCell align="center">Applications</TableCell>
-                  {/* FOR APPLICATION BUTTON */}
-                  <TableCell></TableCell> {/* FOR CHECKBOX */}
+                  <TableCell align="center">Application</TableCell>
+                  <TableCell align="center">Select</TableCell> {/* FOR CHECKBOX */}
                 </TableRow>
               </TableHead>
               <TableBody>
-                {responses.map((res, idx) => (
+                {events.map((res, idx) => (
                   <TableRow hover key={idx}>
                     <TableCell>{idx + 1}</TableCell>
-                    <TableCell>{res.at(-1).name}</TableCell>
-                    {/* <TableCell sx={{ textTransform: "capitalize" }}>
-                      {order.division}
-                    </TableCell> */}
+                    <TableCell>{res.projectTitle}</TableCell>
+                    <TableCell>{format(new Date(res.updated_at), "dd-MM-yyyy")}</TableCell>
                     <TableCell>
                       <StatusPill
                         color={
-                          (res.at(-1).status === "accepted" && "success") ||
-                          (res.at(-1).status === "rejected" && "error") ||
+                          (res.status === "accepted" && "success") ||
+                          (res.status === "rejected" && "error") ||
                           "warning"
                         }
                       >
-                        {res.at(-1).status}
+                        {res.status}
                       </StatusPill>
                     </TableCell>
                     <TableCell align="center">
-                      <Button variant="contained" size="small" onClick={() => navigate(`response/${res.at(-1).id}`)}>
+                      <Button
+                        variant="contained"
+                        size="small"
+                        onClick={() => navigate(`response/${res.at(-1).id}`)}
+                      >
                         View application
                       </Button>
                     </TableCell>

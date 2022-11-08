@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const User = require("./models/user");
 
 module.exports.isLoggedIn = async (req, res, next) => {
+  console.log("isloggedIn middleware");
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
   if (!authHeader.startsWith("Bearer") || !token) {
@@ -12,7 +13,9 @@ module.exports.isLoggedIn = async (req, res, next) => {
         return res.status(403).send({ msg: "Authentication Invalid" });
       } else {
         const userId = payload.userId;
-        req.user = await User.findById(userId);
+        const user = await User.findById(userId);
+        req.user = user;
+        // console.log("res = ", res, req.user);
         next();
       }
     });
@@ -20,11 +23,14 @@ module.exports.isLoggedIn = async (req, res, next) => {
 };
 
 module.exports.isAdmin = async (req, res, next) => {
+  console.log("isadmin middlware");
+  console.log(req.user.position);
   if (
     req.user.position === 1 ||
     req.user.position === 2 ||
     req.user.position === 3
   ) {
+    console.log("inside if ");
     next();
   } else {
     return res.status(404).send({ msg: "User not authorized !" });
@@ -32,7 +38,8 @@ module.exports.isAdmin = async (req, res, next) => {
 };
 
 module.exports.isAuthor = async (req, res, next) => {
-  if (req.user._id === req.body.userId || req.user.position === 1) {
+  console.log("author middleware");
+  if (req.user._id.toString() === req.params.userId || req.user.position === 1) {
     next();
   } else {
     return res.status(404).send({ msg: "User not authorized !" });

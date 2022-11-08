@@ -1,12 +1,16 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
-import { EventParticipants, ProtectedRoutes, Footer } from "./components";
+import {
+  EventParticipants,
+  ProtectedRoutes,
+  Footer,
+  LogIn,
+} from "./components";
 import { CssBaseline } from "@mui/material";
 import { theme } from "./theme";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
-  ClientLogIn,
   AdminLogIn,
   MentorLogIn,
   SuperAdminLogIn,
@@ -18,7 +22,7 @@ import {
   MentorDashboard,
   SuperAdminDashboard,
   StatusPage,
-  EventFormPage,
+  FormPage,
   HomePage,
   SharedLayoutAdmin,
   SharedLayoutClient,
@@ -50,11 +54,16 @@ function App() {
               </>
             }
           />
-
+          
+          {/* LOGIN ROUTE */}
+          <Route exact path="/login" element={<LogIn />} />
           {/* CLIENT LOGIN/REGISTER ROUTES */}
-          <Route exact path="/login" element={<ClientLogIn />} />
           <Route exact path="/register" element={<Register />} />
-          <Route exact path="/auth/verify-email/:emailToken" element={<VerifyEmail />} />
+          <Route
+            exact
+            path="/auth/verify-email/:emailToken"
+            element={<VerifyEmail />}
+          />
           {/* CLIENT PROTECTED ROUTES */}
           <Route
             path="/client"
@@ -66,12 +75,10 @@ function App() {
           >
             <Route index element={<ClientDashboard />} />
             <Route path="status" element={<StatusPage />} />
-            <Route path="apply/:eventId" element={<EventFormPage />} />
+            <Route path="apply" element={<FormPage />} />
             <Route path="event/:eventId" element={<EventDetails />}></Route>
           </Route>
 
-          {/* ADMIN LOGIN ROUTES */}
-          <Route exact path="/adminlogin" element={<AdminLogIn />}></Route>
           {/* ADMIN PROTECTED ROUTES */}
           <Route
             path="/admin"
@@ -84,11 +91,12 @@ function App() {
             <Route index element={<AdminDashboard />} />
             <Route path="create" element={<CreateEvent />} />
             <Route path="event/:eventId" element={<EventParticipants />} />
-            <Route path="event/:eventId/response/:userId" element={<AdminViewForm />} />
+            <Route
+              path="event/:eventId/response/:userId"
+              element={<AdminViewForm />}
+            />
           </Route>
 
-          {/* MENTOR LOGIN ROUTES*/}
-          <Route exact path="/mentorlogin" element={<MentorLogIn />}></Route>
           {/* MENTOR PROTECTED ROUTES */}
           <Route
             path="/mentor"
@@ -102,12 +110,6 @@ function App() {
             <Route path="response/:candidateId" element={<MentorViewForm />} />
           </Route>
 
-          {/* SUPER-ADMIN LOGIN ROUTES */}
-          <Route
-            exact
-            path="/superadminlogin"
-            element={<SuperAdminLogIn />}
-          ></Route>
           {/* SUPER-ADMIN PROTEDTED ROUTES */}
           <Route
             path="/superadmin"

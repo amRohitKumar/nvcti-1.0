@@ -36,12 +36,12 @@ export const logoutUserThunk = async (_, thunkAPI) => {
     return thunkAPI.rejectWithValue(error.message);
   }
 };
-export const submitEventThunk = async ({eventId, answer}, thunkAPI) => {
-  try {
-    const resp = await customFetch.post(`/event/${eventId}/submitForm`, answer, authHeader(thunkAPI));
-    console.log(resp.data);
-    return resp.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.response.data);
-  }
-}
+// export const submitEventThunk = async ({eventId, answer}, thunkAPI) => {
+//   try {
+//     const resp = await customFetch.post(`/event/${eventId}/submitForm`, answer, authHeader(thunkAPI));
+//     console.log(resp.data);
+//     return resp.data;
+//   } catch (error) {
+//     return thunkAPI.rejectWithValue(error.response.data);
+//   }
+// }

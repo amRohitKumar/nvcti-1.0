@@ -5,7 +5,7 @@ import {
   loginUserThunk,
   verifyUserThunk,
   logoutUserThunk,
-  submitEventThunk,
+  // submitEventThunk,
 } from "./userThunk";
 
 import {
@@ -26,7 +26,7 @@ export const registerUser = createAsyncThunk(
 export const verifyUser = createAsyncThunk("user/verifyUser", verifyUserThunk);
 export const loginUser = createAsyncThunk("user/loginUser", loginUserThunk);
 export const clearUser = createAsyncThunk("user/logoutUser", logoutUserThunk);
-export const submitEvent = createAsyncThunk("user/submitEvent", submitEventThunk);
+// export const submitEvent = createAsyncThunk("user/submitEvent", submitEventThunk);
 
 const userSlice = createSlice({
   name: "user",
@@ -83,22 +83,22 @@ const userSlice = createSlice({
     [clearUser.rejected]: (_, { payload }) => {
       toast.error(payload);
     },
-    [submitEvent.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [submitEvent.fulfilled]: (state, { payload }) => {
-      const {user} = payload;
-      console.log(payload);
-      state.isLoading = false;
-      state.user = user;
-      addUserToLocalStorage(user);
-      toast.success("Applyed successfully !");
-    },
-    [submitEvent.rejected]: (state, { payload }) => {
-      const {msg} = payload;
-      state.isLoading = false;
-      toast.error(msg);
-    },
+    // [submitEvent.pending]: (state) => {
+    //   state.isLoading = true;
+    // },
+    // [submitEvent.fulfilled]: (state, { payload }) => {
+    //   const {user} = payload;
+    //   console.log(payload);
+    //   state.isLoading = false;
+    //   state.user = user;
+    //   addUserToLocalStorage(user);
+    //   toast.success("Applyed successfully !");
+    // },
+    // [submitEvent.rejected]: (state, { payload }) => {
+    //   const {msg} = payload;
+    //   state.isLoading = false;
+    //   toast.error(msg);
+    // },
   },
 });
 

@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { clearUser } from "../../features/user/userSlice";
 
@@ -23,12 +23,16 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
 }));
 
 export const AdminDashboardNavbar = (props) => {
+  const { pathname } = useLocation();
   const dispatch = useDispatch();
   const { onSidebarOpen, ...other } = props;
   const settingsRef = useRef(null);
   const [openAccountPopover, setOpenAccountPopover] = useState(false);
   const navigate = useNavigate();
-  const handleSignOut = () => dispatch(clearUser());
+  const handleSignOut = () => {
+    navigate('/');
+    dispatch(clearUser());
+  }
 
   return (
     <>
@@ -51,13 +55,15 @@ export const AdminDashboardNavbar = (props) => {
           {/* NAVBAR LOGO */}
           <NVCTILogo />
           <Box sx={{ flexGrow: 1 }} />
-          <Button
-            variant="contained"
-            onClick={() => navigate("/admin")}
-            sx={{ mr: 2 }}
-          >
-            Dashboard
-          </Button>
+          {pathname !== "/admin" && (
+            <Button
+              variant="contained"
+              onClick={() => navigate("/admin")}
+              sx={{ mr: 2 }}
+            >
+              Dashboard
+            </Button>
+          )}
           <Button variant="contained" onClick={() => navigate('create')}>Create New</Button>
           <Avatar
             onClick={() => setOpenAccountPopover(true)}

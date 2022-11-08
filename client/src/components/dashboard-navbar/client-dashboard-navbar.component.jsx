@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { clearUser } from "../../features/user/userSlice";
 
 import styled from "@emotion/styled";
@@ -16,13 +16,15 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
 }));
 
 export const ClientDashboardNavbar = (props) => {
+  const { pathname } = useLocation();
   const { onSidebarOpen, ...other } = props;
   const settingsRef = useRef(null);
   const [openAccountPopover, setOpenAccountPopover] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleSignOut = () => {
-    dispatch(clearUser());
+    navigate('/');
+    dispatch(clearUser())
   };
   return (
     <>
@@ -45,16 +47,18 @@ export const ClientDashboardNavbar = (props) => {
           {/* NAVBAR LOGO */}
           <NVCTILogo />
           <Box sx={{ flexGrow: 1 }} />
+          {pathname !== "/client" && (
+            <Button
+              variant="contained"
+              onClick={() => navigate("/client")}
+              sx={{ mr: 2 }}
+            >
+              Dashboard
+            </Button>
+          )}
           <Button
             variant="contained"
-            onClick={() => navigate("/client")}
-            sx={{ mr: 2 }}
-          >
-            Dashboard
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => navigate("/apply")}
+            onClick={() => navigate("apply")}
             sx={{ mr: 2 }}
           >
             Apply

@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { EmailIcon, LockOutlinedIcon, NoEncryptionIcon } from "../../icons";
 
-const LogIn = ({ role, redirecturl }) => {
+const LogIn = () => {
   const dispatch = useDispatch();
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,7 +26,7 @@ const LogIn = ({ role, redirecturl }) => {
     };
     dispatch(loginUser(obj));
   };
-  useUserState("LOGIN", redirecturl); // to redirect user if user state changes
+  useUserState("LOGIN"); // to redirect user if user state changes
 
   return (
     <>
@@ -102,13 +102,11 @@ const LogIn = ({ role, redirecturl }) => {
                   Forgot password?
                 </Link>
               </Grid>
-              {role === "user" && (
-                <Grid item>
-                  <Link href="/register" variant="body2">
-                    {"Register now"}
-                  </Link>
-                </Grid>
-              )}
+              <Grid item>
+                <Link href="/register" variant="body2">
+                  {"Register now"}
+                </Link>
+              </Grid>
             </Grid>
           </Box>
         </Box>

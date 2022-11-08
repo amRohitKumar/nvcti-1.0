@@ -9,6 +9,7 @@ router.route("/getform/:formId").get(
   isLoggedIn,
   isAuthor,
   catchAsync(async (req, res) => {
+    console.log("here");
     const formId = req.params.formId;
     const resp = await Form.findById(formId);
     res.status(200).send(resp);
@@ -72,8 +73,9 @@ router.route("/submit").post(
     });
     await newForm.save();
     const user = await User.findById(userId);
-    user.formSubmitted.push(newForm);
+    user.formSubmitted.push(newForm._id);
     await user.save();
+    // logic to add applications in in admin
     res.status(200).send({ msg: "Form submitted successfully !" });
   })
 );

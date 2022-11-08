@@ -10,6 +10,7 @@ import TimeLine from "./timeline/timeline.component";
 import EventApplicationForm from "./event-application-form.jsx/eventApplicationForm";
 import LogIn from "./login/login.component";
 import NVCTILogo from "./logo/logo.component";
+import CircularLoader from "./loader/circular-loader.component";
 
 
 // ADMIN
@@ -26,6 +27,7 @@ import SuperAdminDashboardNavbar from "./dashboard-navbar/superAdmin-dashboard-n
 import EventFormSubmitted from "./submitted-event-form/submittedForm";
 
 export {
+  CircularLoader,
   NVCTILogo,
   LogIn,
   ClientDashboardNavbar,

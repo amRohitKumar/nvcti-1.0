@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+// set imgUrl true in production
 const formSchema = new Schema(
   {
     category: {
@@ -22,7 +23,7 @@ const formSchema = new Schema(
     },
     imgUrl: {
       type: String,
-      required: true,
+      required: false,
     },
     uniqueId: {
       type: String,
@@ -77,7 +78,7 @@ const formSchema = new Schema(
       },
     },
     timeOfCompletion: {
-      type: Number,
+      type: String,
       required: true,
     },
     mentor: {
@@ -92,7 +93,7 @@ const formSchema = new Schema(
         },
         imgUrl: {
           type: String,
-          required: true,
+          required: false,
         },
         uniqueId: {
           type: String,

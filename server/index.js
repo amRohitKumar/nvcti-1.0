@@ -59,7 +59,8 @@ app.get("/", (req, res) => {
 
 app.use((err, req, res, next) => {
   const {statusCode = 500, message = "Something went wrong"} = err;
-  res.send(statusCode).send({msg: message});
+  console.log(message);
+  res.status(statusCode).send({msg: message});
 });
 
 app.listen(port, () => {

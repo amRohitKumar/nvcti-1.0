@@ -1,6 +1,6 @@
-const authHeader = (thunkAPI) => ({
+const authHeader = (token) => ({
   headers: {
-    authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
+    authorization: `Bearer ${token}`,
   },
 });
 

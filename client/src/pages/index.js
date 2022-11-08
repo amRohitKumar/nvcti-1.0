@@ -8,8 +8,7 @@ import EventDetails from "./client/eventdetails/EventDetails";
 import ClientDashboard from "./client/client-dashboard/client-dashboard.page";
 import AdminDashboard from "./admin/admin-dashboard/admin-dashboard.page";
 import StatusPage from "./client/status/status.page";
-import EventFormPage from "../components/event-form/event-form.page";
-import CreateEvent from "./admin/event/event.page";
+import CreateEvent from "./client/form/form.page";
 import SharedLayoutClient from "./client/client-dashboard/shared-layout.page";
 import SharedLayoutAdmin from "./admin/admin-dashboard/shared-layout.page";
 import MentorDashboard from "./mentor/mentor-dashboard/mentor-dashboard.page";
@@ -23,8 +22,10 @@ import AdminViewForm from "./admin/view-form/view-form.page";
 import MentorViewForm from "./mentor/view-form/view-form.page";
 import SuperAdminViewForm from "./superAdmin/view-form/view-form.page";
 import VerifyEmail from "./client/register/email-verify.component";
+import FormPage from "./client/form/form.page";
 
 export {
+  FormPage,
   ClientLogIn,
   AdminLogIn,
   MentorLogIn,
@@ -41,7 +42,6 @@ export {
   SuperAdminViewForm,
   EventDetails,
   StatusPage,
-  EventFormPage,
   CreateEvent,
   SharedLayoutClient,
   SharedLayoutAdmin,

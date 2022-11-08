@@ -1,5 +1,9 @@
-import { useEffect, useState } from "react";
-import Wrapper from "./event.style";
+import { useState } from "react";
+import customFetch from "../../../utils/axios";
+import authHeader from "../../../utils/userAuthHeaders";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Wrapper from "./form.style";
 
 import {
   Paper,
@@ -9,10 +13,6 @@ import {
   MenuItem,
   Button,
   FormControlLabel,
-  Switch,
-  Divider,
-  Tooltip,
-  IconButton,
   Box,
   Radio,
   RadioGroup,
@@ -25,14 +25,20 @@ import {
 
 import MemberDetail from "./member-detail";
 import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
-const NVCTIunit = ["Mechanical and Rapid Prototyping Unit", "Electronics Circuits and IoT Unit", "Gaming and Animation Design Unit", "Pouch Battery Cell Assembly Unit", "Robotics and Automation Unit"];
+import { CircularLoader } from "../../../components";
+const NVCTIunit = [
+  "Mechanical and Rapid Prototyping Unit",
+  "Electronics Circuits and IoT Unit",
+  "Gaming and Animation Design Unit",
+  "Pouch Battery Cell Assembly Unit",
+  "Robotics and Automation Unit",
+];
 
 const CreateEvent = () => {
-  const oo = useLocation();
-  console.log(oo);
   // getting leader name (current user)
-  const leaderName = useSelector(store => store.user.user.name);
+  const navigate = useNavigate();
+  const { name: leaderName, token } = useSelector((store) => store.user.user);
+  const [isLoading, setIsLoading] = useState(false);
   // form inputs
   const [category, setCategory] = useState("R&D Institute");
   const [unit, setUnit] = useState([false, false, false, false]);
@@ -92,27 +98,49 @@ const CreateEvent = () => {
     );
     setMemberCount(members);
   };
-  const handleMembers = (e,idx) => {
+  const handleMembers = (e, idx) => {
     const data = members.map((el, i) => {
-      if(i===idx){
-        return {...el, [e.target.name]: e.target.value};
+      if (i === idx) {
+        return { ...el, [e.target.name]: e.target.value };
       }
       return el;
     });
     setMembers(data);
-  }
+  };
 
-  const handleSubmit = () => {
-    let unitObj = unit.map((e,i) => e&&NVCTIunit[i]);
-    unitObj = unitObj.filter(e => {
-      if(e) return e;
-    });
-    const obj = {category, unit: unitObj, ...leader, ...projectDetail, ...projectIdea, members};
-    console.table(obj);
-  }
+  const handleSubmit = async () => {
+    try {
+      setIsLoading(true);
+      let unitObj = unit.map((e, i) => e && NVCTIunit[i]);
+      unitObj = unitObj.filter((e) => {
+        if (e) return e;
+      });
+      const obj = {
+        category,
+        unit: unitObj,
+        ...leader,
+        ...projectDetail,
+        ...projectIdea,
+        members,
+      };
+      console.table(obj);
+      await customFetch.post(
+        `/form/submit`,
+        obj,
+        authHeader(token)
+      );
+      setIsLoading(false);
+      navigate('/client');
+      toast.success("Form submitted successfully !")
+    } catch (err) {
+      setIsLoading(false);
+      toast.error("Something went wrong while submitting !");
+    }
+  };
 
   return (
     <Wrapper sx={{ width: { lg: "75%", md: "80%", sm: "85%", xs: "95%" } }}>
+      {isLoading&&<CircularLoader />}
       <Box>
         <Typography variant="h2" gutterBottom align="center">
           APPLICATION FORM TO ACCESS THE NVCTI LAB
@@ -428,9 +456,15 @@ const CreateEvent = () => {
           value={memberCount}
           onChange={handleMemberCount}
         />
-        {!!memberCount&&[...Array(memberCount)].map((_, idx) => (
-          <MemberDetail key={idx} index={idx} member={members[idx]} handleMembers={handleMembers} />
-        ))}
+        {!!memberCount &&
+          [...Array(memberCount)].map((_, idx) => (
+            <MemberDetail
+              key={idx}
+              index={idx}
+              member={members[idx]}
+              handleMembers={handleMembers}
+            />
+          ))}
       </Paper>
       <Paper sx={{ mt: 4, p: 5, fontSize: "1.2em" }}>
         <Typography variant="h3" align="center">
@@ -438,8 +472,8 @@ const CreateEvent = () => {
         </Typography>
         <Box>
           <Box sx={{ letterSpacing: "1.2px", mb: 2 }}>
-            I,&nbsp;{leaderName.toUpperCase()}&nbsp;(name of team leader) on my personal and on behalf of
-            all my members, do hereby state that
+            I,&nbsp;{leaderName.toUpperCase()}&nbsp;(name of team leader) on my
+            personal and on behalf of all my members, do hereby state that
           </Box>
           <ul>
             <li>
@@ -466,13 +500,22 @@ const CreateEvent = () => {
             </li>
           </ul>
         </Box>
-        <Box sx={{ my: 2, py: 2, display: 'flex', justifyContent: 'space-between' }}>
+        <Box
+          sx={{
+            my: 2,
+            py: 2,
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
           <div>
             <span style={{ fontWeight: "bold" }}>Team Leader signature:</span>{" "}
             &nbsp;
             <input type="file" name="leader-sign" />
           </div>
-          <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+          <Button variant="contained" onClick={handleSubmit}>
+            Submit
+          </Button>
         </Box>
       </Paper>
     </Wrapper>

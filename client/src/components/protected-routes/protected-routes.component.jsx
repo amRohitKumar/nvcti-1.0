@@ -1,23 +1,24 @@
 import { Navigate } from "react-router-dom";
-// import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../../features/user/userSlice";
 
 //ROLE OBJECT
-const role = {
-  user: 1,
-  admin: 2,
-  mentor: 3,
-  superAdmin: 4,
+const roleObj = {
+  user: 0,
+  admin: 1,
+  mentor: 2,
+  superAdmin: 3,
 };
 
 const ProtectedRoutes = ({ children, userRole }) => {
-  //   const { role } = useSelector((store) => store.user);
+  const dispatch = useDispatch();
   let isAuthorized = false;
-  /*
-    if(role == role[userRole]) isAuthorized = true; 
-  */
-  isAuthorized = true;
+  const role = useSelector((store) => store?.user?.user?.position);
+  if(role && role === roleObj[userRole]) isAuthorized = true; 
+  // isAuthorized = true;
   if (!isAuthorized) {
-    return <Navigate to="/landing" />;
+    dispatch(logoutUser());
+    return <Navigate to="/" />;
   }
   return children;
 };

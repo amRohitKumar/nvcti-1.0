@@ -1,4 +1,4 @@
-
+import {format} from 'date-fns';
 import PerfectScrollbar from "react-perfect-scrollbar";
 import {
   Box,
@@ -15,6 +15,7 @@ import { StatusPill } from "../status-pill/status-pill.component";
 import Wrapper from "./previous-state-table.style";
 
 const PreviousStatusTable = ({ enrolledevents, ...otherProps }) => {
+  console.log(enrolledevents);
   return (
     <Wrapper>
       <Card
@@ -36,7 +37,7 @@ const PreviousStatusTable = ({ enrolledevents, ...otherProps }) => {
               <TableHead>
                 <TableRow>
                   <TableCell>Serial No.</TableCell>
-                  <TableCell>Name</TableCell>
+                  <TableCell>Title</TableCell>
                   <TableCell>Category</TableCell>
                   <TableCell>Applied On</TableCell>
                   <TableCell>Status</TableCell>
@@ -46,9 +47,9 @@ const PreviousStatusTable = ({ enrolledevents, ...otherProps }) => {
                 {enrolledevents.map((event, idx) => (
                   <TableRow hover key={idx}>
                     <TableCell>{idx + 1}</TableCell>
-                    <TableCell>{event.title}</TableCell>
+                    <TableCell>{event.projectTitle}</TableCell>
                     <TableCell>{event.category}</TableCell>
-                    <TableCell>{event.appliedOn}</TableCell>
+                    <TableCell>{format(new Date(event.updated_at), "dd-MM-yyyy")}</TableCell>
                     <TableCell>
                       <StatusPill
                         color={

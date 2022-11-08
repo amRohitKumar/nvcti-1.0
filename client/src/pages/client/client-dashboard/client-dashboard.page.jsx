@@ -1,28 +1,30 @@
 import { useEffect, useState } from "react";
 import customFetch from "../../../utils/axios";
-import { Carousel, PreviousStatusTable } from "../../../components";
-import { ongoingEvents } from "../../../data";
+import authHeader from "../../../utils/userAuthHeaders";
+import { PreviousStatusTable, CircularLoader } from "../../../components";
 import { useTitle } from "../../../hooks";
 
-import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
+import { useSelector } from "react-redux";
 
 const ClientDashboard = () => {
   useTitle("Dashboard");
+  const {_id: currentUserId, token} = useSelector(store => store?.user?.user);
   const [isLoading, setIsLoading] = useState(false);
-  const [events, setEvents] = useState(false);
+  const [events, setEvents] = useState([]);
   useEffect(() => {
     const fetchEvents = async () => {
       setIsLoading(true);
-      const resp = await customFetch.get("/event/allevents");
-      setEvents(resp.data);
+      const resp = await customFetch.get(`/form/getforms/${currentUserId}`, authHeader(token));
+      console.log(resp);
+      setEvents(resp.data.formSubmitted);
       setIsLoading(false);
     };
     fetchEvents();
   }, []);
 
   if (isLoading) {
-    return <CircularProgress sx={{ mx: "auto" }} />;
+    return <CircularLoader />
   }
 
   if (events.length === 0) {
@@ -38,7 +40,6 @@ const ClientDashboard = () => {
 
   return (
     <>
-      <Carousel data={ongoingEvents} />
       <PreviousStatusTable enrolledevents={events} />
     </>
   );

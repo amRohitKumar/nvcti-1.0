@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import {
   Box,
@@ -11,6 +12,7 @@ import {
   TableRow,
 } from "@mui/material";
 
+import StatusPill from "../status-pill/status-pill.component";
 import Wrapper from "./ongoing-evetns.style";
 import { changedateformat } from "../../utils/dateformat";
 import { useNavigate } from "react-router-dom";
@@ -72,8 +74,8 @@ const OngoingEventsAdmin = ({ events, ...otherProps }) => {
                 <TableRow>
                   <TableCell>Serial No.</TableCell>
                   <TableCell>Name</TableCell>
-                  <TableCell>Deadline</TableCell>
-                  <TableCell align="center">Count</TableCell>
+                  <TableCell>Applied on</TableCell>
+                  <TableCell>Status</TableCell>
                   <TableCell align="center">Responses</TableCell>
                 </TableRow>
               </TableHead>
@@ -81,10 +83,18 @@ const OngoingEventsAdmin = ({ events, ...otherProps }) => {
                 {events.map((event, idx) => (
                   <TableRow hover key={idx}>
                     <TableCell>{idx + 1}</TableCell>
-                    <TableCell>{event.title}</TableCell>
-                    <TableCell>{changedateformat(event.endDate)}</TableCell>
-                    <TableCell align="center">
-                      {event.responses.length}
+                    <TableCell>{event.projectTitle}</TableCell>
+                    <TableCell>{format(new Date(event.updated_at), "dd-MM-yyyy")}</TableCell>
+                    <TableCell>
+                      {<StatusPill
+                        color={
+                          (event.status === "accepted" && "success") ||
+                          (event.status === "rejected" && "error") ||
+                          "warning"
+                        }
+                      >
+                        {(event.status).toUpperCase()}
+                      </StatusPill>}
                     </TableCell>
                     <TableCell align="center">
                       <Button

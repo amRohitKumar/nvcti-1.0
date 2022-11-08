@@ -10,11 +10,19 @@ const { default: mongoose } = require('mongoose');
 
 const passGenerator = require("../utilities/generateUID");
 
+router.route("/createevaluator")
+    .get(catchAsync ( async (req, res) => {
+        const evalList = new Evaluator({userId: mongoose.Types.ObjectId('63693aa240a9c863ed92ea66'), applicants: []});
+        await evalList.save()
+    })
+);
+
 router.route('/applicants')
     .get(isLoggedIn, isAdmin, catchAsync(async (req, res) => {
         const mentorID = req.user._id;
-        const mentor = await Evaluator.findById(mentorID).populate("applicants");
-        res.status(200).send(mentor.applicants);
+        const mentor = await Evaluator.findOne({userId: mentorID}).populate("applicants");
+        console.log(mentor);
+        res.status(200).json({applications: mentor.applicants||[]});
     })
 );
 

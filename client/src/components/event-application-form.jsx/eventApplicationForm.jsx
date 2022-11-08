@@ -12,7 +12,7 @@ import { EventInput, EventInputMultiline } from "./eventApplicationForm.styles";
 import Wrapper from "./eventApplicationForm.styles";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { submitEvent } from "../../features/user/userSlice";
+// import { submitEvent } from "../../features/user/userSlice";
 // import { eventFormData } from "../../data";
 
 const EventApplicationForm = ({ eventFormData }) => {
@@ -37,9 +37,9 @@ const EventApplicationForm = ({ eventFormData }) => {
 
   const handleSubmit = () => {
     console.log(JSON.parse(answerArray));
-    dispatch(submitEvent({ eventId, answer: JSON.parse(answerArray) })).then(
-      () => navigate("/client")
-    );
+    // dispatch(submitEvent({ eventId, answer: JSON.parse(answerArray) })).then(
+    //   () => navigate("/client")
+    // );
   };
 
   return (
