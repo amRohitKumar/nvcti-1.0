@@ -2,6 +2,7 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { sendMail } = require("../utilities/mailsender");
+const catchAsync = require("../utilities/catchAsync");
 
 module.exports.register = async (req, res) => {
   try {
@@ -56,6 +57,25 @@ module.exports.register = async (req, res) => {
     return res.status(400).send({ status: "fail", msg: e.message });
   }
 };
+
+// route to register mentor
+module.exports.registerMentor = catchAsync(async (req, res) => {
+  const {email, password} = req.body;
+  const alreadyExists = await User.findOne({ email: email });
+  if(alreadyExists){
+    return res.send({mentor: alreadyExists});
+  }
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  const newMentor = await User.create({
+    email: email,
+    isVerified: true,
+    password: hashedPassword,
+    position: 2, // to create mentor
+  });
+  res.send({mentor: newMentor});
+});
 
 module.exports.verifyEmail = async (req, res) => {
   try {
