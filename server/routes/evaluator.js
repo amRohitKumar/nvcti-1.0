@@ -75,8 +75,11 @@ router.route("/forward").post(
         userId: evaluatorId,
       });
 
+      var textmsg = "";
+
       if (alreadyExistEvaluator) {
         applicantIds.forEach((id) => alreadyExistEvaluator.applicants.push(id));
+        textmsg = "please login to the portal to check new applicants. Use the same credentials as before";
         await alreadyExistEvaluator.save();
       } else {
         // else create a new evaluator
@@ -84,7 +87,14 @@ router.route("/forward").post(
           userId: mongoose.Types.ObjectId(evaluatorId),
           applicants: applicantIds,
         });
+        textmsg = `please login to the portal to check new applicants. Use the following credentials \nemail: ${mail} \npassword: ${password}`;
       }
+      await sendMail({
+        to_email: mail,
+        subject_email: "Forwarded applications from admin",
+        text_email: textmsg,
+        html_email: null,
+      });
     }
     res.status(200).send({ msg: "Forwarded successfully" });
   })
@@ -104,5 +114,16 @@ router.route("/forwardsuperadmin").post(
     res.status(200).send({ msg: "Forwarded successfully !" });
   })
 );
+
+router.route("/addcomment").post(
+  isLoggedIn,
+  isAdmin,
+  catchAsync(async (req, res) => {
+    const form = await Form.findById(req.body.formId);
+    form.comments.push(req.body.comment);
+    await form.save()
+    res.status(200).send({ msg: "Comment added successfully!" });
+  })
+)
 
 module.exports = router;
