@@ -31,7 +31,14 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    isNewNotification: {
+        type: Boolean,
+        default: false
+    },
+    notifications: [{
+        type: String
+    }]
 })
 
 // userSchema.plugin(passportLocalMongoose); // this will add on 'username' and 'passwords' fields for our schema. Apart from those two we need to add on what we need in 'userSchema'. 
