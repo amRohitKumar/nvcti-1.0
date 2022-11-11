@@ -40,21 +40,33 @@ router.route("/update").post(
   isAdmin,
   catchAsync(async (req, res) => {
     const applicant = Form.findById(req.body.applicantId);
-    applicant.status = req.body.status;
+    const status =  req.body.status;
+    const user = req.user;
+    applicant.status = status;
     await applicant.save();
+
+    if (user.notification.length == 10) {
+      user.notifications.pop();
+    }
+  
+    if (status.toLowerCase == "accepted") {
+      user.notifications.unshift(`Your application for ${applicant.projectTitle} is accepted`);
+      user.isNewNotification = true;
+      await user.save();
+    } else if (status.toLowerCase == "rejected") {
+      user.notifications.unshift(`Your application for ${applicant.projectTitle} is rejected`);
+      user.isNewNotification = true;
+      await user.save();
+    }
+
     return res.status(200).send({ msg: "Status updated successfully" });
   })
 );
 
-// 1. we will get list of applicants and mail of mentor -> Done
-// 2. create random id and password -> Done
-// 3. send the creds to mail -> Pending
-// 4. create a user with role admin and add applcants to the evaluator schema -> Done
 router.route("/forward").post(
   isLoggedIn,
   isAdmin,
   catchAsync(async (req, res) => {
-    // applicants = array of applicant id, mails = array of mails
     const { applicants, mails } = req.body;
     console.log(applicants, mails);
     const applicantIds = applicants.map((id) => mongoose.Types.ObjectId(id));
