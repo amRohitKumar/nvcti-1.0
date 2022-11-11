@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import { AdminDashboardNavbar } from "../../../components";
-import { useUserState } from "../../../hooks";
+import { AdminDashboardNavbar } from "../../components";
+import { useUserState } from "../../hooks";
 
 const SharedLayoutAdmin = () => {
   useUserState("LOGOUT", "/");

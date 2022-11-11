@@ -70,7 +70,7 @@ router.route("/submit").post(
       ideaOfProject: { origin, methodology, outcome },
       timeOfCompletion,
       mentor,
-      members
+      member: members
     });
     await newForm.save();
     const user = await User.findById(userId);

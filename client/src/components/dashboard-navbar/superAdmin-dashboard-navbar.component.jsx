@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { clearUser } from "../../features/user/userSlice";
 
 import styled from "@emotion/styled";
 import {
@@ -6,11 +7,11 @@ import {
   Avatar,
   Box,
   Toolbar,
-  Button,
 } from "@mui/material";
 import { UserCircle as UserCircleIcon } from "../../icons/user-circle";
 import { AccountPopover } from "../account-popover/account-popover.component";
 import NVCTILogo from "../logo/logo.component";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
@@ -20,10 +21,14 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
 
 export const SuperAdminDashboardNavbar = (props) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { onSidebarOpen, ...other } = props;
   const settingsRef = useRef(null);
   const [openAccountPopover, setOpenAccountPopover] = useState(false);
-
+  const handleSignOut = () => {
+    navigate("/");
+    dispatch(clearUser());
+  };
   return (
     <>
       <DashboardNavbarRoot
@@ -45,13 +50,6 @@ export const SuperAdminDashboardNavbar = (props) => {
           {/* NAVBAR LOGO */}
           <NVCTILogo />
           <Box sx={{ flexGrow: 1 }} />
-          <Button
-            variant="contained"
-            onClick={() => navigate("/superadmin")}
-            sx={{ mr: 2 }}
-          >
-            Dashboard
-          </Button>
           <Avatar
             onClick={() => setOpenAccountPopover(true)}
             ref={settingsRef}
@@ -72,6 +70,7 @@ export const SuperAdminDashboardNavbar = (props) => {
         anchorEl={settingsRef.current}
         open={openAccountPopover}
         onClose={() => setOpenAccountPopover(false)}
+        handleSignOut={handleSignOut}
       />
     </>
   );

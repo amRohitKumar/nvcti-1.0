@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Box, Typography, Container, Link, Grid } from "@mui/material";
 import iitism2 from "../../assets/ism_transparent_logo.png";
 import FacebookIcon from "@mui/icons-material/Facebook";

@@ -60,7 +60,7 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.user = user;
       addUserToLocalStorage(user);
-      toast.success(`Hello there ${user.name}`);
+      toast.success(`Hello there ${user.position===2?"Evaluator":(user.name)}`);
     },
     [verifyUser.rejected]: (state, { payload }) => {
       state.isLoading = false;
@@ -74,7 +74,7 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.user = user;
       addUserToLocalStorage(user);
-      toast.success(`Welcome back, ${user.name}`);
+      toast.success(`Hello there ${user.position===2?"Evaluator":(user.name)}`);
     },
     [loginUser.rejected]: (state, { payload }) => {
       state.isLoading = false;

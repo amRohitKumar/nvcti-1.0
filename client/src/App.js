@@ -1,41 +1,28 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
-import {
-  EventParticipants,
-  ProtectedRoutes,
-  Footer,
-  LogIn,
-} from "./components";
+import { ProtectedRoutes, Footer, LogIn } from "./components";
 import { CssBaseline } from "@mui/material";
 import { theme } from "./theme";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
-  AdminLogIn,
-  MentorLogIn,
-  SuperAdminLogIn,
   Register,
   Error,
-  EventDetails,
   ClientDashboard,
   AdminDashboard,
   MentorDashboard,
   SuperAdminDashboard,
-  StatusPage,
-  FormPage,
   HomePage,
   SharedLayoutAdmin,
   SharedLayoutClient,
-  CreateEvent,
   SharedLayoutMentor,
   SharedLayoutSuperAdmin,
   Contact,
   Navbar,
-  AdminViewForm,
-  MentorViewForm,
-  SuperAdminViewForm,
   VerifyEmail,
+  FormApplication,
 } from "./pages";
+import { ViewFormApplication } from "./components";
 
 function App() {
   return (
@@ -54,16 +41,20 @@ function App() {
               </>
             }
           />
-          
-          {/* LOGIN ROUTE */}
-          <Route exact path="/login" element={<LogIn />} />
-          {/* CLIENT LOGIN/REGISTER ROUTES */}
+
+          {/* CLIENT REGISTER ROUTES */}
           <Route exact path="/register" element={<Register />} />
+          {/* EMAIL VERIFY ROUTE */}
           <Route
             exact
             path="/auth/verify-email/:emailToken"
             element={<VerifyEmail />}
           />
+          {/* LOGIN ROUTE */}
+          <Route exact path="/login" element={<LogIn />} />
+          {/* VIEW APPLICATION ROUTE */}
+          <Route path="view/:formId" element={<ViewFormApplication />} />
+
           {/* CLIENT PROTECTED ROUTES */}
           <Route
             path="/client"
@@ -74,9 +65,7 @@ function App() {
             }
           >
             <Route index element={<ClientDashboard />} />
-            <Route path="status" element={<StatusPage />} />
-            <Route path="apply" element={<FormPage />} />
-            <Route path="event/:eventId" element={<EventDetails />}></Route>
+            <Route path="apply" element={<FormApplication />} />
           </Route>
 
           {/* ADMIN PROTECTED ROUTES */}
@@ -89,12 +78,6 @@ function App() {
             }
           >
             <Route index element={<AdminDashboard />} />
-            <Route path="create" element={<CreateEvent />} />
-            <Route path="event/:eventId" element={<EventParticipants />} />
-            <Route
-              path="event/:eventId/response/:userId"
-              element={<AdminViewForm />}
-            />
           </Route>
 
           {/* MENTOR PROTECTED ROUTES */}
@@ -107,7 +90,6 @@ function App() {
             }
           >
             <Route index element={<MentorDashboard />} />
-            <Route path="response/:candidateId" element={<MentorViewForm />} />
           </Route>
 
           {/* SUPER-ADMIN PROTEDTED ROUTES */}
@@ -120,10 +102,6 @@ function App() {
             }
           >
             <Route index element={<SuperAdminDashboard />} />
-            <Route
-              path="response/:candidateId"
-              element={<SuperAdminViewForm />}
-            />
           </Route>
 
           {/* ERROR ROUTE */}

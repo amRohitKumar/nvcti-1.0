@@ -64,7 +64,6 @@ export const AdminDashboardNavbar = (props) => {
               Dashboard
             </Button>
           )}
-          <Button variant="contained" onClick={() => navigate('create')}>Create New</Button>
           <Avatar
             onClick={() => setOpenAccountPopover(true)}
             ref={settingsRef}

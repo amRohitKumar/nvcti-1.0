@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import { ClientDashboardNavbar } from "../../../components";
-import { useUserState } from "../../../hooks";
+import { ClientDashboardNavbar } from "../../components";
+import { useUserState } from "../../hooks";
 
 const SharedLayoutClient = () => {
   useUserState("LOGOUT", "/");  

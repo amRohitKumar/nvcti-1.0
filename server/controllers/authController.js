@@ -186,3 +186,10 @@ module.exports.login = async (req, res) => {
     });
   }
 };
+
+module.exports.getUser = catchAsync(async (req, res) => {
+  const {userId} = req.body;
+  const resp = await User.findById(userId);
+  if(!resp) return res.status(400).send({msg: "User not found !"});
+  return res.status(200).send({user: resp});
+});

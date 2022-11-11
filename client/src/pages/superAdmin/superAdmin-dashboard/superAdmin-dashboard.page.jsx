@@ -1,5 +1,9 @@
 import PerfectScrollbar from "react-perfect-scrollbar";
-
+import { useSelector } from "react-redux";
+import customFetch from "../../../utils/axios";
+import authHeader from "../../../utils/userAuthHeaders";
+import {toast} from 'react-toastify';
+import { format } from "date-fns";
 import {
   Box,
   Button,
@@ -10,45 +14,52 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Alert
 } from "@mui/material";
+import { CircularLoader } from "../../../components";
 import { StatusPill } from "../../../components/status-pill/status-pill.component";
 
 import Wrapper from "./superAdmin-dashboard.style";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-const orders = [
-  {
-    name: "Ekaterina Tankova",
-    division: "cyber",
-    status: "pending",
-  },
-  {
-    name: "Cao Yu",
-    division: "cyber",
-    status: "accepted",
-  },
-  {
-    name: "Alexa Richardson",
-    division: "cyber",
-    status: "pending",
-  },
-  {
-    name: "Anje Keizer",
-    division: "cyber",
-    status: "rejected",
-  },
-  {
-    name: "Clarke Gillebert",
-    division: "cyber",
-    status: "accepted",
-  },
-  {
-    name: "Adam Denisov",
-    division: "cyber",
-    status: "rejected",
-  },
-];
 
 const SuperAdminDashboard = (props) => {
+  const navigate = useNavigate();
+  const {token} = useSelector(store => store.user.user);
+  const [isLoading, setIsLoading] = useState(false);
+  const [responses, setResponses] = useState([]);
+  useEffect(() => {
+    const fetchApplications = async () => {
+      try{
+        setIsLoading(true);
+        const resp = await customFetch.get(`/evaluator/applicants`, authHeader(token));
+        // console.log(resp.data);
+        setResponses(resp.data.applications);
+        setIsLoading(false);
+      } catch(err){
+        console.log(err);
+        toast.error("Somehint went wrong while fetching applicatins");
+      }
+    }
+    fetchApplications();
+    //eslint-disable-next-line
+  }, []);
+
+  if (isLoading) {
+    return <CircularLoader/>
+  }
+  if (responses && responses.length === 0) {
+    return (
+      <Alert
+        severity="info"
+        sx={{ width: { xs: "90%", md: "60%" }, mx: "auto" }}
+      >
+        There are no applications.
+      </Alert>
+    );
+  }
   return (
     <Wrapper>
       <Card
@@ -66,13 +77,13 @@ const SuperAdminDashboard = (props) => {
           }}
         >
           <CardHeader
-            title="XYZ event participants"
+            title="Applications - "
             titleTypographyProps={{ fontSize: "2em" }}
             sx={{ ml: 5 }}
           />
-          <Button variant="contained" sx={{ mr: "2em" }}>
+          {/* <Button variant="contained" sx={{ mr: "2em" }}>
             Post result
-          </Button>
+          </Button> */}
         </Box>
         <PerfectScrollbar>
           <Box sx={{ minWidth: 250, maxWidth: 1000, mx: "auto" }}>
@@ -80,37 +91,37 @@ const SuperAdminDashboard = (props) => {
               <TableHead>
                 <TableRow>
                   <TableCell>Serial No.</TableCell>
-                  {Object.keys(orders[0]).map((item, idx) => {
-                    return (
-                      <TableCell key={idx} className="tableHeading">
-                        {item}
-                      </TableCell>
-                    );
-                  })}
+                  <TableCell>Name</TableCell>
+                  <TableCell>Category</TableCell>
+                  <TableCell>Applied on</TableCell>
+                  <TableCell>Status</TableCell>
                   <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {orders.map((order, idx) => (
+                {responses.map((form, idx) => (
                   <TableRow hover key={idx}>
                     <TableCell>{idx + 1}</TableCell>
-                    <TableCell>{order.name}</TableCell>
+                    <TableCell>{form.name}</TableCell>
                     <TableCell sx={{ textTransform: "capitalize" }}>
-                      {order.division}
+                      {form.category}
+                    </TableCell>
+                    <TableCell>
+                      {format(new Date(form.updated_at), "dd-MM-yyyy")}
                     </TableCell>
                     <TableCell>
                       <StatusPill
                         color={
-                          (order.status === "accepted" && "success") ||
-                          (order.status === "rejected" && "error") ||
+                          (form.status === "accepted" && "success") ||
+                          (form.status === "rejected" && "error") ||
                           "warning"
                         }
                       >
-                        {order.status}
+                        {form.status}
                       </StatusPill>
                     </TableCell>
                     <TableCell align="center">
-                      <Button variant="contained" size="small">
+                      <Button variant="contained" size="small" onClick={() => navigate(`/view/${form._id}`)}>
                         View application
                       </Button>
                     </TableCell>

@@ -14,7 +14,7 @@ const ProtectedRoutes = ({ children, userRole }) => {
   const dispatch = useDispatch();
   let isAuthorized = false;
   const role = useSelector((store) => store?.user?.user?.position);
-  if(role && role === roleObj[userRole]) isAuthorized = true; 
+  if(role !== undefined && role === roleObj[userRole]) isAuthorized = true; 
   // isAuthorized = true;
   if (!isAuthorized) {
     dispatch(logoutUser());

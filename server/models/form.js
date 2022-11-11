@@ -6,7 +6,12 @@ const formSchema = new Schema(
   {
     category: {
       type: String,
-      enum: ['Commercial', 'R&D Institute', 'Research Student (Internal/External)', 'Internal UG/PG students'],
+      enum: [
+        "Commercial",
+        "R&D Institute",
+        "Research Student (Internal/External)",
+        "Internal UG/PG students",
+      ],
       required: true,
     },
     unit: {
@@ -18,8 +23,8 @@ const formSchema = new Schema(
       required: true,
     },
     userId: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
+      type: Schema.Types.ObjectId,
+      ref: "User",
     },
     imgUrl: {
       type: String,
@@ -107,15 +112,13 @@ const formSchema = new Schema(
           type: String,
           required: true,
         },
-        contact: {
-          email: {
-            type: String,
-            required: true,
-          },
-          mobile: {
-            type: Number,
-            required: true,
-          },
+        email: {
+          type: String,
+          required: true,
+        },
+        mobile: {
+          type: Number,
+          required: true,
         },
         gender: {
           type: String,

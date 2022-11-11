@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import customFetch from "../../../utils/axios";
 import authHeader from "../../../utils/userAuthHeaders";
-import { PreviousStatusTable, CircularLoader } from "../../../components";
+import { PreviousApplications, CircularLoader } from "../../../components";
 import { useTitle } from "../../../hooks";
 
 import Alert from "@mui/material/Alert";
@@ -40,7 +40,7 @@ const ClientDashboard = () => {
 
   return (
     <>
-      <PreviousStatusTable enrolledevents={events} />
+      <PreviousApplications enrolledevents={events} />
     </>
   );
 };

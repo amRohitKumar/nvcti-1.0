@@ -11,8 +11,9 @@ const useUserState = (state) => {
       if (user.position === 0) url = "/client";
       else if (user.position === 1) url = "/admin";
       else if (user.position === 2) url = "/mentor";
-      else if (user.position === 3) url = "/superadminlogin";
+      else if (user.position === 3) url = "/superadmin";
       else url = "/client";
+      console.log(url);
       navigate(url);
     } else if (state === "LOGOUT" && !user) navigate('/');
   }, [user]);

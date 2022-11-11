@@ -14,7 +14,7 @@ import {
 import { StatusPill } from "../status-pill/status-pill.component";
 import Wrapper from "./previous-state-table.style";
 
-const PreviousStatusTable = ({ enrolledevents, ...otherProps }) => {
+const PreviousApplications = ({ enrolledevents, ...otherProps }) => {
   console.log(enrolledevents);
   return (
     <Wrapper>
@@ -72,4 +72,4 @@ const PreviousStatusTable = ({ enrolledevents, ...otherProps }) => {
   );
 };
 
-export default PreviousStatusTable;
+export default PreviousApplications;

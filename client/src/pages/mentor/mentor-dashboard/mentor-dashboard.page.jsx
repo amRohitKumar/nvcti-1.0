@@ -1,128 +1,51 @@
-import PerfectScrollbar from "react-perfect-scrollbar";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import customFetch from "../../../utils/axios";
+import authHeader from "../../../utils/userAuthHeaders";
+import { toast } from "react-toastify";
 
-import {
-  Box,
-  Button,
-  Card,
-  CardHeader,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from "@mui/material";
-import { StatusPill } from "../../../components/status-pill/status-pill.component";
-
-import Wrapper from "./mentor-dashboard.style";
-
-const orders = [
-  {
-    name: "Ekaterina Tankova",
-    division: "cyber",
-    status: "pending",
-  },
-  {
-    name: "Cao Yu",
-    division: "cyber",
-    status: "accepted",
-  },
-  {
-    name: "Alexa Richardson",
-    division: "cyber",
-    status: "pending",
-  },
-  {
-    name: "Anje Keizer",
-    division: "cyber",
-    status: "rejected",
-  },
-  {
-    name: "Clarke Gillebert",
-    division: "cyber",
-    status: "accepted",
-  },
-  {
-    name: "Adam Denisov",
-    division: "cyber",
-    status: "rejected",
-  },
-];
+import { CircularLoader, ApplicationsList } from "../../../components";
+import { Alert } from "@mui/material";
 
 const MentorDashboard = (props) => {
-  return (
-    <Wrapper>
-      <Card
-        {...props}
-        sx={{
-          my: 2,
-          mx: 2,
-        }}
+  const { token } = useSelector((store) => store.user.user);
+  const [isLoading, setIsLoading] = useState(false);
+  const [responses, setResponses] = useState([]);
+  useEffect(() => {
+    const fetchApplications = async () => {
+      try {
+        setIsLoading(true);
+        const resp = await customFetch.get(
+          `/evaluator/applicants`,
+          authHeader(token)
+        );
+        console.log("mentor dashboard = ", resp.data);
+        setResponses(resp.data.applications);
+        setIsLoading(false);
+      } catch (err) {
+        console.log(err);
+        toast.error("Somehint went wrong while fetching applicatins");
+      }
+    };
+    fetchApplications();
+    //eslint-disable-next-line
+  }, []);
+  if (isLoading) {
+    return <CircularLoader />;
+  }
+
+  if (responses && responses.length === 0) {
+    return (
+      <Alert
+        severity="info"
+        sx={{ width: { xs: "90%", md: "60%" }, mx: "auto" }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <CardHeader
-            title="Cyber division participants"
-            titleTypographyProps={{ fontSize: "2em" }}
-            sx={{ ml: 5 }}
-          />
-          <Button variant="contained" sx={{ mr: "2em" }}>
-            Forward to Super Admin
-          </Button>
-        </Box>
-        <PerfectScrollbar>
-          <Box sx={{ minWidth: 250, maxWidth: 1000, mx: "auto" }}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Serial No.</TableCell>
-                  {Object.keys(orders[0]).map((item, idx) => {
-                    return (
-                      <TableCell key={idx} className="tableHeading">
-                        {item}
-                      </TableCell>
-                    );
-                  })}
-                  <TableCell></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {orders.map((order, idx) => (
-                  <TableRow hover key={idx}>
-                    <TableCell>{idx + 1}</TableCell>
-                    <TableCell>{order.name}</TableCell>
-                    <TableCell sx={{ textTransform: "capitalize" }}>
-                      {order.division}
-                    </TableCell>
-                    <TableCell>
-                      <StatusPill
-                        color={
-                          (order.status === "accepted" && "success") ||
-                          (order.status === "rejected" && "error") ||
-                          "warning"
-                        }
-                      >
-                        {order.status}
-                      </StatusPill>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Button variant="contained" size="small">
-                        View application
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Box>
-        </PerfectScrollbar>
-      </Card>
-    </Wrapper>
-  );
+        There are no responses.
+      </Alert>
+    );
+  }
+
+  return <ApplicationsList events={responses} role="MENTOR" />;
 };
 
 export default MentorDashboard;

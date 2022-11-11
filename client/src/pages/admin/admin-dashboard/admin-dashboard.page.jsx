@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import {toast} from "react-toastify";
-import { CircularLoader, EventParticipants } from "../../../components";
-import { CircularProgress, Alert, Box } from "@mui/material";
+import { CircularLoader, ApplicationsList } from "../../../components";
+import {Alert } from "@mui/material";
 import Wrapper from "./admin-dashboard.style";
 import { useState } from "react";
 import customFetch from "../../../utils/axios";
@@ -18,11 +18,11 @@ const AdminDashboard = () => {
       try{
         setIsLoading(true);
         const resp = await customFetch.get(`/evaluator/applicants`, authHeader(token));
-        console.log(resp.data);
         setResponses(resp.data.applications);
         setIsLoading(false);
       } catch(err){
         console.log(err);
+        setIsLoading(false);
         toast.error("Somehint went wrong while fetching applicatins");
       }
     }
@@ -45,7 +45,7 @@ const AdminDashboard = () => {
   }
   return (
     <Wrapper>
-      <EventParticipants events={responses} />
+      <ApplicationsList events={responses} role="ADMIN" />
     </Wrapper>
   );
 };

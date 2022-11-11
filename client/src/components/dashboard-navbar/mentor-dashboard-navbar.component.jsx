@@ -1,13 +1,8 @@
 import { useRef, useState } from "react";
-
+import { useDispatch } from "react-redux";
+import { clearUser } from "../../features/user/userSlice";
 import styled from "@emotion/styled";
-import {
-  AppBar,
-  Avatar,
-  Box,
-  Toolbar,
-  Button,
-} from "@mui/material";
+import { AppBar, Avatar, Box, Toolbar, Button } from "@mui/material";
 import { UserCircle as UserCircleIcon } from "../../icons/user-circle";
 import { AccountPopover } from "../account-popover/account-popover.component";
 import NVCTILogo from "../logo/logo.component";
@@ -20,10 +15,14 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
 
 export const MentorDashboardNavbar = (props) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { onSidebarOpen, ...other } = props;
   const settingsRef = useRef(null);
   const [openAccountPopover, setOpenAccountPopover] = useState(false);
-
+  const handleSignOut = () => {
+    navigate("/");
+    dispatch(clearUser());
+  };
   return (
     <>
       <DashboardNavbarRoot
@@ -72,6 +71,7 @@ export const MentorDashboardNavbar = (props) => {
         anchorEl={settingsRef.current}
         open={openAccountPopover}
         onClose={() => setOpenAccountPopover(false)}
+        handleSignOut={handleSignOut}
       />
     </>
   );

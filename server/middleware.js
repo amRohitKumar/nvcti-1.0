@@ -39,7 +39,7 @@ module.exports.isAdmin = async (req, res, next) => {
 
 module.exports.isAuthor = async (req, res, next) => {
   console.log("author middleware");
-  if (req.user._id.toString() === req.params.userId || req.user.position === 1) {
+  if (req.user.position > 0 || req.user._id.toString() === req.params.userId) {
     next();
   } else {
     return res.status(404).send({ msg: "User not authorized !" });

@@ -15,5 +15,6 @@ router.route("/registermentor").post(authController.registerMentor);
 router.route("/verify-email/:emailToken").get(authController.verifyEmail); // verify and add user to DB
 
 router.route("/login").post(authController.login);
+router.route("/getuser").get(authController.getUser);
 
 module.exports = router;
