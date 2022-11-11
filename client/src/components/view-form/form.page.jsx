@@ -1,7 +1,7 @@
 import { useState } from "react";
 import customFetch from "../../utils/axios";
 import authHeader from "../../utils/userAuthHeaders";
-import {useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Wrapper from "./form.style";
 
@@ -58,7 +58,7 @@ const ViewFormApplication = () => {
         setIsLoading(false);
       } catch (err) {
         console.log(err);
-        setIsLoading(false)
+        setIsLoading(false);
         toast.error(err.message);
       }
     };
@@ -67,18 +67,18 @@ const ViewFormApplication = () => {
   }, []);
   const handleComment = async () => {
     setIsLoading(true);
-    await customFetch.post("", { comment });
+    await customFetch.post("/evaluator/addcomment", { formId, comment });
     setComment("");
     setIsLoading(false);
   };
   const handleStatus = async (status) => {
-    try{
+    try {
       setIsLoading(true);
-      await customFetch.post("", {status}, authHeader(token));
+      await customFetch.post("/evaluator/update", { applicantId: formId, status }, authHeader(token));
       setIsLoading(false);
       toast.success("Status updeted successfully !");
-      navigate('superadmin');
-    } catch(error) {
+      navigate("superadmin");
+    } catch (error) {
       console.log(error);
       setIsLoading(false);
       toast.error("Something went wrong !");
@@ -459,7 +459,7 @@ const ViewFormApplication = () => {
             Mentors' Comments -
           </Typography>
           <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-            {commentArray.map((u, idx) => (
+            {event.comments.map((u, idx) => (
               <Paper
                 key={idx}
                 sx={{
@@ -476,14 +476,26 @@ const ViewFormApplication = () => {
           </Box>
         </Paper>
       )}
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <Button variant="contained" sx={{ m: 1 }} color="error" onClick={() => handleStatus(0)}>
-          Reject
-        </Button>
-        <Button variant="contained" sx={{ m: 1 }} color="success" onClick={() => handleStatus(1)}>
-          Accept
-        </Button>
-      </Box>
+      {position === 3 && (
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <Button
+            variant="contained"
+            sx={{ m: 1 }}
+            color="error"
+            onClick={() => handleStatus(0)}
+          >
+            Reject
+          </Button>
+          <Button
+            variant="contained"
+            sx={{ m: 1 }}
+            color="success"
+            onClick={() => handleStatus(1)}
+          >
+            Accept
+          </Button>
+        </Box>
+      )}
     </Wrapper>
   );
 };
