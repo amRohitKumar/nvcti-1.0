@@ -39,7 +39,7 @@ router.route("/update").post(
   isLoggedIn,
   isAdmin,
   catchAsync(async (req, res) => {
-    const applicant = Form.findById(req.body.applicantId);
+    const applicant = await Form.findById(req.body.applicantId);
     applicant.status = req.body.status;
     await applicant.save();
     return res.status(200).send({ msg: "Status updated successfully" });

@@ -67,17 +67,26 @@ const ViewFormApplication = () => {
   }, []);
   const handleComment = async () => {
     setIsLoading(true);
-    await customFetch.post("/evaluator/addcomment", { formId, comment });
+    await customFetch.post(
+      "/evaluator/addcomment",
+      { formId, comment },
+      authHeader(token)
+    );
     setComment("");
     setIsLoading(false);
+    toast.success("Comment added successfully !");
   };
   const handleStatus = async (status) => {
     try {
       setIsLoading(true);
-      await customFetch.post("/evaluator/update", { applicantId: formId, status }, authHeader(token));
+      await customFetch.post(
+        "/evaluator/update",
+        { applicantId: formId, status },
+        authHeader(token)
+      );
       setIsLoading(false);
       toast.success("Status updeted successfully !");
-      navigate("superadmin");
+      navigate("/superadmin");
     } catch (error) {
       console.log(error);
       setIsLoading(false);
@@ -454,7 +463,7 @@ const ViewFormApplication = () => {
         </Paper>
       )}
       {position === 3 && (
-        <Paper sx={{ m: 2, p: 3 }}>
+        <Paper sx={{ m: 2, p: 3, }}>
           <Typography variant="h5" gutterBottom align="left">
             Mentors' Comments -
           </Typography>
@@ -467,8 +476,9 @@ const ViewFormApplication = () => {
                   m: 2,
                   p: 2,
                   height: "max-content",
+                  boxShadow: "var(--shadow-2)",
+                  backgroundColor: '#f9f1e66c'
                 }}
-                elevation={20}
               >
                 {u}
               </Paper>
@@ -482,7 +492,7 @@ const ViewFormApplication = () => {
             variant="contained"
             sx={{ m: 1 }}
             color="error"
-            onClick={() => handleStatus(0)}
+            onClick={() => handleStatus("REJECTED")}
           >
             Reject
           </Button>
@@ -490,7 +500,7 @@ const ViewFormApplication = () => {
             variant="contained"
             sx={{ m: 1 }}
             color="success"
-            onClick={() => handleStatus(1)}
+            onClick={() => handleStatus("ACCEPTED")}
           >
             Accept
           </Button>

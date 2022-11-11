@@ -12,8 +12,12 @@ import IconButton from "@mui/material/IconButton";
 import SchoolIcon from "@mui/icons-material/School";
 import MessageIcon from '@mui/icons-material/Message';
 import SendIcon from '@mui/icons-material/Send';
+import AcceptedIcon from "./accepted";
+import RejectedIcon from "./rejected";
 
 export {
+    AcceptedIcon,
+    RejectedIcon,
     PersonIcon,
     EmailIcon,
     NoEncryptionIcon,

@@ -53,8 +53,8 @@ const PreviousApplications = ({ enrolledevents, ...otherProps }) => {
                     <TableCell>
                       <StatusPill
                         color={
-                          (event.status === "accepted" && "success") ||
-                          (event.status === "rejected" && "error") ||
+                          (event.status.toLowerCase() === "accepted" && "success") ||
+                          (event.status.toLowerCase() === "rejected" && "error") ||
                           "warning"
                         }
                       >

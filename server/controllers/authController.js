@@ -105,6 +105,8 @@ module.exports.verifyEmail = async (req, res) => {
           dob: alreadyUser.dob,
           enrolledEvents: alreadyUser.enrolledEvents,
           position: alreadyUser.position,
+          notifications: alreadyUser.notifications,
+          isNewNotification: alreadyUser.isNewNotification,
           token,
         },
       });
@@ -137,6 +139,8 @@ module.exports.verifyEmail = async (req, res) => {
         dob: newUser.dob,
         enrolledEvents: newUser.enrolledEvents,
         position: newUser.position,
+        notifications: [],
+        isNewNotification: false,
         token,
       },
     });
@@ -175,10 +179,13 @@ module.exports.login = async (req, res) => {
         dob: userInDb.dob,
         enrolledEvents: userInDb.enrolledEvents,
         position: userInDb.position,
+        notifications: userInDb.notifications,
+        isNewNotification: userInDb.isNewNotification,
         token,
       },
     });
   } catch (error) {
+    console.log(error);
     res.status(401).send({
       status: "Fail",
       msg: "Something wrong happened from our side plz mail us",

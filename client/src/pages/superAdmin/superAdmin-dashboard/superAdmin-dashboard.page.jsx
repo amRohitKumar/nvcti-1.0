@@ -112,8 +112,8 @@ const SuperAdminDashboard = (props) => {
                     <TableCell>
                       <StatusPill
                         color={
-                          (form.status === "accepted" && "success") ||
-                          (form.status === "rejected" && "error") ||
+                          (form.status.toLowerCase() === "accepted" && "success") ||
+                          (form.status.toLowerCase() === "rejected" && "error") ||
                           "warning"
                         }
                       >

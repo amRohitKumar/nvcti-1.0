@@ -205,8 +205,8 @@ const ApplicationsList = ({ events, role, ...props }) => {
                     <TableCell>
                       <StatusPill
                         color={
-                          (res.status === "accepted" && "success") ||
-                          (res.status === "rejected" && "error") ||
+                          (res.status.toLowerCase() === "accepted" && "success") ||
+                          (res.status.toLowerCase() === "rejected" && "error") ||
                           "warning"
                         }
                       >
