@@ -27,14 +27,14 @@ const ListItemWrapper = styled('div')(({ theme }) => ({
 const StatusIcon = ({msg}) => {
     const status = msg.split(' ').at(-1);
     if(status.toLowerCase() === "accepted") return <AcceptedIcon />
-    else <RejectedIcon />
+    return <RejectedIcon />
 };
 
 // ==============================|| NOTIFICATION LIST ITEM ||============================== //
 
 const NotificationList = () => {
     const theme = useTheme();
-    const {notification} = useSelector(store => store.user.user);
+    const {notifications} = useSelector(store => store.user.user);
     return (
         <List
             sx={{
@@ -56,7 +56,7 @@ const NotificationList = () => {
                 }
             }}
         >
-            {notification.map((message, idx) => (
+            {notifications.map((message, idx) => (
                 <>
                     <ListItemWrapper key={idx}>
                         <ListItem alignItems="center">

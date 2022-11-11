@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const User = require("./models/user");
 
 module.exports.isLoggedIn = async (req, res, next) => {
-  console.log("isloggedIn middleware");
+  // console.log("isloggedIn middleware");
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
   if (!authHeader.startsWith("Bearer") || !token) {
@@ -23,14 +23,14 @@ module.exports.isLoggedIn = async (req, res, next) => {
 };
 
 module.exports.isAdmin = async (req, res, next) => {
-  console.log("isadmin middlware");
+  // console.log("isadmin middlware");
   console.log(req.user.position);
   if (
     req.user.position === 1 ||
     req.user.position === 2 ||
     req.user.position === 3
   ) {
-    console.log("inside if ");
+    // console.log("inside if ");
     next();
   } else {
     return res.status(404).send({ msg: "User not authorized !" });
@@ -38,7 +38,7 @@ module.exports.isAdmin = async (req, res, next) => {
 };
 
 module.exports.isAuthor = async (req, res, next) => {
-  console.log("author middleware");
+  // console.log("author middleware");
   if (req.user.position > 0 || req.user._id.toString() === req.params.userId) {
     next();
   } else {

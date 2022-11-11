@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-
+import { clearNotificationCount } from "../../features/user/userSlice";
+import { useDispatch } from "react-redux";
 // material-ui
 import { useTheme } from "@mui/material/styles";
 import {
@@ -10,6 +11,7 @@ import {
   Grid,
   Paper,
   Popper,
+  Badge,
   useMediaQuery,
 } from "@mui/material";
 
@@ -19,12 +21,15 @@ import NotificationList from "./notification-list.component";
 
 // assets
 import { Bell as IconBell } from "../../icons/bell";
+import { useSelector } from "react-redux";
 
 // ==============================|| NOTIFICATION ||============================== //
 
 const NotificationSection = () => {
   const theme = useTheme();
+  const dispatch = useDispatch();
   const matchesXs = useMediaQuery(theme.breakpoints.down("md"));
+  const { isNewNotification } = useSelector((state) => state.user.user);
 
   const [open, setOpen] = useState(false);
   /**
@@ -33,6 +38,8 @@ const NotificationSection = () => {
   const anchorRef = useRef(null);
 
   const handleToggle = () => {
+    console.log('rrr');
+    dispatch(clearNotificationCount());
     setOpen((prevOpen) => !prevOpen);
   };
 
@@ -62,7 +69,15 @@ const NotificationSection = () => {
           },
         }}
       >
-        <ButtonBase sx={{ borderRadius: "12px" }}>
+        <ButtonBase sx={{ borderRadius: "12px", position: "relative" }}>
+          {isNewNotification && (
+            <Badge
+              badgeContent={1}
+              color="primary"
+              sx={{ position: "absolute", top: "4px", right: "2px" }}
+            />
+          )}
+
           <Avatar
             variant="rounded"
             sx={{
@@ -113,7 +128,11 @@ const NotificationSection = () => {
             <Paper elevation={24}>
               <ClickAwayListener onClickAway={handleClose}>
                 <Grid container direction="column" spacing={2}>
-                  <Grid item xs={12} sx={{maxHeight: '500px', overflowY: 'scroll'}}>
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{ maxHeight: "500px", overflowY: "scroll" }}
+                  >
                     <NotificationList />
                   </Grid>
                 </Grid>

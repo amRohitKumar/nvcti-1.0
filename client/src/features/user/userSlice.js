@@ -37,6 +37,9 @@ const userSlice = createSlice({
       removeUserFromLocalStorage();
       toast.success("Logout Successfully");
     },
+    clearNotificationCount: (state) => {
+      state.user.isNewNotification = false;
+    },
   },
   extraReducers: {
     [registerUser.pending]: (state) => {
@@ -60,7 +63,9 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.user = user;
       addUserToLocalStorage(user);
-      toast.success(`Hello there ${user.position===2?"Evaluator":(user.name)}`);
+      toast.success(
+        `Hello there ${user.position === 2 ? "Evaluator" : user.name}`
+      );
     },
     [verifyUser.rejected]: (state, { payload }) => {
       state.isLoading = false;
@@ -74,7 +79,9 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.user = user;
       addUserToLocalStorage(user);
-      toast.success(`Hello there ${user.position===2?"Evaluator":(user.name)}`);
+      toast.success(
+        `Hello there ${user.position === 2 ? "Evaluator" : user.name}`
+      );
     },
     [loginUser.rejected]: (state, { payload }) => {
       state.isLoading = false;
@@ -102,5 +109,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { logoutUser } = userSlice.actions;
+export const { logoutUser, clearNotificationCount } = userSlice.actions;
 export default userSlice.reducer;

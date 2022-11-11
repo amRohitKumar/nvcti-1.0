@@ -168,7 +168,11 @@ module.exports.login = async (req, res) => {
     const token = jwt.sign({ userId: userInDb._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_LIFETIME,
     });
-
+    const prevNotificationState = userInDb.isNewNotification;
+    if(prevNotificationState){
+      userInDb.isNewNotification = false;
+      await userInDb.save();
+    }
     res.status(200).send({
       status: "success",
       user: {
@@ -180,7 +184,7 @@ module.exports.login = async (req, res) => {
         enrolledEvents: userInDb.enrolledEvents,
         position: userInDb.position,
         notifications: userInDb.notifications,
-        isNewNotification: userInDb.isNewNotification,
+        isNewNotification: prevNotificationState,
         token,
       },
     });

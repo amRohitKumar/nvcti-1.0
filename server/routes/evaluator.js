@@ -41,24 +41,21 @@ router.route("/update").post(
   catchAsync(async (req, res) => {
     const applicant = await Form.findById(req.body.applicantId);
     const status =  req.body.status;
-    const user = req.user;
+    const user = await User.findById(applicant.userId);
     applicant.status = status;
     await applicant.save();
 
-    if (user.notification.length == 10) {
+    if (user.notifications.length == 10) {
       user.notifications.pop();
     }
   
-    if (status.toLowerCase == "accepted") {
+    if (status.toLowerCase() == "accepted") {
       user.notifications.unshift(`Your application for ${applicant.projectTitle} is accepted`);
-      user.isNewNotification = true;
-      await user.save();
-    } else if (status.toLowerCase == "rejected") {
+    } else if (status.toLowerCase() == "rejected") {
       user.notifications.unshift(`Your application for ${applicant.projectTitle} is rejected`);
-      user.isNewNotification = true;
-      await user.save();
     }
-
+    user.isNewNotification = true;
+    await user.save();
     return res.status(200).send({ msg: "Status updated successfully" });
   })
 );
