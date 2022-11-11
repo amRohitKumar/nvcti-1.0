@@ -130,6 +130,9 @@ const formSchema = new Schema(
       type: String,
       default: "Pending",
     },
+    comments: [{
+      type: String 
+    }]
   },
   {
     timestamps: {
