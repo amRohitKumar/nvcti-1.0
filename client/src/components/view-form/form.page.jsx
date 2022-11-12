@@ -28,13 +28,6 @@ import { useSelector } from "react-redux";
 import { CircularLoader } from "..";
 import { useEffect } from "react";
 
-const commentArray = [
-  "loremldfldldflf lffd lfk fkdkl fdklf kjfdkfj kdfjdk fjdklfjj dklfjdk jdkfjdkl jdklf jdkf jdklfjj kljfkld jfdklfjd kjd kldjfkldjfj kljf kd kdj kk",
-  "loremldfldldflf lffd lfk fkdkl fdklf kjfdkfj kdfjdk fjdklfjj dklfjdk jdkfjdkl jdklf jdkf jdklfjj kljfkld jfdklfjd kjd kldjfkldjfj loremldfldldflf lffd lfk fkdkl fdklf kjfdkfj kdfjdk fjdklfjj dklfjdk jdkfjdkl jdklf jdkf jdklfjj kljfkld jfdklfjd kjd kldjfkldjfj kljf kd kdj kk loremldfldldflf lffd lfk fkdkl fdklf kjfdkfj kdfjdk fjdklfjj dklfjdk jdkfjdkl jdklf jdkf jdklfjj kljfkld jfdklfjd kjd kldjfkldjfj kljf kd kdj kk kljf kd kdj kk",
-  "loremldfldldflf lffd lfk fkdkl fdklf kjfdkfj kdfjdk fjdklfjj dklfjdk jdkfjdkl jdklf jdkf jdklfjj kljfkld jfdklfjd kjd kldjfkldjfj kljf kd kdj kk",
-  "loremldfldldflf lffd lfk fkdkl fdklf kjfdkfj kdfjdk fjdklfjj dklfjdk jdkfjdkl jdklf jdkf jdklfjj kljfkld jfdklfjd kjd kldjfkldjfj kljf kd kdj kk",
-  "loremldfldldflf lffd lfk fkdkl fdklf kjfdkfj kdfjdk fjdklfjj dklfjdk jdkfjdkl jdklf jdkf jdklfjj kljfkld jfdklfjd kjd kldjfkldjfj kljf kd kdj kk",
-];
 const ViewFormApplication = () => {
   // getting the document
   const { formId } = useParams();
@@ -440,7 +433,7 @@ const ViewFormApplication = () => {
         />
         {!!event.member.length &&
           [...Array(event.member.length)].map((_, idx) => (
-            <MemberDetail key={idx} member={event.members[idx]} />
+            <MemberDetail key={idx} member={event.member[idx]} />
           ))}
       </Paper>
       {position === 2 && (

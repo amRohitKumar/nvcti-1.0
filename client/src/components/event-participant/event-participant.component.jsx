@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { format } from "date-fns";
 import { useSelector } from "react-redux";
-import PerfectScrollbar from "react-perfect-scrollbar";
 import { toast } from "react-toastify";
 
 import {
@@ -180,7 +179,6 @@ const ApplicationsList = ({ events, role, ...props }) => {
             </Button>
           )}
         </Box>
-        <PerfectScrollbar>
           <Box sx={{ minWidth: 250, maxWidth: 1000, mx: "auto" }}>
             <Table>
               <TableHead>
@@ -190,7 +188,7 @@ const ApplicationsList = ({ events, role, ...props }) => {
                   <TableCell>Applied on</TableCell>
                   <TableCell>Status</TableCell>
                   <TableCell align="center">Application</TableCell>
-                  <TableCell align="center">Select</TableCell>{" "}
+                  <TableCell align="center">Select</TableCell>
                   {/* FOR CHECKBOX */}
                 </TableRow>
               </TableHead>
@@ -233,7 +231,6 @@ const ApplicationsList = ({ events, role, ...props }) => {
               </TableBody>
             </Table>
           </Box>
-        </PerfectScrollbar>
       </Card>
     </Wrapper>
   );

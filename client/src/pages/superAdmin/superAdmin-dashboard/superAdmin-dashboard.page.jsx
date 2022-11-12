@@ -1,4 +1,3 @@
-import PerfectScrollbar from "react-perfect-scrollbar";
 import { useSelector } from "react-redux";
 import customFetch from "../../../utils/axios";
 import authHeader from "../../../utils/userAuthHeaders";
@@ -85,7 +84,6 @@ const SuperAdminDashboard = (props) => {
             Post result
           </Button> */}
         </Box>
-        <PerfectScrollbar>
           <Box sx={{ minWidth: 250, maxWidth: 1000, mx: "auto" }}>
             <Table>
               <TableHead>
@@ -130,7 +128,6 @@ const SuperAdminDashboard = (props) => {
               </TableBody>
             </Table>
           </Box>
-        </PerfectScrollbar>
       </Card>
     </Wrapper>
   );
