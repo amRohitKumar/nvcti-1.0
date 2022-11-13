@@ -7,10 +7,9 @@ const { isLoggedIn, isAuthor } = require("../middleware");
 const catchAsync = require("../utilities/catchAsync");
 
 router.route("/getform/:formId").get(
-  isLoggedIn,
-  isAuthor,
+  // isLoggedIn,
+  // isAuthor,
   catchAsync(async (req, res) => {
-    console.log("here");
     const formId = req.params.formId;
     const resp = await Form.findById(formId);
     res.status(200).send(resp);
@@ -30,7 +29,7 @@ router.route("/getforms/:userId").get(
 router.route("/submit").post(
   isLoggedIn,
   catchAsync(async (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     const {
       category,
       unit,

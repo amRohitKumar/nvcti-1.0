@@ -151,6 +151,7 @@ module.exports.verifyEmail = async (req, res) => {
 
 module.exports.login = async (req, res) => {
   try {
+    console.log("loging starts ...");
     const user = req.body;
     var userInDb = await User.findOne({ email: user.email });
     if (!userInDb)

@@ -21,6 +21,7 @@ const homeRoutes = require("./routes/home");
 const authRoutes = require("./routes/auth");
 const formRoutes = require("./routes/form");
 const evaluatorRoutes = require("./routes/evaluator");
+const pdfRoutes = require('./routes/pdf');
 
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
@@ -48,9 +49,16 @@ app.use(
   })
 );
 
+app.use('*', (req, res, next) => {
+  console.log(req.baseUrl);
+  console.log(req.get('host'));
+  next();
+});
+
 app.use('/', homeRoutes);
 app.use("/auth", authRoutes);
 app.use("/form", formRoutes);
+app.use('/', pdfRoutes);
 app.use("/evaluator", evaluatorRoutes);
 
 app.get("/", (req, res) => {
