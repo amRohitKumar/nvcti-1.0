@@ -13,7 +13,6 @@ const printPDF = async (url, tokenObj) => {
     const page = await browser.newPage();
 
     // go to page
-    console.log(tokenObj, url);
     await page.evaluateOnNewDocument((tokenObj) => {
       localStorage.clear();
       localStorage.setItem("user", tokenObj);
@@ -43,6 +42,7 @@ router.route("/printapplication").post(
     const resp = await printPDF(url, tokenObj);
     res.set({
       "Content-Type": "application/pdf",
+      "Content-Length": resp.length,
     });
     res.status(201).send(Buffer.from(resp, "binary"));
     // res.send( );

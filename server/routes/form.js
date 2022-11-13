@@ -7,8 +7,8 @@ const { isLoggedIn, isAuthor } = require("../middleware");
 const catchAsync = require("../utilities/catchAsync");
 
 router.route("/getform/:formId").get(
-  // isLoggedIn,
-  // isAuthor,
+  isLoggedIn,
+  isAuthor,
   catchAsync(async (req, res) => {
     const formId = req.params.formId;
     const resp = await Form.findById(formId);
