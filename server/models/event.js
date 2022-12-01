@@ -30,7 +30,12 @@ const eventSchema = new Schema({
     questions:{
         type: String,
         required: true
-    }
+    },
+    applicants: [{
+        // userid, response
+        userId: Schema.Types.ObjectId,
+        response: String
+    }]
 })
 
 module.exports = mongoose.model('Event', eventSchema);
