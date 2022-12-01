@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
-import { ProtectedRoutes, Footer, LogIn } from "./components";
+import { ProtectedRoutes, Footer, LogIn, EventPage} from "./components";
 import { CssBaseline } from "@mui/material";
 import { theme } from "./theme";
 import { ToastContainer } from "react-toastify";
@@ -10,17 +10,14 @@ import {
   Error,
   ClientDashboard,
   AdminDashboard,
-  MentorDashboard,
-  SuperAdminDashboard,
   HomePage,
   SharedLayoutAdmin,
   SharedLayoutClient,
-  SharedLayoutMentor,
-  SharedLayoutSuperAdmin,
   Contact,
   Navbar,
   VerifyEmail,
   FormApplication,
+  EventForm,
 } from "./pages";
 import { ViewFormApplication } from "./components";
 
@@ -66,8 +63,8 @@ function App() {
           >
             <Route index element={<ClientDashboard />} />
             <Route path="status" element={<FormApplication />} />
-            <Route path="event/:eventId" element={<FormApplication />} />
-            <Route path="apply/:eventId" element={<FormApplication />} />
+            <Route path="event/:eventId" element={<EventPage />} />
+            <Route path="apply/:eventId" element={<EventForm />} />
           </Route>
 
           {/* ADMIN PROTECTED ROUTES */}

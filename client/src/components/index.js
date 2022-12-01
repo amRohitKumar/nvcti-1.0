@@ -10,6 +10,7 @@ import CircularLoader from "./loader/circular-loader.component";
 import PreviousApplications from "./previous-status-table/previous-state-table.component";
 import OngoingEventsTable from "./ongoing-events-table/ongoing-events-table.component";
 import ViewFormApplication from "./view-form/form.page";
+import EventPage from './event-detail/event-detail.page';
 
 // ADMIN
 import AdminDashboardNavbar from "./dashboard-navbar/admin-dashboard-navbar.component";
@@ -23,6 +24,7 @@ import SuperAdminDashboardNavbar from "./dashboard-navbar/superAdmin-dashboard-n
 
 
 export {
+  EventPage,
   OngoingEventsTable,
   Carousel,
   CircularLoader,

@@ -30,13 +30,13 @@ export const ongoingEvents = [
 ];
 const ClientDashboard = () => {
   useTitle("Dashboard");
-  const {_id: currentUserId, token} = useSelector(store => store?.user?.user);
+  const {_id: currentUserId} = useSelector(store => store?.user?.user);
   const [isLoading, setIsLoading] = useState(false);
   const [events, setEvents] = useState([]);
   useEffect(() => {
     const fetchEvents = async () => {
       setIsLoading(true);
-      const resp = await customFetch.get(`/form/getforms/${currentUserId}`, authHeader(token));
+      const resp = await customFetch.get(`/form/getforms/${currentUserId}`,);
       console.log(resp);
       setEvents(resp.data.formSubmitted);
       setIsLoading(false);
@@ -61,7 +61,7 @@ const ClientDashboard = () => {
 
   return (
     <>
-      <Carousel data={ongoingEvents} />
+      {/* <Carousel data={ongoingEvents} /> */}
       <OngoingEventsTable enrolledevents={events} />
     </>
   );

@@ -78,16 +78,7 @@ const OngoingEventsTable = ({ events, ...otherProps }) => {
                       <Button
                         variant="contained"
                         size="small"
-                        onClick={() =>
-                          navigate(`event/${event._id}`, {
-                            state: {
-                              banner: event.banner,
-                              description: event.description,
-                              endDate: event.endDate,
-                              startDate: event.startDate,
-                            },
-                          })
-                        }
+                        onClick={() => navigate(`event/${event._id}`)}
                       >
                         Know more
                       </Button>
