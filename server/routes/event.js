@@ -15,16 +15,7 @@ const collection = database.collection("event");
 const eventController = require("../controllers/eventFormControllers");
 const User = require("../models/user");
 const  ObjectID = require('mongodb').ObjectId;
-
-//THIS IS COMMENTED AS HANDLED IN REACT
-// router.route('/:id/makeForm')
-//     .get( isLoggedIn, (req, res) => {
-//         if (req.user && req.user.isAdmin === true) {
-//             res.sendFile('index.html', { root: path.join(__dirname, '../build/') });
-//         } else {
-//             res.send("You are not allowed to view this page");
-//         }
-//     }); // admin
+const Event = require('../models/event');
 
 router.route("/submit").post(isLoggedIn, async (req, res) => {
   try{
@@ -55,43 +46,26 @@ router.route("/submit").post(isLoggedIn, async (req, res) => {
   }
 }); //admin
 
-//THIS IS COMMENTED AS HANDLED IN REACT
-// router.route('/:id/formData') // admin & student
-//     .get(catchAsync(isLoggedIn, (req, res) => {
-//         collection.findOne({ "Event": req.params.id }).then((resp) => {
-//             resp["eventID"] = req.params.id;
-//             res.send(resp);
-//         }).catch((error) => {
-//             console.error(error);
-//             res.send("err404")
-//         })
-//     }));
 
-//THIS IS COMMENTED AS HANDLED IN REACT
-// router.route('/:id/apply')
-//     .get(isLoggedIn, (req, res) => {
-//         res.sendFile('index.html', { root: path.join(__dirname, '../build/') });
-//     }); // student
+router.route("/allevents")
+  .get(async (req, res) => {
+    const event = await Event.find();
+    return res.status(200).send({ allevents: event });
+});
 
-router.route("/allevents").get((req, res) => {
-  collection.find({}).toArray((err, result) => {
-    if (err) {
+router.route("/createevent") 
+  .post(async (req, res) => {
+    if (req.user && req.user.isAdmin === true) {
+      const { name, imageUrl, description, startTime, endTime, questions } = req.body;
+      const newevent = new Event({ name, imageUrl, description, startTime, endTime, questions });
+    await newevent.save();
+    return res.status(200).send({ msg: "Created!" });
+    } else {
       return res
         .status(400)
-        .send({ msg: "Something went wrong while fetching event list" });
+        .send({ msg: "You are not allowed to view this page" });
     }
-    // console.log(result);
-    // let allEvents = [];
-    // for (var i = 0; i < result.length; i++) {
-    //   let temp = {};
-    //   temp["Name"] = result[i].title;
-    //   // temp["Organizer"] = result[i].;
-    //   temp["EventID"] = result[i]._id.toString();
-    //   allEvents.push(temp);
-    // }
-    return res.status(200).send({ allEvents: result });
-  });
-});
+  })
 
 router
   .route("/:id/submitForm")
