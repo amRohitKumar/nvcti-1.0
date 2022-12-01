@@ -56,8 +56,8 @@ router.route("/allevents")
 router.route("/createevent") 
   .post(async (req, res) => {
     // if (req.user && req.user.isAdmin === true) {
-      const { name, imageUrl, description, startTime, endTime, questions } = req.body;
-      const newevent = new Event({ name, imageUrl, description, startTime, endTime, questions });
+      const { name, imageUrl, description, startTime, endTime, questions, applicants } = req.body;
+      const newevent = new Event({ name, imageUrl, description, startTime, endTime, questions, applicants });
     await newevent.save();
     return res.status(200).send({ msg: "Created!" });
     // } else {
@@ -71,7 +71,15 @@ router.route('/:id')
   .get(async (req, res) => {
     const event = await Event.findById(req.params.id);
     return res.status(200).send({ event });
-})
+  })
+
+router.route('/:id/applications')
+  .get(async (req, res) => {
+    const event = await Event.findById(req.params.id);
+    // console.log(event);
+    const applications = event.applicants;
+    return res.status(200).send({ applications });
+    })
 
 router
   .route("/:id/submitForm")
