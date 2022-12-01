@@ -67,6 +67,12 @@ router.route("/createevent")
     // }
   })
 
+router.route('/:id')
+  .get(async (req, res) => {
+    const event = await Event.findById(req.params.id);
+    return res.status(200).send({ event });
+})
+
 router
   .route("/:id/submitForm")
   .post(isLoggedIn, upload.any(), async (req, res) => {
@@ -131,15 +137,6 @@ router
     return res.status(200).send({user: userdata});
   }); // student
 
-//THIS IS COMMENTED AS HANDLED IN REACT
-// router.route('/:id/view')
-//     .get(isLoggedIn, (req, res) => {
-//         if (req.user && req.user.isAdmin === true) {
-//             res.sendFile('index.html', { root: path.join(__dirname, '../build/') });
-//         } else {
-//             res.send("You are not allowed to view this page");
-//         }
-//     })
 
 router.route("/:id/updatestatus").post(isLoggedIn, (req, res) => {
   if (req.user && req.user.isAdmin === true) {
