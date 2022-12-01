@@ -16,10 +16,10 @@ import {
   Contact,
   Navbar,
   VerifyEmail,
-  FormApplication,
+  // FormApplication,
   EventForm,
 } from "./pages";
-import { ViewFormApplication } from "./components";
+// import { ViewFormApplication } from "./components";
 
 function App() {
   return (
@@ -50,7 +50,7 @@ function App() {
           {/* LOGIN ROUTE */}
           <Route exact path="/login" element={<LogIn />} />
           {/* VIEW APPLICATION ROUTE */}
-          <Route path="view/:formId" element={<ViewFormApplication />} />
+          {/* <Route path="view/:formId" element={<ViewFormApplication />} /> */}
 
           {/* CLIENT PROTECTED ROUTES */}
           <Route
@@ -62,7 +62,7 @@ function App() {
             }
           >
             <Route index element={<ClientDashboard />} />
-            <Route path="status" element={<FormApplication />} />
+            {/* <Route path="status" element={<FormApplication />} /> */}
             <Route path="event/:eventId" element={<EventPage />} />
             <Route path="apply/:eventId" element={<EventForm />} />
           </Route>

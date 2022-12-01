@@ -12,10 +12,12 @@ import HomePage from "./home/home.page";
 import Navbar from "./home/navbar";
 import Contact from "./home/contact";
 import VerifyEmail from "./client/register/email-verify.component";
-import FormApplication from "./client/form/form.page";
+// import FormApplication from "./client/form/form.page";
+import EventForm from './client/event-form/eventForm';
 
 export {
-  FormApplication,
+  EventForm,
+  // FormApplication,
   Register,
   Error,
   VerifyEmail,

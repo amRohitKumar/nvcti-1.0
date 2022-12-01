@@ -33,16 +33,16 @@ const ClientDashboard = () => {
   const {_id: currentUserId} = useSelector(store => store?.user?.user);
   const [isLoading, setIsLoading] = useState(false);
   const [events, setEvents] = useState([]);
-  useEffect(() => {
-    const fetchEvents = async () => {
-      setIsLoading(true);
-      const resp = await customFetch.get(`/form/getforms/${currentUserId}`,);
-      console.log(resp);
-      setEvents(resp.data.formSubmitted);
-      setIsLoading(false);
-    };
-    fetchEvents();
-  }, []);
+  // useEffect(() => {
+  //   // const fetchEvents = async () => {
+  //   //   setIsLoading(true);
+  //   //   const resp = await customFetch.get(`/form/getforms/${currentUserId}`,);
+  //   //   console.log(resp);
+  //   //   setEvents(resp.data.formSubmitted);
+  //   //   setIsLoading(false);
+  //   // };
+  //   // fetchEvents();
+  // }, []);
 
   if (isLoading) {
     return <CircularLoader />
