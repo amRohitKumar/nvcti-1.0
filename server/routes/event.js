@@ -55,16 +55,16 @@ router.route("/allevents")
 
 router.route("/createevent") 
   .post(async (req, res) => {
-    if (req.user && req.user.isAdmin === true) {
+    // if (req.user && req.user.isAdmin === true) {
       const { name, imageUrl, description, startTime, endTime, questions } = req.body;
       const newevent = new Event({ name, imageUrl, description, startTime, endTime, questions });
     await newevent.save();
     return res.status(200).send({ msg: "Created!" });
-    } else {
-      return res
-        .status(400)
-        .send({ msg: "You are not allowed to view this page" });
-    }
+    // } else {
+    //   return res
+    //     .status(400)
+    //     .send({ msg: "You are not allowed to view this page" });
+    // }
   })
 
 router

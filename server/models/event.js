@@ -27,10 +27,10 @@ const eventSchema = new Schema({
         required: true,
     },
 
-    questions: [{
+    questions:{
         type: String,
         required: true
-    }]
+    }
 })
 
 module.exports = mongoose.model('Event', eventSchema);
