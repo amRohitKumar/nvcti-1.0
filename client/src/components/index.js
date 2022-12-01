@@ -2,11 +2,13 @@ import ClientDashboardNavbar from "./dashboard-navbar/client-dashboard-navbar.co
 import ProtectedRoutes from "./protected-routes/protected-routes.component";
 import Footer from "./footer/Footer.component";
 import TimeLine from "./timeline/timeline.component";
+import Carousel from "./carousel/carousel.component";
 // import EventForm from "./event-form-display/event-form-display.component";
 import LogIn from "./login/login.component";
 import NVCTILogo from "./logo/logo.component";
 import CircularLoader from "./loader/circular-loader.component";
 import PreviousApplications from "./previous-status-table/previous-state-table.component";
+import OngoingEventsTable from "./ongoing-events-table/ongoing-events-table.component";
 import ViewFormApplication from "./view-form/form.page";
 
 // ADMIN
@@ -21,6 +23,8 @@ import SuperAdminDashboardNavbar from "./dashboard-navbar/superAdmin-dashboard-n
 
 
 export {
+  OngoingEventsTable,
+  Carousel,
   CircularLoader,
   NVCTILogo,
   LogIn,

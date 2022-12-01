@@ -65,7 +65,9 @@ function App() {
             }
           >
             <Route index element={<ClientDashboard />} />
-            <Route path="apply" element={<FormApplication />} />
+            <Route path="status" element={<FormApplication />} />
+            <Route path="event/:eventId" element={<FormApplication />} />
+            <Route path="apply/:eventId" element={<FormApplication />} />
           </Route>
 
           {/* ADMIN PROTECTED ROUTES */}
@@ -78,30 +80,6 @@ function App() {
             }
           >
             <Route index element={<AdminDashboard />} />
-          </Route>
-
-          {/* MENTOR PROTECTED ROUTES */}
-          <Route
-            path="/mentor"
-            element={
-              <ProtectedRoutes userRole="mentor">
-                <SharedLayoutMentor />
-              </ProtectedRoutes>
-            }
-          >
-            <Route index element={<MentorDashboard />} />
-          </Route>
-
-          {/* SUPER-ADMIN PROTEDTED ROUTES */}
-          <Route
-            path="/superadmin"
-            element={
-              <ProtectedRoutes userRole="superAdmin">
-                <SharedLayoutSuperAdmin />
-              </ProtectedRoutes>
-            }
-          >
-            <Route index element={<SuperAdminDashboard />} />
           </Route>
 
           {/* ERROR ROUTE */}
