@@ -16,9 +16,9 @@ import {
   Contact,
   Navbar,
   VerifyEmail,
-  // FormApplication,
   EventForm,
   CreateEvent,
+  AdminViewForm,
 } from "./pages";
 // import { ViewFormApplication } from "./components";
 
@@ -51,8 +51,7 @@ function App() {
           {/* LOGIN ROUTE */}
           <Route exact path="/login" element={<LogIn />} />
           {/* VIEW APPLICATION ROUTE */}
-          {/* <Route path="view/:formId" element={<ViewFormApplication />} /> */}
-
+          <Route path="view/:eventId/:formId" element={<AdminViewForm />} />
           {/* CLIENT PROTECTED ROUTES */}
           <Route
             path="/client"

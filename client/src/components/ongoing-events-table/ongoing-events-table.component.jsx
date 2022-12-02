@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 
 import Wrapper from "./ongoing-events-table.style";
+import { changedateformat } from "../../utils/dateformat";
 
 // const orders = [
 //   {
@@ -65,8 +66,13 @@ const OngoingEventsTable = ({ events, role, ...otherProps }) => {
                   <TableCell>Serial No.</TableCell>
                   <TableCell>Name</TableCell>
                   <TableCell>Deadline</TableCell>
+                  {role === "ADMIN" && (
+                    <TableCell align="center">Count</TableCell>
+                  )}
                   <TableCell align="center">View Event</TableCell>
-                  {role === "ADMIN" && <TableCell align="center">Applications</TableCell>}
+                  {role === "ADMIN" && (
+                    <TableCell align="center">Applications</TableCell>
+                  )}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -74,11 +80,17 @@ const OngoingEventsTable = ({ events, role, ...otherProps }) => {
                   <TableRow hover key={idx}>
                     <TableCell>{idx + 1}</TableCell>
                     <TableCell>{event.name}</TableCell>
-                    <TableCell>{event.endTime}</TableCell>
+                    <TableCell>{changedateformat(event.endTime)}</TableCell>
+                    {role === "ADMIN" && (
+                      <TableCell align="center">
+                        {event.applicants.length}
+                      </TableCell>
+                    )}
                     <TableCell align="center">
                       <Button
                         variant="contained"
                         size="small"
+                        color="warning"
                         onClick={() => navigate(`event/${event._id}`)}
                       >
                         Know more
@@ -89,7 +101,11 @@ const OngoingEventsTable = ({ events, role, ...otherProps }) => {
                         <Button
                           variant="contained"
                           size="small"
-                          onClick={() => navigate(`event/${event._id}/applications`)}
+                          onClick={() =>
+                            navigate(`event/${event._id}/applications`, {
+                              state: event.name,
+                            })
+                          }
                         >
                           View applications
                         </Button>

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { useNavigate, useParams } from "react-router-dom";
-// import { format } from "date-fns";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { format } from "date-fns";
 
 import {
   Box,
@@ -26,27 +26,30 @@ import CircularLoader from "../loader/circular-loader.component";
 const ApplicationsList = ({ events, role, ...props }) => {
   const navigate = useNavigate();
   const { eventId } = useParams();
+  const {state: eventName} = useLocation();
+
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(false);
   const { token } = useSelector((store) => store?.user?.user);
+  const fetchEventApplications = async (filter) => {
+    setLoading(true);
+    try {
+      const status = filter?filter:'';
+      const resp = await customFetch.get(
+        `/event/${eventId}/applications?status=${status}`,
+        authHeader(token)
+      );
+      console.log(resp);
+      setApplications(resp.data.applications);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+      toast.error("Something went wrong while fetching applicants list !");
+    }
+  };
   useEffect(() => {
-    const fetchEventApplications = async () => {
-      setLoading(true);
-      try {
-        const resp = await customFetch.get(
-          `/event/${eventId}/applications`,
-          authHeader(token)
-        );
-        console.log(resp);
-        setApplications(resp.data.applications);
-        setLoading(false);
-      } catch (err) {
-        setLoading(false);
-        console.log(err);
-        toast.error("Something went wrong while fetching applicants list !");
-      }
-    };
-    fetchEventApplications();
+    fetchEventApplications('pending');
   }, []);
 
   if (loading) {
@@ -55,15 +58,18 @@ const ApplicationsList = ({ events, role, ...props }) => {
 
   if (applications && applications.length === 0) {
     return (
-      <Alert
-        severity="info"
-        sx={{ width: { xs: "90%", md: "60%" }, mx: "auto" }}
-      >
-        There are no applications.
-      </Alert>
+      <Box sx={{display: 'flex', mx: 5}}>
+        <Alert
+          severity="info"
+          sx={{ display: 'flex', alignItems: 'center', width: { xs: "90%", md: "60%" }, mx: "auto" }}
+        >
+          There are no pending applications. 
+          <Button type="button" onClick={() => fetchEventApplications()}>Show All</Button>
+        </Alert>
+      </Box>
     );
   }
-
+  
   return (
     <Wrapper>
       <Card
@@ -81,18 +87,16 @@ const ApplicationsList = ({ events, role, ...props }) => {
           }}
         >
           <CardHeader
-            title="Applications"
+            title={eventName}
             titleTypographyProps={{ fontSize: "2em" }}
             sx={{ ml: 5 }}
           />
-          blah
         </Box>
         <Box sx={{ minWidth: 250, maxWidth: 1000, mx: "auto" }}>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell>Serial No.</TableCell>
-                <TableCell>Name</TableCell>
                 <TableCell>Applied on</TableCell>
                 <TableCell>Status</TableCell>
                 <TableCell align="center">Application</TableCell>
@@ -102,10 +106,8 @@ const ApplicationsList = ({ events, role, ...props }) => {
               {applications.map((res, idx) => (
                 <TableRow hover key={idx}>
                   <TableCell>{idx + 1}</TableCell>
-                  <TableCell>{res.projectTitle}</TableCell>
                   <TableCell>
-                    {res.time}
-                    {/* {format(new Date(res.updated_at), "dd-MM-yyyy")} */}
+                    {format(new Date(res.time), "dd-MM-yyyy")}
                   </TableCell>
                   <TableCell>
                     <StatusPill
@@ -123,7 +125,7 @@ const ApplicationsList = ({ events, role, ...props }) => {
                     <Button
                       variant="contained"
                       size="small"
-                      onClick={() => navigate(`/${res._id}/view`)}
+                      onClick={() => navigate(`/view/${eventId}/${res._id}`)}
                     >
                       View application
                     </Button>

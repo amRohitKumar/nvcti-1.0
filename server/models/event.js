@@ -36,10 +36,13 @@ const eventSchema = new Schema({
       // userid, response
       userId: Schema.Types.ObjectId,
       response: String,
-      time: String,
+      time: {
+        type: Date,
+        default: Date.now(),
+      },
       status: {
         type: String,
-        default: 'rejected'
+        default: 'pending'
       }
     },
   ],

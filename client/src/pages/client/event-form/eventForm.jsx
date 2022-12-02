@@ -62,20 +62,21 @@ const EventForm = () => {
   const handleSubmit = () => {
     console.log(JSON.parse(answerArray));
     const submitEvent = async () => {
-      try{
+      try {
         setLoading(true);
-        // not implemented 
-        const resp = await customFetch.post(
-          `/${eventId}/submitForm`,
-          {response: answerArray, eventId},
+        // not implemented
+        await customFetch.post(
+          `/event/${eventId}/submitForm`,
+          { response: answerArray },
           authHeader(token)
-        );;
+        );
         toast.success("Form successfully submitted !");
         setLoading(false);
-      } catch(err){
+        navigate("/client");
+      } catch (err) {
         setLoading(false);
-        toast.error("Something went wrong while submitting form !");
         console.log(err);
+        toast.error(err.response.data.msg);
       }
     };
     submitEvent();

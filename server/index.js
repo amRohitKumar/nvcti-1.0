@@ -7,12 +7,10 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const cors = require("cors");
+const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
-const User = require("./models/user");
-const { isLoggedIn } = require("./middleware");
 
 // FORM
-const { MongoClient } = require("mongodb");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 const bodyParser = require("body-parser");
@@ -25,10 +23,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use("/static", express.static(path.join(__dirname, "../build/static")));
 
-
-const mongoose = require("mongoose");
 
 const dbURL = process.env.DBURL || "mongodb://localhost:27017/nvcti";
 
@@ -43,8 +38,6 @@ mongoose
 
 app.use(cors());
 
-const Event = require('./models/event');
-
 // SECURITY
 const mongoSanitize = require("express-mongo-sanitize");
 app.use(
@@ -53,14 +46,19 @@ app.use(
   })
 );
 
+// app.use((req, res, next) => {
+//   console.log(req.url);
+//   next();
+// });
 
 app.use("/auth", authRoute);
 app.use("/event", eventRoute);
 
 
-app.get("/", (req, res) => {
-  res.send({ status: "Helo World" });
-});
+// app.get("/", (req, res) => {
+//   res.send({ status: "Helo World" });
+// });
+
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {

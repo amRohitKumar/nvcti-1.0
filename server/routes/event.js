@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { isLoggedIn, catchAsync, isAdmin } = require("../middleware");
+const { isLoggedIn, isAdmin } = require("../middleware");
 
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
@@ -14,14 +14,14 @@ const database = client.db("nvcti");
 const collection = database.collection("event");
 const eventController = require("../controllers/eventFormControllers");
 const User = require("../models/user");
-const  ObjectID = require('mongodb').ObjectId;
-const Event = require('../models/event');
+const ObjectID = require("mongodb").ObjectId;
+const Event = require("../models/event");
 
 router.route("/submit").post(isLoggedIn, async (req, res) => {
-  try{
+  try {
     if (req.user && req.user.isAdmin === true) {
       const data = req.body;
-      const {banner} = req.body;
+      const { banner } = req.body;
       console.log("ss = ", req.body);
       // const cloudinaryResult = await cloudinary.uploader.upload(banner, {
       //   resource_type: 'image',
@@ -37,141 +37,157 @@ router.route("/submit").post(isLoggedIn, async (req, res) => {
       return res
         .status(400)
         .send({ msg: "You are not allowed to view this page" });
-      }
-    } catch(err){
-      console.log(err);
-      return res
-        .status(400)
-        .send({ msg: "Something went wrong in add event" });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send({ msg: "Something went wrong in add event" });
   }
 }); //admin
 
-
-router.route("/allevents")
-  .get(async (req, res) => {
-    const event = await Event.find();
-    return res.status(200).send({ allevents: event });
+router.route("/allevents").get(async (req, res) => {
+  const event = await Event.find();
+  return res.status(200).send({ allevents: event });
 });
 
-router.route("/createevent") 
-  .post(async (req, res) => {
-    // if (req.user && req.user.isAdmin === true) {
-      const { name, imageUrl, description, startTime, endTime, questions, applicants } = req.body;
-      const newevent = new Event({ name, imageUrl, description, startTime, endTime, questions, applicants });
-    await newevent.save();
-    return res.status(200).send({ msg: "Created!" });
-    // } else {
-    //   return res
-    //     .status(400)
-    //     .send({ msg: "You are not allowed to view this page" });
-    // }
-  })
+router.route("/createevent").post(async (req, res) => {
+  // if (req.user && req.user.isAdmin === true) {
+  const {
+    name,
+    imageUrl,
+    description,
+    startTime,
+    endTime,
+    questions,
+    applicants,
+  } = req.body;
+  const newevent = new Event({
+    name,
+    imageUrl,
+    description,
+    startTime,
+    endTime,
+    questions,
+    applicants,
+  });
+  await newevent.save();
+  return res.status(200).send({ msg: "Created!" });
+  // } else {
+  //   return res
+  //     .status(400)
+  //     .send({ msg: "You are not allowed to view this page" });
+  // }
+});
 
-router.route('/:id')
-  .get(async (req, res) => {
-    const event = await Event.findById(req.params.id);
-    return res.status(200).send({ event });
-  })
-
-router.route('/:id/applications')
-  .get(async (req, res) => {
-    const event = await Event.findById(req.params.id);
-    // console.log(event);
-    const applications = event.applicants;
-    return res.status(200).send({ applications });
-    })
+router.route("/form/:eventId/:formId").get(isLoggedIn, async (req, res) => {
+  const { eventId, formId } = req.params;
+  Event.findById(eventId, (err, doc) => {
+    if (err) res.status(400).send({ msg: err.message });
+    doc.applicants.forEach((el) => {
+      if (el._id.toString() === formId) {
+        console.log(el);
+        return res.status(200).send({
+          application: { question: doc.questions, response: el.response },
+        });
+      }
+    });
+  });
+});
 
 router
-  .route("/:id/submitForm")
-  .post(isLoggedIn, upload.any(), async (req, res) => {
+  .route("/statusupdate/:eventId/:formId")
+  .post(isLoggedIn, isAdmin, async (req, res) => {
+    const { eventId, formId } = req.params;
+    const { status } = req.body;
+    const reqEvent = await Event.findById(eventId);
 
-    // IMPLEMENT LATER FOR HANDELING FILES
-
-    // for (var key of Object.keys(req.body)) {
-    //   if (key != "files" && req.body[key].trim() == "") {
-    //     eFlag = 1;
-    //     // return res.send("error, fill all fields corectly and apply again");
-    //     return res
-    //       .status(400)
-    //       .send({ msg: "Fill all fields corectly and apply again" });
-    //   }
-    // }
-
-    // let data = {};
-    // let files = {};
-
-    // for (var f of req.files) {
-    //   files[f["fieldname"]] = f["filename"];
-    // }
-
-    const curruser = await User.findById(req.user.id);
-
-    let alreadyEnrolled = 0;
-    for (let c of curruser.enrolledEvents) {
-      const eventId = c.split(" ")[0];
-      if (eventId == req.params.id) {
-        alreadyEnrolled = 1;
+    let userId;
+    for (let participant of reqEvent.applicants) {
+      console.log(participant._id.toString());
+      if (participant._id.toString() === formId) {
+        userId = participant.userId;
+        participant.status = status;
         break;
       }
     }
-    
-    if (alreadyEnrolled) {
-      // return res.redirect('/home');
-      return res.status(400).send({ msg: "You have already enrolled!" });
+    console.log(userId);
+    const reqUser = await User.findById(userId);
+    console.log(reqUser);
+    if (status.toLowerCase() == "accepted") {
+      reqUser.notification.unshift(
+        `Your application for ${reqEvent.name} has been accepted`
+      );
+      reqUser.newNotification = true;
+      await reqUser.save();
+    } else if (status.toLowerCase() == "rejected") {
+      reqUser.notification.unshift(
+        `Your application for ${reqEvent.name} has been rejected`
+      );
+      reqUser.newNotification = true;
+      await reqUser.save();
     }
 
-    let l = 0;
+    await reqEvent.save();
+    res.status(200).send({ msg: "Status updated successfully !" });
+  });
 
-    const id = new ObjectID(req.params.id);
-    await collection.findOne({ _id: id }).then((resp) => {
-      data = resp;
-      if (!data["responses"]) {
-        data["responses"] = [];
-      }
-      // req.body["files"] = files;
-      req.body.push({"status": "pending"});
-      data["responses"].push(req.body);
-
-      l = data["responses"].length - 1;
-      console.log(l);
-      collection
-        .findOneAndReplace({ _id: id }, data);
-    });
-
-    const temp = req.params.id + " " + l;
-    curruser.enrolledEvents.push(temp);
-    await curruser.save();
-    const userdata = await User.findById(req.user.id);
-    return res.status(200).send({user: userdata});
-  }); // student
-
-
-router.route("/:id/updatestatus").post(isLoggedIn, (req, res) => {
-  if (req.user && req.user.isAdmin === true) {
-    const id = new ObjectId(req.params.id);
-    collection.findOne({ _id: id }).then((resp) => {
-      resp.applicants[req.body.studId].status = req.body.status;
-      collection
-        .findOneAndReplace({ Event: req.params.id }, resp)
-        .then((resp) => {
-          // res.send("Updated");
-          return res.send(200).json({});
-        });
-    });
-  } else {
-    // res.send("You are not allowed to view this page");
-    return res
-      .status(400)
-      .send({ msg: "You are not allowed to view this page" });
-  }
+router.route("/:id").get(async (req, res) => {
+  const event = await Event.findById(req.params.id);
+  return res.status(200).send({ event });
 });
 
-{
-  //THIS IS COMMENTED AS HANDLED IN REACT
-  // router.route('/')
-  //     .get((req, res) => {
-  //         res.sendFile("index.html", { root: path.join(__dirname, "../build/") });
-  //     })
-}
+router.route("/:id/applications").get(async (req, res) => {
+  const { status } = req.query;
+  console.log(!!status);
+  let event;
+  if (!!status) {
+    event = await Event.find({
+      _id: req.params.id,
+      "applicants.status": status,
+    });
+  } else {
+    event = await Event.findById(req.params.id);
+  }
+  const applications = event?.applicants || [];
+  return res.status(200).send({ applications });
+});
+
+router.route("/:eventId/submitForm").post(isLoggedIn, async (req, res) => {
+  // IMPLEMENT LATER FOR HANDELING FILES
+
+  // for (var key of Object.keys(req.body)) {
+  //   if (key != "files" && req.body[key].trim() == "") {
+  //     eFlag = 1;
+  //     // return res.send("error, fill all fields corectly and apply again");
+  //     return res
+  //       .status(400)
+  //       .send({ msg: "Fill all fields corectly and apply again" });
+  //   }
+  // }
+
+  // let data = {};
+  // let files = {};
+
+  // for (var f of req.files) {
+  //   files[f["fieldname"]] = f["filename"];
+  // }
+
+  const { eventId } = req.params;
+  const curruser = await User.findById(req.user.id);
+  const alreadyEnrolled = await User.find({
+    _id: req.user.id,
+    enrolledEvents: { $in: [new ObjectID(eventId)] },
+  });
+  console.log(alreadyEnrolled);
+  if (alreadyEnrolled.length)
+    return res.status(400).send({ msg: "You have already enrolled !" });
+
+  const resp = await Event.findById(eventId);
+  resp.applicants.push({ userId: req.user.id, response: req.body.response });
+  resp.save();
+  curruser.enrolledEvents.push(eventId);
+  curruser.save();
+
+  return res.status(200).send({ msg: "Form submitted successfully !" });
+}); // student
 
 module.exports = router;

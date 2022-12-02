@@ -29,7 +29,7 @@ const NotificationSection = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const matchesXs = useMediaQuery(theme.breakpoints.down("md"));
-  const { isNewNotification } = useSelector((state) => state.user.user);
+  const { newNotification } = useSelector((state) => state.user.user);
 
   const [open, setOpen] = useState(false);
   /**
@@ -38,7 +38,6 @@ const NotificationSection = () => {
   const anchorRef = useRef(null);
 
   const handleToggle = () => {
-    console.log('rrr');
     dispatch(clearNotificationCount());
     setOpen((prevOpen) => !prevOpen);
   };
@@ -70,7 +69,7 @@ const NotificationSection = () => {
         }}
       >
         <ButtonBase sx={{ borderRadius: "12px", position: "relative" }}>
-          {isNewNotification && (
+          {newNotification && (
             <Badge
               badgeContent={1}
               color="primary"

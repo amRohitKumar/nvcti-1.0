@@ -1,49 +1,69 @@
-import { useState } from "react";
-import { response } from "../../../data";
-import { EventFormSubmitted } from "../../../components";
-import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import { EventFormSubmitted, CircularLoader } from "../../../components";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import customFetch from "../../../utils/axios";
+import authHeader from "../../../utils/userAuthHeaders";
 
 const AdminViewForm = () => {
-  const dispatch = useDispatch();
-  const [review, setReview] = useState("");
-  const onAccept = () => {
-    customFetch()
-  };
-  const onReject = () => {};
-  const { eventId, userId } = useParams();
-  const reqObj = {};
-  useEffect(() => {
-    // dispatch(fetchEvents());
-  }, []);
-  const events = useSelector((state) => state.events.events);
-  if (events.length) {
-    console.log(events);
-    events.forEach((event) => {
-      if (event._id === eventId) {
-        event.responses.forEach((res) => {
-          if (res.at(-1).id === userId) {
-            reqObj.title = event.title;
-            const arr = [];
-            for (let idx = 0; idx < event.questions.length; idx++) {
-              arr.push({ question: event.questions[idx].question, response: res[idx] });
-            }
-            reqObj.responses = arr;
-          }
-        });
-      }
-    });
+  const navigate = useNavigate();
+  const [application, setApplication] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const {token} = useSelector(state => state?.user?.user);
+  
+  const { eventId, formId } = useParams();
+  const handleStatus = async (status) => {
+    try {
+      setLoading(true);
+      console.log(eventId, formId);
+      const resp = await customFetch.post(`/event/statusupdate/${eventId}/${formId}`, {status}, authHeader(token))
+      console.log(resp);
+      setLoading(false);
+      navigate(`/admin/event/${eventId}/applications`)
+      toast.success("Status updated successfully !");
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      toast.error(error.message);
+    }
   }
-  // console.log(reqObj);
+  useEffect(() => {
+    const fetchApplication = async () => {
+      try {
+        setLoading(true);
+        const resp = await customFetch.get(`/event/form/${eventId}/${formId}`, authHeader(token))
+        console.log(resp);
+        setApplication(resp.data.application);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        console.log(error);
+        toast.error(error.message);
+      }
+    }
+    fetchApplication();
+  }, []);
+
+  if (loading || !application) {
+    return <CircularLoader />;
+  }
+
+  const {question, response} = application;
+  const parsedQuestion = JSON.parse(question), parsedResponse = JSON.parse(response);
+  const formatArr = [];
+
+  for(let idx = 0; idx < parsedQuestion.length; idx++){
+    const obj = {};
+    obj["response"] = parsedResponse[idx];
+    obj["question"] = parsedQuestion[idx].question;
+    formatArr.push(obj);
+  }
+  console.log(formatArr);
   return (
     <EventFormSubmitted
-      review={review}
-      setReview={setReview}
-      response={reqObj}
-      onAccept={onAccept}
-      onReject={onReject}
+      response={formatArr}
+      handleStatus={handleStatus}
     />
   );
 };

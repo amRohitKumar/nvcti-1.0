@@ -8,17 +8,8 @@ import {
   Button,
   TextField,
 } from "@mui/material";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
-const EventFormSubmitted = ({
-  response,
-  review,
-  setReview,
-  onAccept,
-  onReject,
-}) => {
-  const { title, responses } = response;
-
+const EventFormSubmitted = ({ response, handleStatus }) => {
   return (
     <Wrapper sx={{ width: "80%" }}>
       <Paper
@@ -26,13 +17,14 @@ const EventFormSubmitted = ({
           display: "flex",
           flexDirection: "column",
           p: "1em",
+          mt: 4,
           borderTop: "10px solid #828DF8",
         }}
       >
-        <EventInput size="large">{title} </EventInput>
+        <EventInput size="large">Response </EventInput>
       </Paper>
 
-      {responses.map(({ response, question }, idx) => (
+      {response.map(({ response, question }, idx) => (
         <ElemWrapper key={idx}>
           <Box sx={{ fontWeight: "500", width: "40%" }}>
             {question || "Question left blank"}
@@ -51,7 +43,6 @@ const EventFormSubmitted = ({
                   gap: "10px",
                 }}
               >
-                <CheckCircleOutlineIcon sx={{ color: "green" }} />
                 {response}
               </Typography>
             </Box>
@@ -76,7 +67,6 @@ const EventFormSubmitted = ({
                       gap: "10px",
                     }}
                   >
-                    <CheckCircleOutlineIcon sx={{ color: "green" }} />
                     {option}
                   </Typography>
                 ))}
@@ -88,7 +78,6 @@ const EventFormSubmitted = ({
                     gap: "10px",
                   }}
                 >
-                  <CheckCircleOutlineIcon sx={{ color: "green" }} />
                   {response.other}
                 </Typography>
               )}
@@ -101,33 +90,28 @@ const EventFormSubmitted = ({
           // border: "1px solid black",
           display: "flex",
           alignItems: "center",
-          justifyContent: "flex-end",
-          flexDirection: "column",
+          justifyContent: "center",
           gap: "20px",
           marginTop: "2em",
         }}
       >
-        <TextField
-          value={review}
-          onChange={(e) => setReview(e.target.value)}
-          label="Review"
-          multiline
-          rows={4}
-          sx={{ width: "60%", "@media (max-width: 900px)": { width: "90%" } }}
-        />
-        <div>
-          <Button variant="contained" color="secondary" onClick={onAccept}>
-            ACCEPT
-          </Button>
-          <Button
-            variant="contained"
-            color="error"
-            sx={{ ml: 1 }}
-            onClick={onReject}
-          >
-            REJECT
-          </Button>
-        </div>
+        <Button
+          type="button"
+          variant="contained"
+          color="secondary"
+          onClick={() => handleStatus("accepted")}
+        >
+          ACCEPT
+        </Button>
+        <Button
+          type="button"
+          variant="contained"
+          color="error"
+          sx={{ ml: 1 }}
+          onClick={() => handleStatus("rejected")}
+        >
+          REJECT
+        </Button>
       </div>
     </Wrapper>
   );

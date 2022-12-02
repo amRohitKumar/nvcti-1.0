@@ -146,6 +146,11 @@ module.exports.login = async (req, res) => {
       expiresIn: process.env.JWT_LIFETIME,
     });
 
+    const prevNotificationState = userInDb.newNotification;
+    if(prevNotificationState){
+      userInDb.newNotification = false;
+      await userInDb.save();
+    }
     res.status(200).send({
       status: "success",
       user: {
@@ -153,9 +158,9 @@ module.exports.login = async (req, res) => {
         email: userInDb.email,
         name: userInDb.name,
         isVerified: userInDb.isVerified,
-        dob: userInDb.dob,
-        enrolledEvents: userInDb.enrolledEvents,
         isAdmin: userInDb.isAdmin,
+        newNotification: prevNotificationState,
+        notification: userInDb.notification,
         token,
       },
     });
