@@ -41,7 +41,7 @@ import Wrapper from "./ongoing-events-table.style";
 //   },
 // ];
 
-const OngoingEventsTable = ({ events, ...otherProps }) => {
+const OngoingEventsTable = ({ events, role, ...otherProps }) => {
   const navigate = useNavigate();
   return (
     <Wrapper>
@@ -65,15 +65,16 @@ const OngoingEventsTable = ({ events, ...otherProps }) => {
                   <TableCell>Serial No.</TableCell>
                   <TableCell>Name</TableCell>
                   <TableCell>Deadline</TableCell>
-                  <TableCell></TableCell>
+                  <TableCell align="center">View Event</TableCell>
+                  {role === "ADMIN" && <TableCell align="center">Applications</TableCell>}
                 </TableRow>
               </TableHead>
               <TableBody>
                 {events.map((event, idx) => (
                   <TableRow hover key={idx}>
                     <TableCell>{idx + 1}</TableCell>
-                    <TableCell>{event.title}</TableCell>
-                    <TableCell>{event.endDate}</TableCell>
+                    <TableCell>{event.name}</TableCell>
+                    <TableCell>{event.endTime}</TableCell>
                     <TableCell align="center">
                       <Button
                         variant="contained"
@@ -83,6 +84,17 @@ const OngoingEventsTable = ({ events, ...otherProps }) => {
                         Know more
                       </Button>
                     </TableCell>
+                    {role === "ADMIN" && (
+                      <TableCell align="center">
+                        <Button
+                          variant="contained"
+                          size="small"
+                          onClick={() => navigate(`event/${event._id}/applications`)}
+                        >
+                          View applications
+                        </Button>
+                      </TableCell>
+                    )}
                   </TableRow>
                 ))}
               </TableBody>

@@ -30,25 +30,24 @@ export const ongoingEvents = [
 ];
 const ClientDashboard = () => {
   useTitle("Dashboard");
-  const {_id: currentUserId} = useSelector(store => store?.user?.user);
   const [isLoading, setIsLoading] = useState(false);
   const [events, setEvents] = useState([]);
-  // useEffect(() => {
-  //   // const fetchEvents = async () => {
-  //   //   setIsLoading(true);
-  //   //   const resp = await customFetch.get(`/form/getforms/${currentUserId}`,);
-  //   //   console.log(resp);
-  //   //   setEvents(resp.data.formSubmitted);
-  //   //   setIsLoading(false);
-  //   // };
-  //   // fetchEvents();
-  // }, []);
+  useEffect(() => {
+    const fetchEvents = async () => {
+      setIsLoading(true);
+      const resp = await customFetch.get('/event/allevents');
+      console.log(resp);
+      setEvents(resp.data.allevents);
+      setIsLoading(false);
+    };
+    fetchEvents();
+  }, []);
 
   if (isLoading) {
     return <CircularLoader />
   }
 
-  if (events.length === 0) {
+  if (events && events.length === 0) {
     return (
       <Alert
         severity="info"
@@ -58,11 +57,11 @@ const ClientDashboard = () => {
       </Alert>
     );
   }
-
+  console.log("hh = ", events);
   return (
     <>
       {/* <Carousel data={ongoingEvents} /> */}
-      <OngoingEventsTable enrolledevents={events} />
+      <OngoingEventsTable events={events} />
     </>
   );
 };

@@ -3,19 +3,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { clearUser } from "../../features/user/userSlice";
 
-
 import styled from "@emotion/styled";
-import {
-  AppBar,
-  Avatar,
-  Box,
-  Toolbar,
-  Button,
-} from "@mui/material";
+import { AppBar, Avatar, Box, Toolbar, Button } from "@mui/material";
 import { UserCircle as UserCircleIcon } from "../../icons/user-circle";
 import { AccountPopover } from "../account-popover/account-popover.component";
 import NVCTILogo from "../logo/logo.component";
-
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -30,9 +22,9 @@ export const AdminDashboardNavbar = (props) => {
   const [openAccountPopover, setOpenAccountPopover] = useState(false);
   const navigate = useNavigate();
   const handleSignOut = () => {
-    navigate('/');
+    navigate("/");
     dispatch(clearUser());
-  }
+  };
 
   return (
     <>
@@ -64,6 +56,9 @@ export const AdminDashboardNavbar = (props) => {
               Dashboard
             </Button>
           )}
+          <Button variant="contained" sx={{ mr: 2 }} onClick={() => navigate("create")}>
+            Create Event
+          </Button>
           <Avatar
             onClick={() => setOpenAccountPopover(true)}
             ref={settingsRef}

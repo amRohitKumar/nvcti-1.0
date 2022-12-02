@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import {toast} from "react-toastify";
-import { CircularLoader, ApplicationsList } from "../../../components";
+import { CircularLoader, ApplicationsList, OngoingEventsTable } from "../../../components";
 import {Alert } from "@mui/material";
 import Wrapper from "./admin-dashboard.style";
 import { useState } from "react";
@@ -10,15 +10,14 @@ import { useSelector } from "react-redux";
 
 const AdminDashboard = () => {
   // fetch applications for lab
-  const {token} = useSelector(store => store.user.user);
   const [isLoading, setIsLoading] = useState(false);
   const [responses, setResponses] = useState([]);
   useEffect(() => {
     const fetchApplications = async () => {
       try{
         setIsLoading(true);
-        const resp = await customFetch.get(`/evaluator/applicants`, authHeader(token));
-        setResponses(resp.data.applications);
+        const resp = await customFetch.get(`/event/allevents`);
+        setResponses(resp.data.allevents);
         setIsLoading(false);
       } catch(err){
         console.log(err);
@@ -45,7 +44,7 @@ const AdminDashboard = () => {
   }
   return (
     <Wrapper>
-      <ApplicationsList events={responses} role="ADMIN" />
+      <OngoingEventsTable events={responses} role="ADMIN" />
     </Wrapper>
   );
 };

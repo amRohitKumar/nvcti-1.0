@@ -14,8 +14,12 @@ import Contact from "./home/contact";
 import VerifyEmail from "./client/register/email-verify.component";
 // import FormApplication from "./client/form/form.page";
 import EventForm from './client/event-form/eventForm';
+import AdminViewForm from "./admin/view-form/view-form.page";
+import CreateEvent from "./admin/event/event.page";
 
 export {
+  CreateEvent,
+  AdminViewForm,
   EventForm,
   // FormApplication,
   Register,

@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
-import { ProtectedRoutes, Footer, LogIn, EventPage} from "./components";
+import { ProtectedRoutes, Footer, LogIn, EventPage, EventParticipants } from "./components";
 import { CssBaseline } from "@mui/material";
 import { theme } from "./theme";
 import { ToastContainer } from "react-toastify";
@@ -18,6 +18,7 @@ import {
   VerifyEmail,
   // FormApplication,
   EventForm,
+  CreateEvent,
 } from "./pages";
 // import { ViewFormApplication } from "./components";
 
@@ -77,6 +78,9 @@ function App() {
             }
           >
             <Route index element={<AdminDashboard />} />
+            <Route path="create" element={<CreateEvent />} />
+            <Route path="event/:eventId" element={<EventPage role="ADMIN" />} />
+            <Route path="event/:eventId/applications" element={<EventParticipants />} />
           </Route>
 
           {/* ERROR ROUTE */}

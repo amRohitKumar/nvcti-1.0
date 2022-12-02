@@ -160,6 +160,7 @@ module.exports.login = async (req, res) => {
       },
     });
   } catch (error) {
+    console.log(error);
     res.status(401).send({
       status: "Fail",
       msg: "Something wrong happened from our side plz mail us",

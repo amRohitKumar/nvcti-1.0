@@ -15,7 +15,8 @@ import EventPage from './event-detail/event-detail.page';
 // ADMIN
 import AdminDashboardNavbar from "./dashboard-navbar/admin-dashboard-navbar.component";
 import ApplicationsList from "./event-participant/event-participant.component";
-
+import EventFormSubmitted from "./submitted-event-form/submittedForm";
+import EventParticipants from './event-participant/event-participant.component';
 // MENTOR
 import MentorDashboardNavbar from "./dashboard-navbar/mentor-dashboard-navbar.component";
 
@@ -24,6 +25,8 @@ import SuperAdminDashboardNavbar from "./dashboard-navbar/superAdmin-dashboard-n
 
 
 export {
+  EventParticipants,
+  EventFormSubmitted,
   EventPage,
   OngoingEventsTable,
   Carousel,

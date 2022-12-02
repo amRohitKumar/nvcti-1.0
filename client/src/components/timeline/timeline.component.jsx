@@ -22,7 +22,8 @@ const TimeLine = ({ startDate, endDate }) => {
             align="right"
             variant="body2"
           >
-            {changedateformat(startDate)}
+            {/* {changedateformat(startDate)} */}
+            {startDate}
           </TimelineOppositeContent>
           <TimelineSeparator>
             <TimelineConnector />
@@ -43,7 +44,8 @@ const TimeLine = ({ startDate, endDate }) => {
             align="right"
             variant="body2"
           >
-            {changedateformat(endDate)}
+            {/* {changedateformat(endDate)} */}
+            {endDate}
           </TimelineOppositeContent>
           <TimelineSeparator>
             <TimelineConnector />

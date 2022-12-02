@@ -10,37 +10,83 @@ import {
 } from "./questions";
 import { EventInput, EventInputMultiline } from "./eventForm.styles";
 import Wrapper from "./eventForm.styles";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import customFetch from "../../../utils/axios";
+import authHeader from "../../../utils/userAuthHeaders";
+import { CircularLoader } from "../../../components";
 // import { submitEvent } from "../../features/user/userSlice";
 // import { eventFormData } from "../../data";
 
-const EventForm = ({ eventFormData }) => {
-  const dispatch = useDispatch();
+const EventForm = () => {
   const navigate = useNavigate();
   const { eventId } = useParams();
-  const { title, description, questions } = eventFormData;
+  const { token } = useSelector((state) => state.user.user);
+  const [event, setEvent] = useState("");
   const [loading, setLoading] = useState(true);
   const [answerArray, setAnswerArray] = useState("[]");
 
   useEffect(() => {
-    let newAnswerArray = [];
-    questions.forEach(({ type }, idx) => {
-      if (type === "multiple" || type === "checkboxes")
-        newAnswerArray.push({ other: "", options: [] });
-      else newAnswerArray.push("");
-    });
-    setAnswerArray(JSON.stringify(newAnswerArray));
-    setLoading(false);
-    //eslint-disable-next-line
+    const fetchEvent = async () => {
+      setLoading(true);
+      try {
+        const resp = await customFetch.get(
+          `/event/${eventId}`,
+          authHeader(token)
+        );
+        console.log(resp);
+        setEvent(resp.data.event);
+        const questionsJSON = resp.data.event.questions;
+        console.log(questionsJSON);
+        const parsedQuestions = JSON.parse(questionsJSON);
+        // creating answer array
+
+        let newAnswerArray = [];
+        parsedQuestions.forEach(({ type }, idx) => {
+          if (type === "multiple" || type === "checkboxes")
+            newAnswerArray.push({ other: "", options: [] });
+          else newAnswerArray.push("");
+        });
+        setAnswerArray(JSON.stringify(newAnswerArray));
+        setLoading(false);
+      } catch (err) {
+        setLoading(false);
+        toast.error("Something went wrong while fething event !");
+        console.log(err);
+      }
+    };
+    fetchEvent();
   }, []);
 
   const handleSubmit = () => {
     console.log(JSON.parse(answerArray));
+    const submitEvent = async () => {
+      try{
+        setLoading(true);
+        // not implemented 
+        const resp = await customFetch.post(
+          `/${eventId}/submitForm`,
+          {response: answerArray, eventId},
+          authHeader(token)
+        );;
+        toast.success("Form successfully submitted !");
+        setLoading(false);
+      } catch(err){
+        setLoading(false);
+        toast.error("Something went wrong while submitting form !");
+        console.log(err);
+      }
+    };
+    submitEvent();
     // dispatch(submitEvent({ eventId, answer: JSON.parse(answerArray) })).then(
     //   () => navigate("/client")
     // );
   };
+
+  if (loading || !event) {
+    return <CircularLoader />;
+  }
 
   return (
     <>
@@ -54,19 +100,19 @@ const EventForm = ({ eventFormData }) => {
               borderTop: "10px solid #828DF8",
             }}
           >
-            <EventInput size="large">{title} </EventInput>
+            <EventInput size="large">{event.name} </EventInput>
             <EventInputMultiline>
               <Linkify
                 properties={{
                   target: "_blank",
                 }}
               >
-                {description}
+                {event.description}
               </Linkify>
             </EventInputMultiline>
           </Paper>
 
-          {questions.map(
+          {JSON.parse(event.questions).map(
             ({ type, question, isRequired, options, other }, idx) => {
               if (type === "short_anwer")
                 return (

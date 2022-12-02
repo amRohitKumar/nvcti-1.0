@@ -80,7 +80,7 @@ const userSlice = createSlice({
       state.user = user;
       addUserToLocalStorage(user);
       toast.success(
-        `Hello there ${user.position === 2 ? "Evaluator" : user.name}`
+        `Hello there ${user.isAdmin? "Admin" : user.name}`
       );
     },
     [loginUser.rejected]: (state, { payload }) => {

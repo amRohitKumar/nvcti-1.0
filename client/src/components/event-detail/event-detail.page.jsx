@@ -10,17 +10,31 @@ import {
 import TimeLine from "../timeline/timeline.component";
 import { InfoIcon, HowToRegIcon } from "../../icons";
 import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useState } from "react";
+import customFetch from "../../utils/axios";
+import { CircularLoader } from "../../components";
 
-const EventPage = () => {
+const EventPage = ({ role }) => {
+  const [event, setEvent] = useState([]);
+  const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { eventId } = useParams();
-  const eventObj = {
-    banner:
-      "https://images.unsplash.com/photo-1664575196412-ed801e8333a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2071&q=80",
-    startDate: "22/10/2022",
-    endDate: "23/10/2022",
-    description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Accusantium neque eligendi beatae, consequuntur reiciendis possimus ab ipsum nostrum quia fugit! Magni, ab a! Commodi nulla dolorem explicabo repellat minus veritatis ullam pariatur dolor voluptate qui voluptatem doloribus error officiis neque, placeat porro at ipsum natus architecto, voluptatibus voluptatum fugit exercitationem? Delectus voluptatum aut beatae mollitia."
-  };
+  useEffect(() => {
+    const fetchEvent = async () => {
+      setLoading(true);
+      const resp = await customFetch.get(`/event/${eventId}`);
+      console.log(resp);
+      setEvent(resp.data.event);
+      setLoading(false);
+    };
+    fetchEvent();
+  }, []);
+
+  if (isLoading) {
+    return <CircularLoader />;
+  }
+
   return (
     <Container
       component="main"
@@ -35,7 +49,7 @@ const EventPage = () => {
           <ImageList sx={{ borderRadius: "12px" }}>
             <ImageListItem cols={2} sx={{ position: "relative" }}>
               <img
-                src={eventObj.banner}
+                src={event.imageUrl}
                 alt="Event banner"
                 loading="lazy"
                 style={{ maxHeight: "500px", aspectRatio: "1/1" }}
@@ -87,32 +101,32 @@ const EventPage = () => {
               }}
             >
               {/******************************************************************************************/}
-              <TimeLine
-                startDate={eventObj.startDate}
-                endDate={eventObj.endDate}
-              />
+              <TimeLine startDate={event.startTime} endDate={event.endTime} />
               {/******************************************************************************************/}
             </Box>
-            <Button
-              fullWidth
-              variant="contained"
-              sx={{
-                borderTopRightRadius: "0",
-                borderTopLeftRadius: "0",
-                backgroundColor: "rgb(241, 138, 29)",
-              }}
-              color="secondary"
-              startIcon={<HowToRegIcon />}
-              onClick={() => navigate(`/client/apply/${eventId}`)}
-            >
-              Apply now
-            </Button>
+
+            {role !== "ADMIN" && (
+              <Button
+                fullWidth
+                variant="contained"
+                sx={{
+                  borderTopRightRadius: "0",
+                  borderTopLeftRadius: "0",
+                  backgroundColor: "rgb(241, 138, 29)",
+                }}
+                color="secondary"
+                startIcon={<HowToRegIcon />}
+                onClick={() => navigate(`/client/apply/${eventId}`)}
+              >
+                Apply now
+              </Button>
+            )}
           </Box>
         </Grid>
       </Grid>
       <Grid container component="section">
         <Grid item component="article" id="details">
-          {eventObj.description}
+          {event.description}
         </Grid>
       </Grid>
     </Container>

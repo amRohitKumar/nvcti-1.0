@@ -8,14 +8,11 @@ const useUserState = (state) => {
   useEffect(() => {
     if (state === "LOGIN" && user) {
       let url;
-      if (user.position === 0) url = "/client";
-      else if (user.position === 1) url = "/admin";
-      else if (user.position === 2) url = "/mentor";
-      else if (user.position === 3) url = "/superadmin";
+      if (user.isAdmin) url = "/admin";
       else url = "/client";
       console.log(url);
       navigate(url);
-    } else if (state === "LOGOUT" && !user) navigate('/');
+    } else if (state === "LOGOUT" && !user) {console.log('hhhhhh'); navigate('/'); }
   }, [user]);
 };
 
