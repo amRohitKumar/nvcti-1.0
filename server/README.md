@@ -7,15 +7,15 @@
     - The questions in the form of a particular event is stored in "questions" field of the model.
 
 # Controllers
-- authController
+* authController
     To control process required for authentication.
 
 # Routes
-- `*/register*`
+* `/register`
     Register a new user (Post request using the data from the form, should contain all the required fields in the user schema).
-- `*/verify-email/:emailToken*`
+* `/verify-email/:emailToken`
     Verify the email provided by the user using nodemailer and then add the user to database. 
--  `*/login*`
+*  `/login`
     Login an existing user
 
 # Environment variables
