@@ -8,15 +8,22 @@
 
 # Controllers
 * authController
+
     To control process required for authentication.
 
 # Routes
 * `/register`
+
     Register a new user (Post request using the data from the form, should contain all the required fields in the user schema).
+
 * `/verify-email/:emailToken`
+
     Verify the email provided by the user using nodemailer and then add the user to database. 
+
 *  `/login`
+
     Login an existing user
+
 
 # Environment variables
 - JWT_SECRET
