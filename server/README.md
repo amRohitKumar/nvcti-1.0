@@ -12,17 +12,45 @@
     To control process required for authentication.
 
 # Routes
-* `/register`
+- auth
+    * `/register`
 
-    Register a new user (Post request using the data from the form, should contain all the required fields in the user schema).
+        Register a new user (POST request using the data from the form, should contain all the required fields in the user schema).
 
-* `/verify-email/:emailToken`
+    * `/verify-email/:emailToken`
 
-    Verify the email provided by the user using nodemailer and then add the user to database. 
+        Verify the email provided by the user using nodemailer and then add the user to database. 
 
-*  `/login`
+    *  `/login`
 
-    Login an existing user
+        Login an existing user.
+
+- event
+
+    * `/createevent`
+
+        Create an event along with the form asscoiated with it.
+
+    * `/allevents`
+
+        API to get all events in the database in raw json format.
+
+    * `/form/:eventId/:formId`
+
+        API to get the form "formId" associated with the event "eventId" and the responses to that form.
+
+    * `/statusupdate/:eventId/:formId`
+
+        An API to accept reject the response using the "formId" of the response.
+
+    * `/:id`
+        Returns the event of specified "id".
+
+    * `/:id/applications`
+        API to get all the applicants of the specified event id in the request params.
+
+    * `/:eventId/submitForm`
+        Submit the form (client side) (POST request, requires all the required fields in the data)
 
 
 # Environment variables
