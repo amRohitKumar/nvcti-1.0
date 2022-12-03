@@ -44,12 +44,15 @@
         An API to accept reject the response using the "formId" of the response.
 
     * `/:id`
+
         Returns the event of specified "id".
 
     * `/:id/applications`
+
         API to get all the applicants of the specified event id in the request params.
 
     * `/:eventId/submitForm`
+    
         Submit the form (client side) (POST request, requires all the required fields in the data)
 
 
