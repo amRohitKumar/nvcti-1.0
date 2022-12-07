@@ -49,7 +49,7 @@ export default function Footer() {
         align="center"
         {...props}
       >
-        {"Copyright © "}- IIT (ISM) Dhanbad {new Date().getFullYear()} -
+        {"Copyright © "}- IIT (ISM) Dhanbad {new Date().getFullYear()}
       </Typography>
     );
   };
